@@ -158,6 +158,15 @@ msgstr ""
 msgid "admin.user_usage"
 msgstr "Usage: /user <tg_id>"
 
+msgid "captcha.ask"
+msgstr "Quick check that you're not a bot: tap {emoji}"
+
+msgid "captcha.ok"
+msgstr "Thanks! Let's continue 👌"
+
+msgid "captcha.wrong"
+msgstr "Not quite, try again"
+
 msgid "cards.common"
 msgstr "✨ In common: {items} · {percent}% match"
 

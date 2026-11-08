@@ -3,6 +3,7 @@
 from aiogram import Router
 
 from svoi_bot.features.about import router as about
+from svoi_bot.features.captcha import router as captcha
 from svoi_bot.features.city import router as city
 from svoi_bot.features.contacts import router as contacts
 from svoi_bot.features.feed import router as feed
@@ -18,6 +19,8 @@ from svoi_bot.features.start import router as start
 def routers() -> list[Router]:
     """Fresh user-facing routers per dispatcher (admin and dev routes are added in main)."""
     return [
+        # first: suspicious accounts solve the captcha before anything else (S11)
+        captcha.make_router(),
         start.make_router(),
         onboarding.make_router(),
         city.make_router(),
