@@ -5,6 +5,7 @@ from aiogram import Router
 from svoi_bot.features.about import router as about
 from svoi_bot.features.city import router as city
 from svoi_bot.features.interests import router as interests
+from svoi_bot.features.my_profile import router as my_profile
 from svoi_bot.features.onboarding import router as onboarding
 from svoi_bot.features.start import router as start
 
@@ -17,6 +18,7 @@ def routers() -> list[Router]:
         city.make_router(),
         interests.make_router(),
         about.make_router(),
+        my_profile.make_router(),
         # keep last: catches anything else from users who have not finished onboarding
         onboarding.make_resume_router(),
     ]

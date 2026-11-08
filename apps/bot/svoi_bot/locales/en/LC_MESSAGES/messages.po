@@ -411,6 +411,101 @@ msgstr "Multi-select"
 msgid "kitchen.option"
 msgstr "Option"
 
+msgid "me.delete"
+msgstr "🗑 Delete profile"
+
+msgid "me.delete.ask"
+msgstr "Delete your profile for good? Likes and contacts will be gone. This cannot be undone."
+
+msgid "me.delete.done"
+msgstr "Profile deleted. Tap /start to come back."
+
+msgid "me.delete.no"
+msgstr "◀️ No"
+
+msgid "me.delete.yes"
+msgstr "🗑 Yes, delete"
+
+msgid "me.edit.age"
+msgstr "🎂 Age"
+
+msgid "me.edit.city"
+msgstr "📍 City"
+
+msgid "me.edit.goals"
+msgstr "🎯 Goal"
+
+msgid "me.edit.height"
+msgstr "📏 Height"
+
+msgid "me.edit.institution"
+msgstr "🎓 School"
+
+msgid "me.edit.interests"
+msgstr "🏷 Interests"
+
+msgid "me.edit.name"
+msgstr "✏️ Name"
+
+msgid "me.edit.photos"
+msgstr "🖼 Photos"
+
+msgid "me.edit.prompts"
+msgstr "💬 About me"
+
+msgid "me.hidden"
+msgstr "Profile hidden. You won't appear in other feeds; likes and contacts are kept."
+
+msgid "me.hide"
+msgstr "⏸ Hide profile"
+
+msgid "me.pending"
+msgstr "Your changes are under review. Until then others see the previous version."
+
+msgid "me.photos.add"
+msgstr "➕ Add"
+
+msgid "me.photos.empty"
+msgstr "None yet."
+
+msgid "me.photos.pending"
+msgstr "under review"
+
+msgid "me.photos.photo"
+msgstr "📷 photo"
+
+msgid "me.photos.title"
+msgstr "Your photos and videos:"
+
+msgid "me.photos.video"
+msgstr "🎬 video"
+
+msgid "me.reset"
+msgstr "🔄 Start over"
+
+msgid "me.reset.ask"
+msgstr "Fill in your profile again? Likes, contacts and views stay."
+
+msgid "me.reset.yes"
+msgstr "🔄 Yes, start over"
+
+msgid "me.shown"
+msgstr "Your profile is visible again 👁"
+
+msgid "me.unhide"
+msgstr "👁 Show profile"
+
+msgid "menu.help"
+msgstr ""
+"Questions and complaints: @{support}\n"
+"\n"
+"/search — browse profiles\n"
+"/likes — who liked you\n"
+"/profile — my profile\n"
+"/contacts — mutual likes\n"
+"/settings — filters and notifications\n"
+"/pause — leave the feed"
+
 msgid "menu.home"
 msgstr "Main menu 👇"
 

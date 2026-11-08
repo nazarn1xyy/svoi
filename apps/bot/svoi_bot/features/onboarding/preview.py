@@ -8,8 +8,8 @@ from svoi_bot.api_client import ApiException
 from svoi_bot.features.about import views
 from svoi_bot.features.about.states import AboutSG
 from svoi_bot.features.onboarding.registry import StepContext, profile_menu, register, show_step
+from svoi_bot.features.start.menu import send_menu
 from svoi_bot.middlewares import remember_state
-from svoi_bot.ui import keyboards
 from svoi_bot.ui.callbacks import PickCb
 from svoi_bot.ui.cards import render_card, send_card
 
@@ -43,6 +43,4 @@ async def on_preview(query: CallbackQuery, callback_data: PickCb, step: StepCont
         raise
     await remember_state(step.state, new_state)
     await step.state.set_state(None)
-    await step.bot.send_message(
-        step.tg_user.id, views.finished(), reply_markup=keyboards.main_menu(new_state.counters)
-    )
+    await send_menu(step.bot, step.api, step.tg_user.id, views.finished())

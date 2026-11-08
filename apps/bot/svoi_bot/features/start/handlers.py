@@ -1,12 +1,14 @@
-"""/start [r_<code>]: UserContextMiddleware already called POST /users/start with the code."""
+"""/start [r_<code>] and /help."""
 
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 from svoi_contracts.cards import UserState
 from svoi_contracts.enums import UserStatus
 
+from svoi_bot.config import Settings
 from svoi_bot.features.onboarding.registry import StepContext, show_step
-from svoi_bot.features.start.menu import show_menu
+from svoi_bot.features.start.menu import send_menu
+from svoi_bot.ui.i18n import _
 
 
 async def on_start(
@@ -18,4 +20,9 @@ async def on_start(
         await show_step(step, user_state.onboarding_step)
         return
     await state.set_state(None)
-    await show_menu(message, user_state)
+    await send_menu(step.bot, step.api, step.tg_user.id)
+
+
+async def on_help(message: Message, settings: Settings) -> None:
+    """Support contact and a short guide."""
+    await message.answer(_("menu.help", support=settings.support_username))
