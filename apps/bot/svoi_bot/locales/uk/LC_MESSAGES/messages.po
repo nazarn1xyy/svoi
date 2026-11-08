@@ -87,8 +87,80 @@ msgstr "Додати ще одне питання?"
 msgid "about.prompts.too_long"
 msgstr "Відповідь — до 300 символів. Скороти, будь ласка."
 
+msgid "admin.action.approve"
+msgstr "✅ Схвалити"
+
+msgid "admin.action.ban_7d"
+msgstr "⏳ Бан 7 днів"
+
+msgid "admin.action.ban_forever"
+msgstr "⛔ Бан назавжди"
+
+msgid "admin.action.delete_media"
+msgstr "🖼 Видалити фото"
+
+msgid "admin.action.delete_text"
+msgstr "✏️ Видалити текст"
+
+msgid "admin.action.move_to_minor_pool"
+msgstr "🔞 Перенести в пул 16–17"
+
+msgid "admin.action.ok"
+msgstr "✅ Все гаразд"
+
+msgid "admin.action.reject"
+msgstr "❌ Відхилити"
+
+msgid "admin.confirm.ask"
+msgstr "Точно? {action}"
+
+msgid "admin.confirm.no"
+msgstr "Ні"
+
+msgid "admin.confirm.yes"
+msgstr "Так"
+
+msgid "admin.empty"
+msgstr "Черга порожня 🎉"
+
+msgid "admin.gesture"
+msgstr "Очікуваний жест: {gesture}"
+
 msgid "admin.home"
 msgstr "Адмін-розділ. Черги модерації з'являться тут."
+
+msgid "admin.home.title"
+msgstr "Черги модерації"
+
+msgid "admin.metrics"
+msgstr ""
+"Метрики за {start}–{end}: старти {starts}, завершили анкету {onboarding}%, взаємних лайків "
+"{mutual}%, утримання D1 {d1}% / D7 {d7}%, скарг на 1000 показів {reports}, підтверджених скарг "
+"{confirmed}%"
+
+msgid "admin.queue.custom_tags"
+msgstr "Свої теги ({n})"
+
+msgid "admin.queue.photos"
+msgstr "Фото ({n})"
+
+msgid "admin.queue.reports"
+msgstr "Скарги ({n})"
+
+msgid "admin.queue.texts"
+msgstr "Тексти ({n})"
+
+msgid "admin.queue.verifications"
+msgstr "Верифікації ({n})"
+
+msgid "admin.user"
+msgstr ""
+"user_id {user_id} · tg {tg_id}\n"
+"Статус: {status} · тіньовий бан: {shadow}\n"
+"Бан до: {until} · ризик: {risk} · скарг: {reports}"
+
+msgid "admin.user_usage"
+msgstr "Формат: /user <tg_id>"
 
 msgid "cards.common"
 msgstr "✨ У вас спільного: {items} · збіг {percent}%"
@@ -629,6 +701,33 @@ msgstr ""
 msgid "menu.home"
 msgstr "Головне меню 👇"
 
+msgid "moderation.banned"
+msgstr "Твою анкету заблоковано. Причина — порушення правил."
+
+msgid "moderation.banned_until"
+msgstr "Твою анкету заблоковано до {date}. Причина — порушення правил."
+
+msgid "moderation.media_rejected"
+msgstr "Одне з твоїх фото не пройшло модерацію і видалене. Додай інше в «Моя анкета»."
+
+msgid "moderation.tag_approved"
+msgstr "Твій інтерес схвалено і додано до анкети."
+
+msgid "moderation.tag_rejected"
+msgstr "Твій інтерес не пройшов перевірку."
+
+msgid "moderation.text_removed"
+msgstr "Текст у твоїй анкеті видалено: він порушував правила."
+
+msgid "moderation.unbanned"
+msgstr "Блокування знято. З поверненням!"
+
+msgid "moderation.verification_rejected"
+msgstr "Не вдалося підтвердити верифікацію. Спробуй ще раз: /verify"
+
+msgid "moderation.verified"
+msgstr "Готово! Твоя анкета верифікована ✅"
+
 msgid "onboarding.age.ask"
 msgstr "Скільки тобі років?"
 
@@ -679,6 +778,30 @@ msgstr "Як до тебе звертатися?"
 
 msgid "onboarding.name.rules"
 msgstr "Ім'я — від 2 до 20 літер, без посилань і цифр"
+
+msgid "report.already"
+msgstr "Ти вже скаржився на цю анкету."
+
+msgid "report.ask"
+msgstr "Що не так з анкетою?"
+
+msgid "report.block"
+msgstr "🚫 Заблокувати"
+
+msgid "report.blocked"
+msgstr "Заблоковано. Ви більше не побачите одне одного."
+
+msgid "report.cancelled"
+msgstr "Добре, скасовано."
+
+msgid "report.describe"
+msgstr "Опиши коротко, що не так (до 500 символів)."
+
+msgid "report.thanks"
+msgstr "Дякуємо, ми перевіримо. Цю анкету ти більше не побачиш."
+
+msgid "report.too_long"
+msgstr "Опис — до 500 символів."
 
 msgid "settings.age"
 msgstr "🎂 Вік: {low}–{high}"

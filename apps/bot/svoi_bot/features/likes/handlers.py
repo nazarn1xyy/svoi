@@ -73,3 +73,8 @@ async def on_nav(query: CallbackQuery, callback_data: NavCb, step: StepContext) 
     await query.answer()
     if callback_data.arg == "open":
         await _show_or_done(step)
+
+
+async def on_open_after_report(step: StepContext) -> None:
+    """After reporting a liker: the next incoming like or «Це всі»."""
+    await _show_or_done(step)

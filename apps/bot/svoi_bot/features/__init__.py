@@ -10,6 +10,7 @@ from svoi_bot.features.interests import router as interests
 from svoi_bot.features.likes import router as likes
 from svoi_bot.features.my_profile import router as my_profile
 from svoi_bot.features.onboarding import router as onboarding
+from svoi_bot.features.report import router as report
 from svoi_bot.features.settings import router as settings
 from svoi_bot.features.start import router as start
 
@@ -27,6 +28,7 @@ def routers() -> list[Router]:
         feed.make_router(),
         likes.make_router(),
         contacts.make_router(),
+        report.make_router(),
         # keep last: catches anything else from users who have not finished onboarding
         onboarding.make_resume_router(),
     ]

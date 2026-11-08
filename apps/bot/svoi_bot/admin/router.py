@@ -4,10 +4,11 @@ from typing import Any
 
 from aiogram import Router
 from aiogram.filters import Command, Filter
-from aiogram.types import Message, TelegramObject
+from aiogram.types import TelegramObject
 from svoi_contracts.cards import UserState
 
-from svoi_bot.ui.i18n import _
+from svoi_bot.admin.features.queue import handlers as queue
+from svoi_bot.ui.callbacks import AdminCb
 
 
 class IsAdmin(Filter):
@@ -19,15 +20,13 @@ class IsAdmin(Filter):
         return user_state is not None and user_state.is_admin
 
 
-async def admin_home(message: Message) -> None:
-    """Placeholder until S10 adds the moderation queues."""
-    await message.answer(_("admin.home"))
-
-
 def make_router() -> Router:
     """Admin routes; every handler is guarded by IsAdmin at router level."""
     router = Router(name="admin")
     router.message.filter(IsAdmin())
     router.callback_query.filter(IsAdmin())
-    router.message.register(admin_home, Command("admin"))
+    router.message.register(queue.on_home, Command("admin"))
+    router.message.register(queue.on_user, Command("user"))
+    router.message.register(queue.on_metrics, Command("metrics"))
+    router.callback_query.register(queue.on_callback, AdminCb.filter())
     return router

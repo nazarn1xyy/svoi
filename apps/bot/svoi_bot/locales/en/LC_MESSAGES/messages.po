@@ -84,8 +84,79 @@ msgstr "Add one more prompt?"
 msgid "about.prompts.too_long"
 msgstr "Answers are up to 300 characters. Please shorten it."
 
+msgid "admin.action.approve"
+msgstr "✅ Approve"
+
+msgid "admin.action.ban_7d"
+msgstr "⏳ Ban 7 days"
+
+msgid "admin.action.ban_forever"
+msgstr "⛔ Ban forever"
+
+msgid "admin.action.delete_media"
+msgstr "🖼 Delete photo"
+
+msgid "admin.action.delete_text"
+msgstr "✏️ Delete text"
+
+msgid "admin.action.move_to_minor_pool"
+msgstr "🔞 Move to the 16–17 pool"
+
+msgid "admin.action.ok"
+msgstr "✅ All fine"
+
+msgid "admin.action.reject"
+msgstr "❌ Reject"
+
+msgid "admin.confirm.ask"
+msgstr "Sure? {action}"
+
+msgid "admin.confirm.no"
+msgstr "No"
+
+msgid "admin.confirm.yes"
+msgstr "Yes"
+
+msgid "admin.empty"
+msgstr "Queue is empty 🎉"
+
+msgid "admin.gesture"
+msgstr "Expected gesture: {gesture}"
+
 msgid "admin.home"
 msgstr "Admin section. Moderation queues will appear here."
+
+msgid "admin.home.title"
+msgstr "Moderation queues"
+
+msgid "admin.metrics"
+msgstr ""
+"Metrics {start}–{end}: starts {starts}, finished profile {onboarding}%, mutual likes {mutual}%, "
+"retention D1 {d1}% / D7 {d7}%, reports per 1000 views {reports}, confirmed reports {confirmed}%"
+
+msgid "admin.queue.custom_tags"
+msgstr "Custom tags ({n})"
+
+msgid "admin.queue.photos"
+msgstr "Photos ({n})"
+
+msgid "admin.queue.reports"
+msgstr "Reports ({n})"
+
+msgid "admin.queue.texts"
+msgstr "Texts ({n})"
+
+msgid "admin.queue.verifications"
+msgstr "Verifications ({n})"
+
+msgid "admin.user"
+msgstr ""
+"user_id {user_id} · tg {tg_id}\n"
+"Status: {status} · shadow ban: {shadow}\n"
+"Banned until: {until} · risk: {risk} · reports: {reports}"
+
+msgid "admin.user_usage"
+msgstr "Usage: /user <tg_id>"
 
 msgid "cards.common"
 msgstr "✨ In common: {items} · {percent}% match"
@@ -628,6 +699,33 @@ msgstr ""
 msgid "menu.home"
 msgstr "Main menu 👇"
 
+msgid "moderation.banned"
+msgstr "Your profile is blocked for breaking the rules."
+
+msgid "moderation.banned_until"
+msgstr "Your profile is blocked until {date} for breaking the rules."
+
+msgid "moderation.media_rejected"
+msgstr "One of your photos failed moderation and was removed. Add another in «My profile»."
+
+msgid "moderation.tag_approved"
+msgstr "Your interest was approved and added to your profile."
+
+msgid "moderation.tag_rejected"
+msgstr "Your interest didn't pass review."
+
+msgid "moderation.text_removed"
+msgstr "A text on your profile was removed for breaking the rules."
+
+msgid "moderation.unbanned"
+msgstr "The block is lifted. Welcome back!"
+
+msgid "moderation.verification_rejected"
+msgstr "Verification failed. Try again: /verify"
+
+msgid "moderation.verified"
+msgstr "Done! Your profile is verified ✅"
+
 msgid "onboarding.age.ask"
 msgstr "How old are you?"
 
@@ -679,6 +777,30 @@ msgstr "What should we call you?"
 
 msgid "onboarding.name.rules"
 msgstr "Name: 2 to 20 letters, no links or digits"
+
+msgid "report.already"
+msgstr "You have already reported this profile."
+
+msgid "report.ask"
+msgstr "What's wrong with this profile?"
+
+msgid "report.block"
+msgstr "🚫 Block"
+
+msgid "report.blocked"
+msgstr "Blocked. You won't see each other again."
+
+msgid "report.cancelled"
+msgstr "OK, cancelled."
+
+msgid "report.describe"
+msgstr "Briefly describe what's wrong (up to 500 characters)."
+
+msgid "report.thanks"
+msgstr "Thanks, we'll check. You won't see this profile again."
+
+msgid "report.too_long"
+msgstr "Up to 500 characters, please."
 
 msgid "settings.age"
 msgstr "🎂 Age: {low}–{high}"

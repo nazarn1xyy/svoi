@@ -5,8 +5,7 @@ from typing import Any
 import pytest
 from aiogram import Bot
 from aiogram.exceptions import TelegramForbiddenError, TelegramServerError
-from aiogram.methods import SendMessage, TelegramMethod
-from aiogram.types import Chat
+from aiogram.methods import SendMessage
 from arq import Retry
 from harness import RecordingSession
 from redis.asyncio import Redis
@@ -14,22 +13,7 @@ from svoi_bot.api_client import FakeApiClient
 from svoi_bot.workers.notify import notify_likes, notify_match
 from svoi_contracts.enums import Lang
 from svoi_contracts.jobs import NotifyLikes, NotifyMatch
-
-
-class _FailingSession(RecordingSession):
-    def __init__(self, error: type[Exception] | None = None) -> None:
-        super().__init__(Chat(id=1, type="private"))
-        self.error = error
-
-    async def make_request(
-        self,
-        bot: Bot,
-        method: TelegramMethod[Any],
-        timeout: int | None = None,  # noqa: ASYNC109 - aiogram signature
-    ) -> Any:
-        if self.error is not None:
-            raise self.error(method, "boom")
-        return await super().make_request(bot, method, timeout)
+from telegram_fakes import FailingSession as _FailingSession
 
 
 def _ctx(redis: Redis, api: FakeApiClient, session: RecordingSession) -> dict[str, Any]:
