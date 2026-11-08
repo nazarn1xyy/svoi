@@ -45,12 +45,12 @@ select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC", "S", "PL", "RUF"]
 python_version = "3.12"
 strict = true
 explicit_package_bases = true
-mypy_path = ["packages/contracts", "apps/api", "apps/bot", "packages/contracts/tests"]
+mypy_path = ["packages/contracts", "apps/api", "apps/bot", "packages/contracts/tests", "apps/api/tests"]
 
 [tool.pytest.ini_options]
 # each package keeps its own tests/; importlib mode avoids basename clashes between them
 addopts = ["--import-mode=importlib"]
 # test helpers that parse docs/tech.md, imported as top-level modules
-pythonpath = ["packages/contracts/tests"]
+pythonpath = ["packages/contracts/tests", "apps/api/tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
