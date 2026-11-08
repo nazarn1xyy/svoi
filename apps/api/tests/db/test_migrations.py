@@ -109,11 +109,6 @@ def migrated(database_url: str) -> str:
     return database_url
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="CONTRACT GAP core v2 section 5: ck_profiles_pool evaluates to NULL, so age without"
-    " pool and pool without age pass; strict xfail turns red once the core fixes it",
-)
 @settings(
     max_examples=40, deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture]
 )

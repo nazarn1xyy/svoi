@@ -116,8 +116,9 @@ class Profile(Base):
     __table_args__ = (
         CheckConstraint("age IS NULL OR age BETWEEN 16 AND 99", name="ck_profiles_age"),
         CheckConstraint(
-            "(age IS NULL AND pool IS NULL) OR (age < 18 AND pool = 'minor')"
-            " OR (age >= 18 AND pool = 'adult')",
+            # COALESCE: a NULL result would pass the CHECK (core v3)
+            "COALESCE((age IS NULL AND pool IS NULL) OR (age < 18 AND pool = 'minor')"
+            " OR (age >= 18 AND pool = 'adult'), false)",
             name="ck_profiles_pool",
         ),
         Index("ix_profiles_pool_city", "pool", "city_id"),
