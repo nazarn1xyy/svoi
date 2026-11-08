@@ -3,7 +3,10 @@ name = "svoi-bot"
 version = "0.0.0"
 description = "Svoi Telegram bot"
 requires-python = ">=3.12,<3.13"
-dependencies = ["svoi-contracts"]
+dependencies = [
+    "httpx>=0.28",
+    "svoi-contracts",
+]
 
 [build-system]
 requires = ["hatchling>=1.25"]
