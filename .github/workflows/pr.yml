@@ -1,0 +1,130 @@
+# PR gate (FRONTEND.md section 5). No deploy here: deploy.yml owns that (K13).
+name: pr
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  ENV: test
+  BOT_USE_FAKE_API: "true"
+  USE_FAKE_CLIENTS: "true"
+  UV_PYTHON: "3.12"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+
+  types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      # tests/ holds repo-level checks; typing them keeps the strict rule repo-wide
+      - run: uv run mypy packages apps tests
+
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run pytest packages/contracts
+      # repo-level checks: workspace, infra and this gate match the core
+      - run: uv run pytest tests
+
+  api:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: svoi
+          POSTGRES_PASSWORD: svoi
+          POSTGRES_DB: svoi
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U svoi -d svoi"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+      redis:
+        image: redis:7
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      DATABASE_URL: postgresql+asyncpg://svoi:svoi@localhost:5432/svoi
+      REDIS_URL: redis://localhost:6379/0
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      # alembic lands in K6; skip instead of failing the gate before that
+      - if: hashFiles('apps/api/alembic.ini') != ''
+        run: uv run alembic -c apps/api/alembic.ini upgrade head
+      - if: hashFiles('apps/api/alembic.ini') != ''
+        run: uv run alembic -c apps/api/alembic.ini check
+      - run: uv run pytest apps/api
+
+  bot:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      REDIS_URL: redis://localhost:6379/0
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          enable-cache: true
+      - run: uv sync --frozen
+      - run: uv run pytest apps/bot
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - name: build api image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: apps/api/Dockerfile
+          push: false
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+      - name: build bot image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: apps/bot/Dockerfile
+          push: false
+          cache-from: type=gha,scope=bot
+          cache-to: type=gha,mode=max,scope=bot
