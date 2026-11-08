@@ -25,8 +25,11 @@ REFERRAL_PREFIX = "r_"
 
 
 async def remember_state(state: FSMContext, user_state: UserState) -> None:
-    """Refresh the cached UserState after an API call returned a new one."""
-    await state.update_data({_STATE: user_state.model_dump(mode="json"), _AT: time.monotonic()})
+    """Refresh the cached UserState after an API call returned a new one.
+
+    The 60 s window still counts from the last start call, so the API is asked again soon.
+    """
+    await state.update_data({_STATE: user_state.model_dump(mode="json")})
 
 
 def start_payload(event: TelegramObject) -> str | None:
@@ -63,6 +66,7 @@ class UserContextMiddleware(BaseMiddleware):
         )
         if fresh:
             data["user_state"] = UserState.model_validate(cached[_STATE])
+            set_locale(data["user_state"].lang)
             return await handler(event, data)
         bot: Bot = data["bot"]
         try:
