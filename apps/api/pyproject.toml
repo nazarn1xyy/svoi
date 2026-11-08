@@ -3,7 +3,13 @@ name = "svoi-api"
 version = "0.0.0"
 description = "Svoi backend API"
 requires-python = ">=3.12,<3.13"
-dependencies = ["svoi-contracts"]
+dependencies = [
+    "alembic>=1.14",
+    "asyncpg>=0.30",
+    "geoalchemy2>=0.15",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "svoi-contracts",
+]
 
 [build-system]
 requires = ["hatchling>=1.25"]
