@@ -14,6 +14,7 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_applicati
 from aiohttp import web
 
 from svoi_bot import errors, features
+from svoi_bot.admin import router as admin
 from svoi_bot.api_client import ApiClient, FakeApiClient, HttpApiClient
 from svoi_bot.commands import set_commands
 from svoi_bot.config import Settings
@@ -46,6 +47,8 @@ def build_dispatcher(
         observer.outer_middleware(I18nMiddleware())
         observer.outer_middleware(user_context)
     dp.include_router(errors.make_router())
+    # admin first: moderators reach queues even with an unfinished profile (ADR 0001)
+    dp.include_router(admin.make_router())
     for router in [*(extra_routers or []), *features.routers()]:
         dp.include_router(router)
     if settings.dev_routes:

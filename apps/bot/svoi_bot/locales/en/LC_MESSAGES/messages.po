@@ -18,6 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+msgid "admin.home"
+msgstr "Admin section. Moderation queues will appear here."
+
 msgid "cards.common"
 msgstr "✨ In common: {items} · {percent}% match"
 
