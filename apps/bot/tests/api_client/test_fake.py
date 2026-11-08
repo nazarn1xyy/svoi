@@ -8,7 +8,7 @@ from svoi_contracts.api.catalog import CustomInterestIn
 from svoi_contracts.api.profile import AgeIn, CityIn, GenderIn, GoalsIn, InterestsIn, NameIn
 from svoi_contracts.api.users import LangIn, StartIn
 from svoi_contracts.api.verification import VerificationIn
-from svoi_contracts.constants import AGE_MIN
+from svoi_contracts.constants import AGE_MAX, AGE_MIN
 from svoi_contracts.enums import Gender, GoalCode, Lang, OnboardingStep, Pool, UserStatus
 from svoi_contracts.errors import ApiError, ErrorCode
 
@@ -23,17 +23,26 @@ def _start() -> StartIn:
 
 async def _onboarded_to(fake: FakeApiClient, step: OnboardingStep) -> None:
     await fake.start(TG, _start())
-    actions = {
-        OnboardingStep.lang: lambda: fake.set_lang(TG, LangIn(lang=Lang.uk)),
-        OnboardingStep.consent: lambda: fake.consent(TG),
-        OnboardingStep.age: lambda: fake.set_age(TG, AgeIn(age=19)),
-        OnboardingStep.name: lambda: fake.set_name(TG, NameIn(name="Ira")),
-        OnboardingStep.gender: lambda: fake.set_gender(TG, GenderIn(gender=Gender.female)),
-    }
-    for current, action in actions.items():
+    order = [
+        OnboardingStep.lang,
+        OnboardingStep.consent,
+        OnboardingStep.age,
+        OnboardingStep.name,
+        OnboardingStep.gender,
+    ]
+    for current in order:
         if current == step:
             return
-        await action()
+        if current is OnboardingStep.lang:
+            await fake.set_lang(TG, LangIn(lang=Lang.uk))
+        elif current is OnboardingStep.consent:
+            await fake.consent(TG)
+        elif current is OnboardingStep.age:
+            await fake.set_age(TG, AgeIn(age=19))
+        elif current is OnboardingStep.name:
+            await fake.set_name(TG, NameIn(name="Ira"))
+        else:
+            await fake.set_gender(TG, GenderIn(gender=Gender.female))
 
 
 async def test_new_user_starts_at_language_step() -> None:
@@ -85,11 +94,12 @@ def test_age_outcome_follows_age_min(age: int) -> None:
         try:
             await fake.set_age(TG, AgeIn(age=age))
         except ApiException as exc:
-            assert exc.err.code is ErrorCode.age_too_young
+            expected = ErrorCode.age_too_young if age < AGE_MIN else ErrorCode.validation_error
+            assert exc.err.code is expected
             return False
         return True
 
-    assert asyncio.run(run()) == (age >= AGE_MIN)
+    assert asyncio.run(run()) == (AGE_MIN <= age <= AGE_MAX)
 
 
 async def test_name_rules() -> None:
@@ -111,7 +121,9 @@ async def test_contract_violation_on_wrong_body_type() -> None:
     fake = FakeApiClient()
     await _onboarded_to(fake, OnboardingStep.age)
     with pytest.raises(ContractViolation):
-        await fake.set_age(TG, AgeIn.model_construct(age="19"))  # type: ignore[arg-type]  # bypasses validation like buggy bot code
+        await fake.set_age(
+            TG, AgeIn.model_construct(age="19")
+        )  # bypasses validation like buggy code
     with pytest.raises(ContractViolation):
         await fake.set_age(TG, NameIn(name="x"))  # type: ignore[arg-type]  # wrong model
 

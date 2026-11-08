@@ -113,7 +113,8 @@ async def test_no_content_and_query_params() -> None:
         return httpx.Response(200, json=[])
 
     client = _client(httpx.MockTransport(handler))
-    assert await client.delete_me(42) is None
+    await client.delete_me(42)
+    assert seen[0].method == "DELETE"
     assert await client.search_cities(42, "Він") == []
     assert seen[1].url.params["q"] == "Він"
     assert seen[1].url.params["limit"] == "5"
