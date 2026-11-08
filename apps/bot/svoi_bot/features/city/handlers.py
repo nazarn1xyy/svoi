@@ -15,6 +15,7 @@ from svoi_bot.ui.callbacks import PickCb
 
 _CITIES, _LOCATED, _COORDS = "city_results", "city_located", "city_coords"
 SEARCH_LIMIT = 5
+CITY_ID_KEY = "city_id"
 
 
 @register(OnboardingStep.city)
@@ -62,6 +63,8 @@ async def on_location(message: Message, step: StepContext) -> None:
 
 async def _save(step: StepContext, city: CityOut, body: CityIn) -> None:
     new_state = await step.api.set_city(step.tg_user.id, body)
+    # UserState has no city_id, and S4 needs it for institution search (CONTRACT GAP)
+    await step.state.update_data({CITY_ID_KEY: city.id})
     await step.screen.clear()
     await step.bot.send_message(
         step.tg_user.id, views.saved(city.name), reply_markup=keyboards.remove()

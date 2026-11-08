@@ -24,6 +24,8 @@ async def at_step(harness: BotHarness, step: OnboardingStep, *, age: int = 19) -
     if order.index(step) > order.index(OnboardingStep.interests):
         user.interests = {1: None, 2: None, 14: None}
     user.step = step
+    if user.city_id is not None:
+        await harness._context().update_data({"city_id": user.city_id})
     harness.clock.tick(CACHE_TTL_S + 1)  # the next update asks the API again
     harness.clear()
     await harness.send_text("…")  # any message resumes the saved step

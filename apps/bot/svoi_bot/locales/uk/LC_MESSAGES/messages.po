@@ -19,6 +19,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+msgid "about.height.ask"
+msgstr "Вкажеш зріст? Напиши число в сантиметрах."
+
+msgid "about.height.range"
+msgstr "Зріст — число від {low} до {high}"
+
+msgid "about.institution.ask"
+msgstr "Де навчаєшся або працюєш? Так знайдуться люди з твого коледжу чи вишу."
+
+msgid "about.institution.none"
+msgstr "Не знайшов такий заклад. Спробуй інакше або пропусти крок."
+
+msgid "about.institution.results"
+msgstr "Знайшов:"
+
+msgid "about.institution.search_hint"
+msgstr "Напиши назву, щоб знайти інший"
+
+msgid "about.media.added"
+msgstr "Додано ({count}/{total}). Ще одне?"
+
+msgid "about.media.ask"
+msgstr "Додай до 3 фото або коротке відео — анкети з фото частіше отримують відповіді."
+
+msgid "about.media.done"
+msgstr "✅ Готово"
+
+msgid "about.media.none"
+msgstr "⏭ Без фото"
+
+msgid "about.media.wrong_type"
+msgstr "Надішли фото або відео"
+
+msgid "about.preview.edit"
+msgstr "✏️ Змінити"
+
+msgid "about.preview.finished"
+msgstr "Готово! Тепер подивимось, хто поруч 👇"
+
+msgid "about.preview.head"
+msgstr "Так тебе побачать інші:"
+
+msgid "about.preview.ok"
+msgstr "✅ Все вірно, до анкет"
+
+msgid "about.preview.username"
+msgstr ""
+"Щоб при взаємній симпатії з тобою могли зв'язатися, створи username: Налаштування Telegram → Ім'я"
+" користувача."
+
+msgid "about.prompts.add"
+msgstr "➕ Ще одне"
+
+msgid "about.prompts.answer"
+msgstr "{title} Напиши відповідь до 300 символів."
+
+msgid "about.prompts.ask"
+msgstr "Обери питання і дай відповідь — це краще за порожній опис."
+
+msgid "about.prompts.enough"
+msgstr "✅ Досить"
+
+msgid "about.prompts.more"
+msgstr "Додати ще одне питання?"
+
+msgid "about.prompts.too_long"
+msgstr "Відповідь — до 300 символів. Скороти, будь ласка."
+
 msgid "admin.home"
 msgstr "Адмін-розділ. Черги модерації з'являться тут."
 
@@ -93,6 +161,51 @@ msgstr "✍️ Напишу назву"
 
 msgid "city.yes"
 msgstr "✅ Так"
+
+msgid "clarify.anime_format"
+msgstr "«{interest}»: як дивишся?"
+
+msgid "clarify.basketball_role"
+msgstr "«{interest}» — граєш чи вболіваєш?"
+
+msgid "clarify.chess_format"
+msgstr "«{interest}»: онлайн чи наживо?"
+
+msgid "clarify.cs2_level"
+msgstr "«{interest}»: як граєш?"
+
+msgid "clarify.dance_style"
+msgstr "«{interest}»: який стиль?"
+
+msgid "clarify.dota2_level"
+msgstr "«{interest}»: як граєш?"
+
+msgid "clarify.drawing_medium"
+msgstr "«{interest}»: на чому малюєш?"
+
+msgid "clarify.english_level"
+msgstr "«{interest}»: який у тебе рівень?"
+
+msgid "clarify.football_role"
+msgstr "«{interest}» — граєш чи вболіваєш?"
+
+msgid "clarify.guitar_play"
+msgstr "Ти обрав «{interest}». Граєш сам чи більше слухаєш?"
+
+msgid "clarify.gym_goal"
+msgstr "«{interest}»: яка в тебе мета?"
+
+msgid "clarify.photo_gear"
+msgstr "«{interest}»: на що знімаєш?"
+
+msgid "clarify.piano_play"
+msgstr "Ти обрав «{interest}». Граєш сам чи більше слухаєш?"
+
+msgid "clarify.programming_level"
+msgstr "«{interest}»: вчишся чи вже пишеш код?"
+
+msgid "clarify.running_distance"
+msgstr "«{interest}»: які дистанції?"
 
 msgid "commands.contacts"
 msgstr "Мої контакти"

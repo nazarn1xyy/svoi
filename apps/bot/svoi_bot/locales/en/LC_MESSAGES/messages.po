@@ -18,6 +18,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+msgid "about.height.ask"
+msgstr "Add your height? Type it in centimetres."
+
+msgid "about.height.range"
+msgstr "Height is a number from {low} to {high}"
+
+msgid "about.institution.ask"
+msgstr "Where do you study or work? That helps find people from your college or university."
+
+msgid "about.institution.none"
+msgstr "No such place found. Try again or skip this step."
+
+msgid "about.institution.results"
+msgstr "Found:"
+
+msgid "about.institution.search_hint"
+msgstr "Type a name to find another one"
+
+msgid "about.media.added"
+msgstr "Added ({count}/{total}). One more?"
+
+msgid "about.media.ask"
+msgstr "Add up to 3 photos or a short video; profiles with photos get more replies."
+
+msgid "about.media.done"
+msgstr "✅ Done"
+
+msgid "about.media.none"
+msgstr "⏭ No photos"
+
+msgid "about.media.wrong_type"
+msgstr "Send a photo or a video"
+
+msgid "about.preview.edit"
+msgstr "✏️ Edit"
+
+msgid "about.preview.finished"
+msgstr "Done! Let's see who's nearby 👇"
+
+msgid "about.preview.head"
+msgstr "This is how others will see you:"
+
+msgid "about.preview.ok"
+msgstr "✅ Looks good, show profiles"
+
+msgid "about.preview.username"
+msgstr "So people can reach you after a mutual like, create a username: Telegram Settings → Username."
+
+msgid "about.prompts.add"
+msgstr "➕ One more"
+
+msgid "about.prompts.answer"
+msgstr "{title} Write an answer of up to 300 characters."
+
+msgid "about.prompts.ask"
+msgstr "Pick a prompt and answer it; it beats an empty bio."
+
+msgid "about.prompts.enough"
+msgstr "✅ That's enough"
+
+msgid "about.prompts.more"
+msgstr "Add one more prompt?"
+
+msgid "about.prompts.too_long"
+msgstr "Answers are up to 300 characters. Please shorten it."
+
 msgid "admin.home"
 msgstr "Admin section. Moderation queues will appear here."
 
@@ -92,6 +158,51 @@ msgstr "✍️ I'll type it"
 
 msgid "city.yes"
 msgstr "✅ Yes"
+
+msgid "clarify.anime_format"
+msgstr "«{interest}»: how do you watch?"
+
+msgid "clarify.basketball_role"
+msgstr "«{interest}»: do you play or watch?"
+
+msgid "clarify.chess_format"
+msgstr "«{interest}»: online or in person?"
+
+msgid "clarify.cs2_level"
+msgstr "«{interest}»: how do you play?"
+
+msgid "clarify.dance_style"
+msgstr "«{interest}»: which style?"
+
+msgid "clarify.dota2_level"
+msgstr "«{interest}»: how do you play?"
+
+msgid "clarify.drawing_medium"
+msgstr "«{interest}»: what do you draw on?"
+
+msgid "clarify.english_level"
+msgstr "«{interest}»: what's your level?"
+
+msgid "clarify.football_role"
+msgstr "«{interest}»: do you play or watch?"
+
+msgid "clarify.guitar_play"
+msgstr "You picked «{interest}». Do you play or mostly listen?"
+
+msgid "clarify.gym_goal"
+msgstr "«{interest}»: what's your goal?"
+
+msgid "clarify.photo_gear"
+msgstr "«{interest}»: what do you shoot with?"
+
+msgid "clarify.piano_play"
+msgstr "You picked «{interest}». Do you play or mostly listen?"
+
+msgid "clarify.programming_level"
+msgstr "«{interest}»: learning or already coding?"
+
+msgid "clarify.running_distance"
+msgstr "«{interest}»: what distances?"
 
 msgid "commands.contacts"
 msgstr "My contacts"
