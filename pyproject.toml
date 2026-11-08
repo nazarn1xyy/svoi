@@ -34,8 +34,8 @@ target-version = "py312"
 select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC", "S", "PL", "RUF"]
 
 [tool.ruff.lint.per-file-ignores]
-# pytest relies on bare assert
-"**/tests/**" = ["S101"]
+# pytest relies on bare assert; tests compare against literal expected values
+"**/tests/**" = ["S101", "PLR2004"]
 
 [tool.mypy]
 python_version = "3.12"
