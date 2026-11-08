@@ -1,11 +1,12 @@
 # tech.md — «Свої»: ядро проєкту
 
-**Версія ядра: v2** · 2026-11-08
+**Версія ядра: v3** · 2026-11-08
 
 ## Changelog
 
 - v1 — початкова заморозка: схема БД, контракти API слайсів S1–S14, контракти черги, примітиви UI бота, продуктові константи.
 - v2 — один Telegram-бот і одне середовище (`docs/adr/0001-single-bot.md`): прибрано компонент `admin-bot`, точку входу `svoi_bot.admin.main` і змінну `ADMIN_BOT_TOKEN`; модерація, `/user` і `/metrics` — адмін-розділ основного бота за `UserState.is_admin`; один VPS з деплоєм на мердж у `main` замість тестового і прод-VPS. Міграція: у `.env` видалити `ADMIN_BOT_TOKEN`; контракти API, черги, схема БД і константи не змінились.
+- v3 — `ck_profiles_pool` обгорнуто в `COALESCE(..., false)`: вираз давав NULL для віку без пулу і пулу без віку, а CHECK пропускає NULL. Міграція `0002` перестворює обмеження; існуючі рядки з віком без пулу треба виправити до неї. Контракти API, черги і константи не змінились.
 
 ## Правила цього документа
 
@@ -356,7 +357,7 @@ class Profile(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     __table_args__ = (
         CheckConstraint("age IS NULL OR age BETWEEN 16 AND 99", name="ck_profiles_age"),
-        CheckConstraint("(age IS NULL AND pool IS NULL) OR (age < 18 AND pool = 'minor') OR (age >= 18 AND pool = 'adult')", name="ck_profiles_pool"),
+        CheckConstraint("COALESCE((age IS NULL AND pool IS NULL) OR (age < 18 AND pool = 'minor') OR (age >= 18 AND pool = 'adult'), false)", name="ck_profiles_pool"),
         Index("ix_profiles_pool_city", "pool", "city_id"),
         Index("ix_profiles_geo", "geo", postgresql_using="gist"),
     )

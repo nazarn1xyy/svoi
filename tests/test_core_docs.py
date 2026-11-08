@@ -16,20 +16,27 @@ def _tech() -> str:
     return (ROOT / "docs/tech.md").read_text()
 
 
-def test_core_header_is_v2() -> None:
-    assert re.search(r"^\*\*Версія ядра: v2\*\*", _tech(), re.MULTILINE)
+def _version() -> int:
+    match = re.search(r"^\*\*Версія ядра: v(\d+)\*\*", _tech(), re.MULTILINE)
+    assert match is not None
+    return int(match.group(1))
 
 
-def test_changelog_explains_v2_and_keeps_v1() -> None:
+def test_core_is_at_least_v2() -> None:
+    assert _version() >= 2
+
+
+def test_changelog_has_a_line_per_version() -> None:
     changelog = _tech().split("## Changelog", 1)[1].split("##", 1)[0]
-    assert "- v1 —" in changelog
-    assert "- v2 —" in changelog
+    for version in range(1, _version() + 1):
+        assert f"- v{version} —" in changelog, version
     assert "0001-single-bot" in changelog
 
 
-def test_role_guides_reference_core_v2() -> None:
+def test_role_guides_reference_the_current_core() -> None:
     for name in ("FRONTEND.md", "BACKEND.md"):
-        assert "поточна версія **v2**" in (ROOT / "docs" / name).read_text(), name
+        current = f"поточна версія **v{_version()}**"
+        assert current in (ROOT / "docs" / name).read_text(), name
 
 
 def test_adr_records_the_decision() -> None:
