@@ -1,0 +1,107 @@
+# Local stack. Every app service starts on fakes: .env.example supplies defaults,
+# an optional ../.env overrides them. Migrations run only in the deploy step.
+name: svoi
+
+x-app: &app
+  restart: unless-stopped
+  env_file:
+    - path: ../.env.example
+      required: true
+    - path: ../.env
+      required: false
+
+x-api-image: &api-image
+  image: ${API_IMAGE:-svoi-api:local}
+
+x-bot-image: &bot-image
+  image: ${BOT_IMAGE:-svoi-bot:local}
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: svoi
+      POSTGRES_PASSWORD: svoi
+      POSTGRES_DB: svoi
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U svoi -d svoi"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    <<: [*app, *api-image]
+    build:
+      context: ..
+      dockerfile: apps/api/Dockerfile
+    command: ["uvicorn", "svoi_api.main:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+    depends_on: &api-deps
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  api-worker:
+    <<: [*app, *api-image]
+    command: ["arq", "svoi_api.jobs.worker.WorkerSettings"]
+    depends_on:
+      <<: *api-deps
+      api:
+        condition: service_started
+
+  bot:
+    <<: [*app, *bot-image]
+    build:
+      context: ..
+      dockerfile: apps/bot/Dockerfile
+    command: ["python", "-m", "svoi_bot.main"]
+    depends_on: &bot-deps
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_started
+
+  bot-worker:
+    <<: [*app, *bot-image]
+    command: ["arq", "svoi_bot.workers.main.WorkerSettings"]
+    depends_on:
+      <<: *bot-deps
+      bot:
+        condition: service_started
+
+  admin-bot:
+    <<: [*app, *bot-image]
+    command: ["python", "-m", "svoi_bot.admin.main"]
+    depends_on:
+      <<: *bot-deps
+      bot:
+        condition: service_started
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddydata:/data
+    depends_on:
+      - bot
+
+volumes:
+  pgdata:
+  redisdata:
+  caddydata:

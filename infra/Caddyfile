@@ -1,0 +1,4 @@
+# Local entry point. TLS and the Telegram webhook route are added in K13.
+:80 {
+	respond /healthz "ok" 200
+}
