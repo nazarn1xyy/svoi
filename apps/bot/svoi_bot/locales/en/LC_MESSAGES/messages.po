@@ -561,6 +561,138 @@ msgstr "What should we call you?"
 msgid "onboarding.name.rules"
 msgstr "Name: 2 to 20 letters, no links or digits"
 
+msgid "settings.age"
+msgstr "🎂 Age: {low}–{high}"
+
+msgid "settings.age_fixed"
+msgstr "At your age the search covers 16–17 only"
+
+msgid "settings.freq.daily"
+msgstr "Daily"
+
+msgid "settings.freq.hourly"
+msgstr "Hourly"
+
+msgid "settings.freq.instant"
+msgstr "Instantly"
+
+msgid "settings.gender"
+msgstr "👥 With: {value}"
+
+msgid "settings.gender.all"
+msgstr "Everyone"
+
+msgid "settings.gender.female"
+msgstr "Girls"
+
+msgid "settings.gender.male"
+msgstr "Guys"
+
+msgid "settings.gender_pick.all"
+msgstr "Everyone"
+
+msgid "settings.gender_pick.female"
+msgstr "Girls"
+
+msgid "settings.gender_pick.male"
+msgstr "Guys"
+
+msgid "settings.gender_title"
+msgstr "Who do you want to talk to?"
+
+msgid "settings.lang"
+msgstr "🌐 Language: {value}"
+
+msgid "settings.lang_button"
+msgstr "🌐 Language"
+
+msgid "settings.max_down"
+msgstr "− max"
+
+msgid "settings.max_up"
+msgstr "+ max"
+
+msgid "settings.min_down"
+msgstr "− min"
+
+msgid "settings.min_up"
+msgstr "+ min"
+
+msgid "settings.notify"
+msgstr "🔔 Notifications: {value} · quiet hours {quiet}"
+
+msgid "settings.notify_button"
+msgstr "🔔 Notifications"
+
+msgid "settings.notify_title"
+msgstr "How often to notify you and when to stay quiet?"
+
+msgid "settings.off"
+msgstr "off"
+
+msgid "settings.on"
+msgstr "on"
+
+msgid "settings.privacy"
+msgstr "🔒 Distance: {distance} · school: {institution}"
+
+msgid "settings.privacy_button"
+msgstr "🔒 Privacy"
+
+msgid "settings.privacy_title"
+msgstr "What to show on your profile?"
+
+msgid "settings.quiet.off"
+msgstr "none"
+
+msgid "settings.quiet_pick.22-09"
+msgstr "22:00–09:00"
+
+msgid "settings.quiet_pick.23-08"
+msgstr "23:00–08:00"
+
+msgid "settings.quiet_pick.off"
+msgstr "No quiet hours"
+
+msgid "settings.radius"
+msgstr "📍 Search: {value}"
+
+msgid "settings.radius.any_online"
+msgstr "Anywhere (online)"
+
+msgid "settings.radius.city"
+msgstr "My city"
+
+msgid "settings.radius.country"
+msgstr "Whole country"
+
+msgid "settings.radius.km100"
+msgstr "Within 100 km"
+
+msgid "settings.radius.km25"
+msgstr "Within 25 km"
+
+msgid "settings.radius.km50"
+msgstr "Within 50 km"
+
+msgid "settings.radius.region"
+msgstr "Whole region"
+
+msgid "settings.radius_title"
+msgstr "Where to search?"
+
+msgid "settings.show_distance"
+msgstr "Show distance: {value}"
+
+msgid "settings.show_institution"
+msgstr "Show school: {value}"
+
+msgid "settings.title"
+msgstr "⚙️ Settings"
+
+msgid "settings.verified"
+msgstr "✅ Verified only: {value}"
+
 msgid "ui.button.back"
 msgstr "◀️ Back"
 

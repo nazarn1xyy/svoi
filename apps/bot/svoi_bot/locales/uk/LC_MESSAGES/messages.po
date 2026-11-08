@@ -563,6 +563,138 @@ msgstr "Як до тебе звертатися?"
 msgid "onboarding.name.rules"
 msgstr "Ім'я — від 2 до 20 літер, без посилань і цифр"
 
+msgid "settings.age"
+msgstr "🎂 Вік: {low}–{high}"
+
+msgid "settings.age_fixed"
+msgstr "Для твого віку пошук тільки серед 16–17"
+
+msgid "settings.freq.daily"
+msgstr "Раз на день"
+
+msgid "settings.freq.hourly"
+msgstr "Раз на годину"
+
+msgid "settings.freq.instant"
+msgstr "Одразу"
+
+msgid "settings.gender"
+msgstr "👥 З ким: {value}"
+
+msgid "settings.gender.all"
+msgstr "Усі"
+
+msgid "settings.gender.female"
+msgstr "Дівчата"
+
+msgid "settings.gender.male"
+msgstr "Хлопці"
+
+msgid "settings.gender_pick.all"
+msgstr "З усіма"
+
+msgid "settings.gender_pick.female"
+msgstr "З дівчатами"
+
+msgid "settings.gender_pick.male"
+msgstr "З хлопцями"
+
+msgid "settings.gender_title"
+msgstr "З ким хочеш спілкуватися?"
+
+msgid "settings.lang"
+msgstr "🌐 Мова: {value}"
+
+msgid "settings.lang_button"
+msgstr "🌐 Мова"
+
+msgid "settings.max_down"
+msgstr "− макс"
+
+msgid "settings.max_up"
+msgstr "+ макс"
+
+msgid "settings.min_down"
+msgstr "− мін"
+
+msgid "settings.min_up"
+msgstr "+ мін"
+
+msgid "settings.notify"
+msgstr "🔔 Сповіщення: {value} · тихі години {quiet}"
+
+msgid "settings.notify_button"
+msgstr "🔔 Сповіщення"
+
+msgid "settings.notify_title"
+msgstr "Як часто сповіщати і коли не турбувати?"
+
+msgid "settings.off"
+msgstr "вимк"
+
+msgid "settings.on"
+msgstr "увімк"
+
+msgid "settings.privacy"
+msgstr "🔒 Відстань: {distance} · заклад: {institution}"
+
+msgid "settings.privacy_button"
+msgstr "🔒 Приватність"
+
+msgid "settings.privacy_title"
+msgstr "Що показувати в анкеті?"
+
+msgid "settings.quiet.off"
+msgstr "немає"
+
+msgid "settings.quiet_pick.22-09"
+msgstr "22:00–09:00"
+
+msgid "settings.quiet_pick.23-08"
+msgstr "23:00–08:00"
+
+msgid "settings.quiet_pick.off"
+msgstr "Без тихих годин"
+
+msgid "settings.radius"
+msgstr "📍 Де шукати: {value}"
+
+msgid "settings.radius.any_online"
+msgstr "Географія не важлива (онлайн)"
+
+msgid "settings.radius.city"
+msgstr "Моє місто"
+
+msgid "settings.radius.country"
+msgstr "Уся країна"
+
+msgid "settings.radius.km100"
+msgstr "До 100 км"
+
+msgid "settings.radius.km25"
+msgstr "До 25 км"
+
+msgid "settings.radius.km50"
+msgstr "До 50 км"
+
+msgid "settings.radius.region"
+msgstr "Уся область"
+
+msgid "settings.radius_title"
+msgstr "Де шукати?"
+
+msgid "settings.show_distance"
+msgstr "Показувати відстань: {value}"
+
+msgid "settings.show_institution"
+msgstr "Показувати заклад: {value}"
+
+msgid "settings.title"
+msgstr "⚙️ Налаштування"
+
+msgid "settings.verified"
+msgstr "✅ Тільки верифіковані: {value}"
+
 msgid "ui.button.back"
 msgstr "◀️ Назад"
 
