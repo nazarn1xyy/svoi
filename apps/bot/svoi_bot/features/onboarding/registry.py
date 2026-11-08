@@ -48,6 +48,8 @@ StepScreen = Callable[[StepContext], Awaitable[None]]
 STEP_SCREENS: dict[OnboardingStep, StepScreen] = {}
 # set by features/my_profile (S5): where an edit goes after success
 after_edit: list[StepScreen] = []
+# set by features/my_profile (S5): «✏️ Змінити» on the preview opens the edit menu
+profile_menu: list[StepScreen] = []
 
 
 def register(step: OnboardingStep) -> Callable[[StepScreen], StepScreen]:
@@ -88,3 +90,8 @@ async def advance(ctx: StepContext, new_state: UserState) -> None:
         return
     if not await show_step(ctx, new_state.onboarding_step):
         await ctx.state.set_state(None)
+
+
+async def finish_edit(ctx: StepContext) -> None:
+    """Leave an edit without saving (skip in edit mode): back to «Моя анкета»."""
+    await advance(ctx, await ctx.api.get_me(ctx.tg_user.id))
