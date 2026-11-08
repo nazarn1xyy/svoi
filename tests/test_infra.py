@@ -8,7 +8,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 INFRA = ROOT / "infra"
-SERVICES = {"postgres", "redis", "api", "api-worker", "bot", "bot-worker", "admin-bot", "caddy"}
+# core v2: admin lives inside the main bot, so there is no admin-bot service
+SERVICES = {"postgres", "redis", "api", "api-worker", "bot", "bot-worker", "caddy"}
 APP_SERVICES = SERVICES - {"postgres", "redis", "caddy"}
 DOCKERFILES = (ROOT / "apps/api/Dockerfile", ROOT / "apps/bot/Dockerfile")
 
@@ -41,7 +42,7 @@ def test_api_and_its_worker_share_the_api_image() -> None:
 
 def test_bot_processes_share_the_bot_image() -> None:
     services = _services()
-    images = {services[name]["image"] for name in ("bot", "bot-worker", "admin-bot")}
+    images = {services[name]["image"] for name in ("bot", "bot-worker")}
     assert len(images) == 1
     assert services["bot"]["build"]["dockerfile"] == "apps/bot/Dockerfile"
 
@@ -53,7 +54,6 @@ def test_entrypoints_match_core_layout() -> None:
         "api-worker": "svoi_api.jobs.worker",
         "bot": "svoi_bot.main",
         "bot-worker": "svoi_bot.workers.main",
-        "admin-bot": "svoi_bot.admin.main",
     }
     for name, module in expected.items():
         assert module in " ".join(services[name]["command"]), name

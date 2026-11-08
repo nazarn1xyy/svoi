@@ -81,14 +81,6 @@ services:
       bot:
         condition: service_started
 
-  admin-bot:
-    <<: [*app, *bot-image]
-    command: ["python", "-m", "svoi_bot.admin.main"]
-    depends_on:
-      <<: *bot-deps
-      bot:
-        condition: service_started
-
   caddy:
     image: caddy:2
     restart: unless-stopped
