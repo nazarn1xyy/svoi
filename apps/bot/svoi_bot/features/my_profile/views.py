@@ -38,6 +38,7 @@ def profile_buttons(status: UserStatus) -> InlineKeyboardMarkup:
     buttons = [nav_button(_(key), ME, arg) for arg, key in labels]
     rows = [buttons[i : i + 3] for i in range(0, len(buttons), 3)]
     toggle = ("unhide", "me.unhide") if status is UserStatus.hidden else ("hide", "me.hide")
+    rows.append([nav_button(_("me.verify"), ME, "verify")])
     rows.append([nav_button(_("me.reset"), ME, "reset")])
     rows.append([nav_button(_(toggle[1]), ME, toggle[0])])
     rows.append([nav_button(_("me.delete"), ME, "delete")])
