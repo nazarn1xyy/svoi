@@ -19,6 +19,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+msgid "admin.home"
+msgstr "Админ-раздел. Очереди модерации появятся здесь."
+
 msgid "cards.common"
 msgstr "✨ У вас общего: {items} · совпадение {percent}%"
 
