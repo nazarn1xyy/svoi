@@ -5,6 +5,7 @@ import logging
 import time
 from collections.abc import Callable
 
+import sentry_sdk
 import structlog
 from aiogram import Bot, Dispatcher, Router
 from aiogram.client.default import DefaultBotProperties
@@ -91,10 +92,18 @@ async def run(settings: Settings) -> None:
         await bot.session.close()
 
 
+def init_sentry(settings: Settings) -> None:
+    """Error reporting when SENTRY_DSN is set; nothing otherwise."""
+    if settings.sentry_dsn:
+        sentry_sdk.init(dsn=settings.sentry_dsn, environment=settings.env, send_default_pii=False)
+
+
 def main() -> None:
     """CLI entry."""
     logging.basicConfig(level=logging.INFO)
-    asyncio.run(run(Settings()))
+    settings = Settings()
+    init_sentry(settings)
+    asyncio.run(run(settings))
 
 
 if __name__ == "__main__":

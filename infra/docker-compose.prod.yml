@@ -1,0 +1,77 @@
+# VPS overrides: images from GHCR, webhook mode, TLS on Caddy, monitoring and backups.
+# docker compose -f docker-compose.yml -f docker-compose.prod.yml ... (see infra/deploy.sh)
+x-prod: &prod
+  env_file:
+    - path: ../.env
+      required: true
+
+services:
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+
+  api:
+    <<: *prod
+    image: ghcr.io/${GHCR_OWNER:?}/svoi-api:${IMAGE_TAG:?}
+    build: !reset null
+
+  api-worker:
+    <<: *prod
+    image: ghcr.io/${GHCR_OWNER:?}/svoi-api:${IMAGE_TAG:?}
+
+  bot:
+    <<: *prod
+    image: ghcr.io/${GHCR_OWNER:?}/svoi-bot:${IMAGE_TAG:?}
+    build: !reset null
+    environment:
+      BOT_MODE: webhook
+
+  bot-worker:
+    <<: *prod
+    image: ghcr.io/${GHCR_OWNER:?}/svoi-bot:${IMAGE_TAG:?}
+
+  caddy:
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:?set SITE_ADDRESS to the bot domain}
+
+  prometheus:
+    image: prom/prometheus:v3.1.0
+    restart: unless-stopped
+    command: ["--config.file=/etc/prometheus/prometheus.yml", "--storage.tsdb.retention.time=30d"]
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheusdata:/prometheus
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    restart: unless-stopped
+    # no published port: open it through an SSH tunnel (infra/README.md)
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?set GRAFANA_ADMIN_PASSWORD in .env}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - grafanadata:/var/lib/grafana
+
+  backup:
+    image: postgis/postgis:16-3.4
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/backup/backup-loop.sh"]
+    environment:
+      PGHOST: postgres
+      PGUSER: svoi
+      PGDATABASE: svoi
+      PGPASSWORD: ${POSTGRES_PASSWORD:?}
+      BACKUP_DIR: /backups
+      BACKUP_KEEP_DAYS: "14"
+    volumes:
+      - ./backup.sh:/backup/backup.sh:ro
+      - ./backup-loop.sh:/backup/backup-loop.sh:ro
+      - ${BACKUP_HOST_DIR:-/var/backups/svoi}:/backups
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  prometheusdata:
+  grafanadata:

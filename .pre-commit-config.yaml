@@ -7,6 +7,8 @@ repos:
       - id: trailing-whitespace
       - id: check-toml
       - id: check-yaml
+        # syntax only: docker compose files use the !reset tag
+        args: [--unsafe]
       - id: check-merge-conflict
       - id: detect-private-key
   - repo: local

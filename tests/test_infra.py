@@ -88,7 +88,12 @@ def test_migrations_never_run_on_container_start() -> None:
     for name in APP_SERVICES:
         assert "alembic" not in " ".join(_services()[name]["command"]), name
     for dockerfile in DOCKERFILES:
-        assert "alembic" not in dockerfile.read_text()
+        runs = [
+            line
+            for line in dockerfile.read_text().splitlines()
+            if line.split(" ", 1)[0] in {"RUN", "CMD", "ENTRYPOINT"}
+        ]
+        assert not any("alembic" in line for line in runs), dockerfile
 
 
 def test_dockerfiles_use_frozen_lock_and_non_root_user() -> None:

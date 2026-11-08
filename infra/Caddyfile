@@ -1,4 +1,13 @@
-# Local entry point. TLS and the Telegram webhook route are added in K13.
-:80 {
+# SITE_ADDRESS is ":80" locally and the bot domain on the VPS (Caddy then issues TLS itself).
+{$SITE_ADDRESS::80} {
 	respond /healthz "ok" 200
+
+	# Telegram webhook; aiogram checks X-Telegram-Bot-Api-Secret-Token (WEBHOOK_SECRET)
+	handle /tg/webhook {
+		reverse_proxy bot:8080
+	}
+
+	handle {
+		respond "not found" 404
+	}
 }
