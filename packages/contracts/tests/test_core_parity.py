@@ -11,7 +11,7 @@ from typing import Any
 import core_spec
 import pytest
 import svoi_contracts
-from pydantic import BaseModel, TypeAdapter
+from pydantic import BaseModel, Strict, TypeAdapter
 from svoi_contracts import constants, enums, errors, jobs
 from svoi_contracts.api import feed, likes
 
@@ -58,6 +58,8 @@ def _fmt(tp: Any) -> str:  # noqa: PLR0911 - one branch per typing form
         return "None"
     if tp is Any:
         return "Any"
+    if origin is typing.Annotated:
+        return _fmt(args[0])  # Strict and Field constraints are not part of the shape
     if origin in (typing.Union, types.UnionType):
         return " | ".join(_fmt(a) for a in args)
     if origin is typing.Literal:
@@ -124,11 +126,36 @@ def test_model_fields_match_core(name: str) -> None:
 
 
 @pytest.mark.parametrize("name", sorted(core_spec.classes()))
-def test_models_forbid_extra_are_frozen_and_strict(name: str) -> None:
+def test_models_forbid_extra_and_are_frozen(name: str) -> None:
     config = _models()[name].model_config
     assert config.get("extra") == "forbid"
     assert config.get("frozen") is True
-    assert config.get("strict") is True
+    # whole-model strict breaks FastAPI, which validates JSON bodies in python mode
+    assert not config.get("strict")
+
+
+def _strict(ann: Any, metadata: list[Any]) -> bool:
+    if any(isinstance(m, Strict) for m in metadata):
+        return True
+    origin = typing.get_origin(ann)
+    if origin is typing.Annotated:
+        inner, *meta = typing.get_args(ann)
+        return _strict(inner, meta)
+    if origin in (typing.Union, types.UnionType, list):
+        return all(_strict(a, []) for a in typing.get_args(ann) if a is not type(None))
+    return ann not in (int, str, bool)
+
+
+REQUEST_MODELS = sorted(
+    n for n in core_spec.classes() if n.endswith("In") or n in {"MessageMedia", "SettingsOut"}
+)
+
+
+@pytest.mark.parametrize("name", REQUEST_MODELS)
+def test_request_scalars_are_strict(name: str) -> None:
+    # the bot builds these; "19" must not pass as an int (FRONTEND S1 contract test)
+    for field_name, field in _models()[name].model_fields.items():
+        assert _strict(field.annotation, list(field.metadata)), field_name
 
 
 @pytest.mark.parametrize(

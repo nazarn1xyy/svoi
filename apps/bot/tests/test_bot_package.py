@@ -11,4 +11,8 @@ def test_bot_package_imports_and_ships_py_typed() -> None:
 
 
 def test_bot_resolves_contracts_from_workspace() -> None:
-    importlib.import_module("svoi_contracts")
+    # K5 acceptance: the contracts package imports from bot
+    contracts = importlib.import_module("svoi_contracts")
+    cards = importlib.import_module("svoi_contracts.cards")
+    assert contracts.CORE_VERSION >= 1
+    assert "is_admin" in cards.UserState.model_fields
