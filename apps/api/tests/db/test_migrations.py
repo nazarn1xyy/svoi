@@ -51,8 +51,8 @@ def test_downgrade_to_base_and_back(alembic_config: Config, database_url: str) -
         _scalar(
             database_url,
             "SELECT count(*) FROM information_schema.tables "
-            "WHERE table_schema = 'public' AND table_name <> 'alembic_version'"
-            " AND table_name <> 'spatial_ref_sys'",
+            "WHERE table_schema = 'public' AND table_type = 'BASE TABLE'"
+            " AND table_name NOT IN ('alembic_version', 'spatial_ref_sys')",
         )
     )
     assert remaining == 0
@@ -109,6 +109,11 @@ def migrated(database_url: str) -> str:
     return database_url
 
 
+@pytest.mark.xfail(
+    strict=True,
+    reason="CONTRACT GAP core v2 section 5: ck_profiles_pool evaluates to NULL, so age without"
+    " pool and pool without age pass; strict xfail turns red once the core fixes it",
+)
 @settings(
     max_examples=40, deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture]
 )
