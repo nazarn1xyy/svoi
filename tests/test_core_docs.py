@@ -61,3 +61,15 @@ def test_no_second_bot_or_second_environment_remains() -> None:
 
 def test_admin_section_is_gated_by_is_admin() -> None:
     assert "UserState.is_admin" in _tech()
+
+
+def test_every_contracts_module_is_listed_in_the_repo_tree() -> None:
+    tech = _tech()
+    tree = tech[tech.index("### 3.2.") : tech.index("### 3.3.")]
+    package = ROOT / "packages/contracts/svoi_contracts"
+    for module in sorted(package.rglob("*.py")):
+        assert f"── {module.name}" in tree, module.relative_to(ROOT)
+
+
+def test_skeleton_checklist_tracks_the_current_core_version() -> None:
+    assert "`CORE_VERSION = 1`" not in _tech()

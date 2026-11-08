@@ -94,6 +94,7 @@ svoi/
 │       ├── fixtures/              # JSON-фікстури, генеруються сид-скриптом
 │       └── svoi_contracts/
 │           ├── __init__.py        # CORE_VERSION
+│           ├── base.py            # Contract: базова модель усіх контрактів
 │           ├── enums.py
 │           ├── constants.py       # продуктові константи (розділ 4)
 │           ├── errors.py          # ApiError, ErrorCode
@@ -101,12 +102,14 @@ svoi/
 │           │   ├── users.py
 │           │   ├── profile.py
 │           │   ├── catalog.py
+│           │   ├── prefs.py
 │           │   ├── feed.py
 │           │   ├── reactions.py
 │           │   ├── likes.py
 │           │   ├── safety.py
 │           │   ├── moderation.py
 │           │   ├── admin.py
+│           │   ├── verification.py
 │           │   └── referral.py
 │           ├── cards.py           # ProfileCard, MatchResult та інші спільні типи
 │           └── jobs.py            # payload-моделі черги
@@ -1391,7 +1394,7 @@ SENTRY_DSN=
 Розробники не починають слайси S2+, поки чек-лист «скелет готовий» не зелений повністю:
 
 - [ ] CI зелений на тривіальному PR;
-- [ ] `packages/contracts` v1 у `main`, `CORE_VERSION = 1`, тест версії зелений;
+- [ ] `packages/contracts` поточної версії ядра у `main`, `CORE_VERSION` дорівнює версії в заголовку, тест версії зелений;
 - [ ] моделі БД і перша міграція в `main`, міграції проходять на ефемерному Postgres у CI;
 - [ ] сид дає каталоги і 50 анкет (40 adult, 10 minor) у 3 містах; фікстури для `FakeApiClient` згенеровані;
 - [ ] FastAPI app factory, автентифікація, маппінг помилок, `/health` у `main`;
