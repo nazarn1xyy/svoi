@@ -162,6 +162,15 @@ msgstr ""
 msgid "admin.user_usage"
 msgstr "Формат: /user <tg_id>"
 
+msgid "captcha.ask"
+msgstr "Проверка, что ты не бот: нажми на {emoji}"
+
+msgid "captcha.ok"
+msgstr "Спасибо! Продолжаем 👌"
+
+msgid "captcha.wrong"
+msgstr "Не угадал, попробуй ещё"
+
 msgid "cards.common"
 msgstr "✨ У вас общего: {items} · совпадение {percent}%"
 
