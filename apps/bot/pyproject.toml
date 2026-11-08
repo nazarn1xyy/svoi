@@ -10,6 +10,7 @@ dependencies = [
     "httpx>=0.28",
     "pydantic-settings>=2.6",
     "redis>=5.2",
+    "sentry-sdk>=2.18",
     "structlog>=24.4",
     "svoi-contracts",
 ]

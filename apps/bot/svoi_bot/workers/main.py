@@ -9,7 +9,7 @@ from arq.worker import Function, func
 from svoi_contracts.jobs import DemoPing
 
 from svoi_bot.config import Settings
-from svoi_bot.main import make_api, make_bot
+from svoi_bot.main import init_sentry, make_api, make_bot
 from svoi_bot.workers import demo
 from svoi_bot.workers.delivery import MAX_TRIES
 
@@ -29,6 +29,7 @@ async def startup(ctx: dict[str, Any]) -> None:
     """One Bot and one ApiClient per worker process."""
     settings: Settings = ctx.get("settings") or Settings()
     ctx["settings"] = settings
+    init_sentry(settings)
     ctx["bot"] = make_bot(settings)
     ctx["api"] = make_api(settings)
 

@@ -22,6 +22,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 FROM python:3.12-slim
 RUN useradd --create-home --uid 10001 svoi
 COPY --from=build --chown=svoi:svoi /app/.venv /app/.venv
+# deploy.sh runs "alembic -c /app/alembic.ini upgrade head" before restarting services
+COPY --chown=svoi:svoi apps/api/alembic.ini /app/alembic.ini
+COPY --chown=svoi:svoi apps/api/migrations /app/migrations
 ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1
 WORKDIR /app
 USER svoi
