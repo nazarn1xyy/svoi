@@ -49,6 +49,33 @@ msgstr "один заклад"
 msgid "cards.seeks"
 msgstr "🎯 Шукає: {goals}"
 
+msgid "commands.contacts"
+msgstr "Мої контакти"
+
+msgid "commands.help"
+msgstr "Допомога"
+
+msgid "commands.likes"
+msgstr "Хто мене лайкнув"
+
+msgid "commands.pause"
+msgstr "Пауза, вийти в меню"
+
+msgid "commands.profile"
+msgstr "Моя анкета"
+
+msgid "commands.search"
+msgstr "Дивитися анкети"
+
+msgid "commands.settings"
+msgstr "Налаштування"
+
+msgid "commands.start"
+msgstr "Почати"
+
+msgid "commands.verify"
+msgstr "Верифікація"
+
 msgid "errors.age_locked"
 msgstr "Вік уже не можна змінити. Якщо помилився — напиши в підтримку: /help"
 

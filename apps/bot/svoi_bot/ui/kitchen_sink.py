@@ -11,8 +11,6 @@ from svoi_bot.ui import cards, keyboards, progress
 from svoi_bot.ui.errors import render_api_error
 from svoi_bot.ui.i18n import _
 
-router = Router(name="kitchen_sink")
-
 SAMPLE = ProfileCard(
     user_id=0,
     name="Назар",
@@ -32,7 +30,6 @@ SAMPLE = ProfileCard(
 )
 
 
-@router.message(Command("kitchen_sink"))
 async def kitchen_sink(message: Message, bot: Bot) -> None:
     """Every primitive of tech.md section 9, one message each."""
     chat = message.chat.id
@@ -63,3 +60,10 @@ async def kitchen_sink(message: Message, bot: Bot) -> None:
     await bot.send_message(
         chat, _("kitchen.menu"), reply_markup=keyboards.main_menu(Counters(incoming_likes=3))
     )
+
+
+def make_router() -> Router:
+    """Fresh router mounted by svoi_bot.main in local and test."""
+    router = Router(name="kitchen_sink")
+    router.message.register(kitchen_sink, Command("kitchen_sink"))
+    return router
