@@ -231,6 +231,18 @@ msgstr "Start"
 msgid "commands.verify"
 msgstr "Verification"
 
+msgid "contacts.delete"
+msgstr "🚫 Remove contact"
+
+msgid "contacts.empty"
+msgstr "No contacts yet. Mutual likes will show up here."
+
+msgid "contacts.row"
+msgstr "{name}, {age} · {city}"
+
+msgid "contacts.title"
+msgstr "🤝 Your contacts:"
+
 msgid "errors.age_locked"
 msgstr "Your age can no longer be changed. If it is wrong, contact support: /help"
 
@@ -475,6 +487,27 @@ msgstr "Multi-select"
 
 msgid "kitchen.option"
 msgstr "Option"
+
+msgid "likes.accept"
+msgstr "❤️ Like back"
+
+msgid "likes.decline"
+msgstr "👎 No"
+
+msgid "likes.message"
+msgstr "💌 A message for you: {message}"
+
+msgid "likes.none"
+msgstr "That's everyone. Back to profiles?"
+
+msgid "likes.notify"
+msgstr "❤️ You were liked by {people}! Take a look?"
+
+msgid "likes.notify.later"
+msgstr "⏰ Later"
+
+msgid "likes.notify.look"
+msgstr "👀 Look"
 
 msgid "match.ice.goal"
 msgstr "Conversation starter: you're both looking for {goal}"

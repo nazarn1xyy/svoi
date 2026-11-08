@@ -34,8 +34,9 @@ class RenderedCard:
 
 
 def _lower(title: str) -> str:
-    # "Футбол" reads "футбол" inside a sentence; acronyms such as CS2 keep their case
-    return title[0].lower() + title[1:] if len(title) > 1 and title[1].islower() else title
+    # "Футбол" reads "футбол" inside a sentence; brands (Minecraft) and acronyms (CS2) keep case
+    cyrillic = "\u0400" <= title[:1] <= "\u04ff"
+    return title[0].lower() + title[1:] if cyrillic and title[1:2].islower() else title
 
 
 def _completeness(card: ProfileCard) -> str:

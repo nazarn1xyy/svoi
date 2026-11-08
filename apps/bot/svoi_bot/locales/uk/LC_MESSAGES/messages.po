@@ -234,6 +234,18 @@ msgstr "Почати"
 msgid "commands.verify"
 msgstr "Верифікація"
 
+msgid "contacts.delete"
+msgstr "🚫 Видалити контакт"
+
+msgid "contacts.empty"
+msgstr "Поки немає контактів. Взаємні симпатії з'являться тут."
+
+msgid "contacts.row"
+msgstr "{name}, {age} · {city}"
+
+msgid "contacts.title"
+msgstr "🤝 Твої контакти:"
+
 msgid "errors.age_locked"
 msgstr "Вік уже не можна змінити. Якщо помилився — напиши в підтримку: /help"
 
@@ -476,6 +488,27 @@ msgstr "Мультивибір"
 
 msgid "kitchen.option"
 msgstr "Варіант"
+
+msgid "likes.accept"
+msgstr "❤️ Взаємно"
+
+msgid "likes.decline"
+msgstr "👎 Ні"
+
+msgid "likes.message"
+msgstr "💌 Повідомлення для тебе: {message}"
+
+msgid "likes.none"
+msgstr "Це всі. Повертаємось до анкет?"
+
+msgid "likes.notify"
+msgstr "❤️ Ти сподобався {people}! Подивитися?"
+
+msgid "likes.notify.later"
+msgstr "⏰ Пізніше"
+
+msgid "likes.notify.look"
+msgstr "👀 Подивитися"
 
 msgid "match.ice.goal"
 msgstr "Привід почати: ви обоє шукаєте {goal}"
