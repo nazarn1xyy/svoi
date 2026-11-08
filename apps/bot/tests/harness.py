@@ -282,14 +282,12 @@ class BotHarness:
     def last_markup(
         self,
     ) -> InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | None:
-        """Keyboard of the latest message that carried one."""
-        for method in reversed(self.shown()):
-            markup = getattr(method, "reply_markup", None)
-            if markup is not None:
-                return cast(
-                    InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove, markup
-                )
-        return None
+        """Keyboard of the latest send or edit (None when it has none)."""
+        shown = self.shown()
+        if not shown:
+            return None
+        markup = getattr(shown[-1], "reply_markup", None)
+        return cast(InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | None, markup)
 
     def buttons(self) -> list[str]:
         """Button labels of the latest keyboard, row by row flattened."""

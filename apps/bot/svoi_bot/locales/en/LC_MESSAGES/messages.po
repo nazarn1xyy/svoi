@@ -225,6 +225,61 @@ msgstr "Multi-select"
 msgid "kitchen.option"
 msgstr "Option"
 
+msgid "menu.home"
+msgstr "Main menu 👇"
+
+msgid "onboarding.age.ask"
+msgstr "How old are you?"
+
+msgid "onboarding.age.not_a_number"
+msgstr "Type your age in digits, for example 19"
+
+msgid "onboarding.consent.go"
+msgstr "👌 Let's go"
+
+msgid "onboarding.consent.how"
+msgstr "❓ How it works"
+
+msgid "onboarding.consent.how_text"
+msgstr ""
+"1. Fill in your profile: interests, city, goal.\n"
+"2. Browse people nearby with shared interests.\n"
+"3. Like them. If the like is mutual, you both get each other's username and can chat."
+
+msgid "onboarding.consent.text"
+msgstr ""
+"Hi! I help you find people with shared interests: friends, company, partners. This is not a "
+"dating site. Shall we fill in your profile in 2 minutes?\n"
+"\n"
+"❗ The bot never asks for documents or personal data. People online may pretend to be someone "
+"else.\n"
+"\n"
+"By continuing you accept the rules and the privacy policy."
+
+msgid "onboarding.gender.ask"
+msgstr "You are…"
+
+msgid "onboarding.gender.female"
+msgstr "Girl"
+
+msgid "onboarding.gender.hidden"
+msgstr "Prefer not to say"
+
+msgid "onboarding.gender.hint"
+msgstr "Only used for the \"who I want to talk to\" filter; you can hide it on your profile"
+
+msgid "onboarding.gender.male"
+msgstr "Guy"
+
+msgid "onboarding.lang.ask"
+msgstr "Choose your language 👇"
+
+msgid "onboarding.name.ask"
+msgstr "What should we call you?"
+
+msgid "onboarding.name.rules"
+msgstr "Name: 2 to 20 letters, no links or digits"
+
 msgid "ui.button.back"
 msgstr "◀️ Back"
 
