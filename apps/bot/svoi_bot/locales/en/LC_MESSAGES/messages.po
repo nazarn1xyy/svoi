@@ -738,6 +738,18 @@ msgstr "Verification failed. Try again: /verify"
 msgid "moderation.verified"
 msgstr "Done! Your profile is verified ✅"
 
+msgid "notify.day3"
+msgstr "New profiles are waiting for you 👀 Shall we look?"
+
+msgid "notify.day7"
+msgstr "Long time no see! New people have joined in your city."
+
+msgid "notify.look"
+msgstr "🔍 Take a look"
+
+msgid "notify.new_people"
+msgstr "{count} new people in your city love {interest} 👀"
+
 msgid "onboarding.age.ask"
 msgstr "How old are you?"
 
