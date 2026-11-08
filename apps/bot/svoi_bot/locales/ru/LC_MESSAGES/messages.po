@@ -696,6 +696,9 @@ msgstr "Анкета снова видна 👁"
 msgid "me.unhide"
 msgstr "👁 Показать анкету"
 
+msgid "me.verify"
+msgstr "✅ Верификация"
+
 msgid "menu.help"
 msgstr ""
 "Вопросы и жалобы: @{support}\n"
@@ -982,3 +985,23 @@ msgstr[2] "{count} людям"
 
 msgid "ui.step_header"
 msgstr "Шаг {n} из {total}"
+
+msgid "verify.ask"
+msgstr ""
+"Верификация подтверждает, что ты настоящий человек. Запиши видеокружок, на котором ты {gesture}. "
+"Модератор сравнит его с фото анкеты."
+
+msgid "verify.conflict.already_verified"
+msgstr "Анкета уже верифицирована ✅"
+
+msgid "verify.conflict.no_photo"
+msgstr "Сначала добавь фото, чтобы модератор мог сравнить."
+
+msgid "verify.conflict.pending"
+msgstr "Проверка ещё идёт."
+
+msgid "verify.round_only"
+msgstr "Нужен именно видеокружок."
+
+msgid "verify.sent"
+msgstr "Отправлено на проверку. Сообщим результат."

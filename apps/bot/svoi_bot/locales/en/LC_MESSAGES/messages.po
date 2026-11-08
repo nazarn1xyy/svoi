@@ -694,6 +694,9 @@ msgstr "Your profile is visible again 👁"
 msgid "me.unhide"
 msgstr "👁 Show profile"
 
+msgid "me.verify"
+msgstr "✅ Verification"
+
 msgid "menu.help"
 msgstr ""
 "Questions and complaints: @{support}\n"
@@ -980,3 +983,23 @@ msgstr[1] "{count} people"
 
 msgid "ui.step_header"
 msgstr "Step {n} of {total}"
+
+msgid "verify.ask"
+msgstr ""
+"Verification shows you're a real person. Record a round video where you {gesture}. A moderator "
+"will compare it with your profile photo."
+
+msgid "verify.conflict.already_verified"
+msgstr "Your profile is already verified ✅"
+
+msgid "verify.conflict.no_photo"
+msgstr "Add a photo first so the moderator can compare."
+
+msgid "verify.conflict.pending"
+msgstr "The review is still in progress."
+
+msgid "verify.round_only"
+msgstr "It has to be a round video message."
+
+msgid "verify.sent"
+msgstr "Sent for review. We'll let you know."
