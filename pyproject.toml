@@ -49,13 +49,20 @@ ignore = ["RUF001"]
 python_version = "3.12"
 strict = true
 explicit_package_bases = true
-mypy_path = ["packages/contracts", "apps/api", "apps/bot", "packages/contracts/tests", "apps/api/tests"]
+mypy_path = [
+    "packages/contracts",
+    "apps/api",
+    "apps/bot",
+    "packages/contracts/tests",
+    "apps/api/tests",
+    "apps/bot/tests",
+]
 
 [tool.pytest.ini_options]
 # each package keeps its own tests/; importlib mode avoids basename clashes between them
 addopts = ["--import-mode=importlib"]
 # test helpers that parse docs/tech.md, imported as top-level modules
-pythonpath = ["packages/contracts/tests", "apps/api/tests"]
+pythonpath = ["packages/contracts/tests", "apps/api/tests", "apps/bot/tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 
