@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "code": "weekend",
+    "title_uk": "🌅 Ідеальні вихідні — це…",
+    "title_ru": "🌅 Идеальные выходные — это…",
+    "title_en": "🌅 My perfect weekend is…"
+  },
+  {
+    "id": 2,
+    "code": "looking_for",
+    "title_uk": "🔍 Шукаю людину, яка…",
+    "title_ru": "🔍 Ищу человека, который…",
+    "title_en": "🔍 Looking for someone who…"
+  },
+  {
+    "id": 3,
+    "code": "teach_learn",
+    "title_uk": "🎓 Можу навчити / хочу навчитися…",
+    "title_ru": "🎓 Могу научить / хочу научиться…",
+    "title_en": "🎓 I can teach / want to learn…"
+  },
+  {
+    "id": 4,
+    "code": "listening",
+    "title_uk": "🎧 Зараз слухаю…",
+    "title_ru": "🎧 Сейчас слушаю…",
+    "title_en": "🎧 Listening to…"
+  }
+]

@@ -1,0 +1,51 @@
+[
+  {
+    "code": "friends",
+    "emoji": "👫",
+    "title_uk": "Знайти друзів",
+    "title_ru": "Найти друзей",
+    "title_en": "Find friends"
+  },
+  {
+    "code": "walks",
+    "emoji": "🚶",
+    "title_uk": "Компанія для прогулянок",
+    "title_ru": "Компания для прогулок",
+    "title_en": "Walk buddies"
+  },
+  {
+    "code": "sport",
+    "emoji": "⚽",
+    "title_uk": "Напарник для спорту",
+    "title_ru": "Напарник для спорта",
+    "title_en": "Sports partner"
+  },
+  {
+    "code": "study",
+    "emoji": "📚",
+    "title_uk": "Разом навчатися",
+    "title_ru": "Учиться вместе",
+    "title_en": "Study together"
+  },
+  {
+    "code": "gaming",
+    "emoji": "🎮",
+    "title_uk": "Грати онлайн",
+    "title_ru": "Играть онлайн",
+    "title_en": "Play online"
+  },
+  {
+    "code": "creative",
+    "emoji": "🎨",
+    "title_uk": "Творчість, проєкти",
+    "title_ru": "Творчество, проекты",
+    "title_en": "Creative projects"
+  },
+  {
+    "code": "chat",
+    "emoji": "💬",
+    "title_uk": "Просто поспілкуватися",
+    "title_ru": "Просто пообщаться",
+    "title_en": "Just chat"
+  }
+]
