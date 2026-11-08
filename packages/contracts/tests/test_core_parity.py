@@ -45,7 +45,8 @@ def _models() -> dict[str, type[BaseModel]]:
         module = importlib.import_module(module_name)
         for name, obj in vars(module).items():
             is_model = inspect.isclass(obj) and issubclass(obj, BaseModel)
-            if is_model and obj.__module__ == module_name:
+            # pydantic registers parametrizations such as Page[ContactOut] in the module
+            if is_model and obj.__module__ == module_name and "[" not in name:
                 assert name not in found, f"{name} defined twice"
                 found[name] = obj
     return found
@@ -168,9 +169,9 @@ def test_job_topics_match_section_8(name: str, model: core_spec.ClassSpec) -> No
 
 def test_response_unions_discriminate_on_kind() -> None:
     assert set(core_spec.aliases()) == {"FeedResponse", "IncomingResponse"}
-    empty = TypeAdapter(feed.FeedResponse).validate_json(
+    empty: object = TypeAdapter(feed.FeedResponse).validate_json(
         '{"kind": "empty", "reason": "limit_reached", "expand_options": [], "resets_at": null}'
     )
     assert isinstance(empty, feed.FeedEmpty)
-    none = TypeAdapter(likes.IncomingResponse).validate_json('{"kind": "none"}')
+    none: object = TypeAdapter(likes.IncomingResponse).validate_json('{"kind": "none"}')
     assert isinstance(none, likes.NoIncoming)

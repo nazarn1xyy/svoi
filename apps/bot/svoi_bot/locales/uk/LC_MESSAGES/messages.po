@@ -1,0 +1,236 @@
+# Ukrainian translations for svoi.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the svoi project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: svoi VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-11-08 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: uk\n"
+"Language-Team: uk <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || "
+"n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+msgid "cards.common"
+msgstr "✨ У вас спільного: {items} · збіг {percent}%"
+
+msgid "cards.completeness"
+msgstr "Анкета заповнена на {n}%"
+
+msgid "cards.completeness_hint"
+msgstr "Анкета заповнена на {n}% — {hint}"
+
+msgid "cards.height"
+msgstr "📏 {cm} см"
+
+msgid "cards.hint.institution"
+msgstr "вкажи заклад"
+
+msgid "cards.hint.photo"
+msgstr "додай фото"
+
+msgid "cards.hint.prompt"
+msgstr "дай відповідь на питання"
+
+msgid "cards.pending_media"
+msgstr "🕓 Фото на перевірці"
+
+msgid "cards.same_institution"
+msgstr "один заклад"
+
+msgid "cards.seeks"
+msgstr "🎯 Шукає: {goals}"
+
+msgid "errors.age_locked"
+msgstr "Вік уже не можна змінити. Якщо помилився — напиши в підтримку: /help"
+
+msgid "errors.age_too_young"
+msgstr "Бот доступний з 16 років. Повертайся, коли виповниться 16 🙂"
+
+msgid "errors.banned_forever"
+msgstr "Твою анкету заблоковано назавжди."
+
+msgid "errors.banned_until"
+msgstr "Твою анкету заблоковано до {date}."
+
+msgid "errors.captcha_required"
+msgstr "Спершу підтверди, що ти не бот."
+
+msgid "errors.content_blocked.age_mismatch"
+msgstr "У тексті вказано інший вік, ніж в анкеті. Виправ текст."
+
+msgid "errors.content_blocked.link"
+msgstr "Посилання заборонені."
+
+msgid "errors.content_blocked.mention"
+msgstr "Згадки @ заборонені. Контакти відкриються після взаємної симпатії."
+
+msgid "errors.content_blocked.phone"
+msgstr "Номери телефонів заборонені."
+
+msgid "errors.content_blocked.stopword"
+msgstr "Текст схожий на рекламу. Перепиши його."
+
+msgid "errors.forbidden"
+msgstr "Доступ заборонено"
+
+msgid "errors.generic"
+msgstr "Щось пішло не так. Спробуй ще раз за хвилину."
+
+msgid "errors.limit_reached"
+msgstr "На сьогодні анкети закінчились. Нові з'являться о 00:00 — або запроси друга і отримай +20."
+
+msgid "errors.media_forbidden"
+msgstr "Для твого віку доступні тільки текстові повідомлення"
+
+msgid "errors.media_limit"
+msgstr "Можна додати до 3 фото або відео."
+
+msgid "errors.profile_incomplete"
+msgstr "Спершу заповни анкету до кінця."
+
+msgid "errors.rate_limited"
+msgstr "Повільніше 🙂 Зроби паузу на хвилину."
+
+msgid "errors.undo_unavailable"
+msgstr "Повернути вже не можна"
+
+msgid "errors.validation_error"
+msgstr "Перевір дані й спробуй ще раз."
+
+msgid "format.distance.km100"
+msgstr "до 100 км"
+
+msgid "format.distance.km25"
+msgstr "до 25 км"
+
+msgid "format.distance.km5"
+msgstr "до 5 км"
+
+msgid "format.distance.same_city"
+msgstr "у твоєму місті"
+
+msgid "format.gesture.ok_sign"
+msgstr "показуєш жест «ОК»"
+
+msgid "format.gesture.peace"
+msgstr "показуєш «вікторію» ✌️"
+
+msgid "format.gesture.point_up"
+msgstr "показуєш пальцем угору"
+
+msgid "format.gesture.three_fingers"
+msgstr "показуєш три пальці й усміхаєшся"
+
+msgid "format.gesture.thumb_up"
+msgstr "показуєш великий палець угору"
+
+msgid "format.gesture.wave"
+msgstr "махаєш рукою"
+
+msgid "format.goal.chat"
+msgstr "з ким поспілкуватися"
+
+msgid "format.goal.creative"
+msgstr "людей для творчості"
+
+msgid "format.goal.friends"
+msgstr "друзів"
+
+msgid "format.goal.gaming"
+msgstr "з ким грати онлайн"
+
+msgid "format.goal.sport"
+msgstr "напарника для спорту"
+
+msgid "format.goal.study"
+msgstr "з ким навчатися"
+
+msgid "format.goal.walks"
+msgstr "компанію для прогулянок"
+
+msgid "format.reason.abuse"
+msgstr "Образи"
+
+msgid "format.reason.fake"
+msgstr "Фейк або бот"
+
+msgid "format.reason.nsfw"
+msgstr "Неприйнятні фото"
+
+msgid "format.reason.other"
+msgstr "Інше"
+
+msgid "format.reason.scam"
+msgstr "Шахрайство"
+
+msgid "format.reason.spam"
+msgstr "Спам або реклама"
+
+msgid "format.reason.underage"
+msgstr "Виглядає молодше вказаного віку"
+
+msgid "kitchen.confirm"
+msgstr "Підтвердження"
+
+msgid "kitchen.feed"
+msgstr "Стрічка"
+
+msgid "kitchen.location"
+msgstr "Геолокація"
+
+msgid "kitchen.menu"
+msgstr "Головне меню"
+
+msgid "kitchen.multi"
+msgstr "Мультивибір"
+
+msgid "kitchen.option"
+msgstr "Варіант"
+
+msgid "ui.button.back"
+msgstr "◀️ Назад"
+
+msgid "ui.button.done"
+msgstr "Готово ▶️ ({count})"
+
+msgid "ui.button.send_location"
+msgstr "📍 Надіслати геолокацію"
+
+msgid "ui.button.skip"
+msgstr "⏭ Пропустити"
+
+msgid "ui.menu.contacts"
+msgstr "🤝 Мої контакти"
+
+msgid "ui.menu.likes"
+msgstr "❤️ Мене лайкнули"
+
+msgid "ui.menu.likes_count"
+msgstr "❤️ Мене лайкнули ({count})"
+
+msgid "ui.menu.profile"
+msgstr "👤 Моя анкета"
+
+msgid "ui.menu.search"
+msgstr "🔍 Дивитися анкети"
+
+msgid "ui.menu.settings"
+msgstr "⚙️ Налаштування"
+
+msgid "ui.people"
+msgid_plural "ui.people"
+msgstr[0] "{count} людині"
+msgstr[1] "{count} людям"
+msgstr[2] "{count} людям"
+
+msgid "ui.step_header"
+msgstr "Крок {n} з {total}"

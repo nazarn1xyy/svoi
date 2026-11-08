@@ -1,0 +1,234 @@
+# English translations for svoi.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the svoi project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: svoi VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-11-08 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+msgid "cards.common"
+msgstr "✨ In common: {items} · {percent}% match"
+
+msgid "cards.completeness"
+msgstr "Profile {n}% complete"
+
+msgid "cards.completeness_hint"
+msgstr "Profile {n}% complete — {hint}"
+
+msgid "cards.height"
+msgstr "📏 {cm} cm"
+
+msgid "cards.hint.institution"
+msgstr "add your school"
+
+msgid "cards.hint.photo"
+msgstr "add a photo"
+
+msgid "cards.hint.prompt"
+msgstr "answer a prompt"
+
+msgid "cards.pending_media"
+msgstr "🕓 Photos under review"
+
+msgid "cards.same_institution"
+msgstr "same school"
+
+msgid "cards.seeks"
+msgstr "🎯 Looking for: {goals}"
+
+msgid "errors.age_locked"
+msgstr "Your age can no longer be changed. If it is wrong, contact support: /help"
+
+msgid "errors.age_too_young"
+msgstr "The bot is for people aged 16 and up. Come back when you turn 16 🙂"
+
+msgid "errors.banned_forever"
+msgstr "Your profile is blocked permanently."
+
+msgid "errors.banned_until"
+msgstr "Your profile is blocked until {date}."
+
+msgid "errors.captcha_required"
+msgstr "First confirm you are not a bot."
+
+msgid "errors.content_blocked.age_mismatch"
+msgstr "The text mentions a different age than your profile. Please fix it."
+
+msgid "errors.content_blocked.link"
+msgstr "Links are not allowed."
+
+msgid "errors.content_blocked.mention"
+msgstr "@ mentions are not allowed. Contacts open after a mutual like."
+
+msgid "errors.content_blocked.phone"
+msgstr "Phone numbers are not allowed."
+
+msgid "errors.content_blocked.stopword"
+msgstr "This looks like an ad. Please rewrite it."
+
+msgid "errors.forbidden"
+msgstr "Access denied"
+
+msgid "errors.generic"
+msgstr "Something went wrong. Try again in a minute."
+
+msgid "errors.limit_reached"
+msgstr "That's all profiles for today. New ones arrive at 00:00, or invite a friend to get +20."
+
+msgid "errors.media_forbidden"
+msgstr "Only text messages are available at your age"
+
+msgid "errors.media_limit"
+msgstr "You can add up to 3 photos or videos."
+
+msgid "errors.profile_incomplete"
+msgstr "Finish your profile first."
+
+msgid "errors.rate_limited"
+msgstr "Slow down 🙂 Take a one-minute break."
+
+msgid "errors.undo_unavailable"
+msgstr "It can no longer be undone"
+
+msgid "errors.validation_error"
+msgstr "Check the data and try again."
+
+msgid "format.distance.km100"
+msgstr "within 100 km"
+
+msgid "format.distance.km25"
+msgstr "within 25 km"
+
+msgid "format.distance.km5"
+msgstr "within 5 km"
+
+msgid "format.distance.same_city"
+msgstr "in your city"
+
+msgid "format.gesture.ok_sign"
+msgstr "show the OK sign"
+
+msgid "format.gesture.peace"
+msgstr "show a peace sign ✌️"
+
+msgid "format.gesture.point_up"
+msgstr "point up"
+
+msgid "format.gesture.three_fingers"
+msgstr "show three fingers and smile"
+
+msgid "format.gesture.thumb_up"
+msgstr "show a thumbs-up"
+
+msgid "format.gesture.wave"
+msgstr "wave your hand"
+
+msgid "format.goal.chat"
+msgstr "someone to chat with"
+
+msgid "format.goal.creative"
+msgstr "creative partners"
+
+msgid "format.goal.friends"
+msgstr "friends"
+
+msgid "format.goal.gaming"
+msgstr "gaming buddies"
+
+msgid "format.goal.sport"
+msgstr "a sports partner"
+
+msgid "format.goal.study"
+msgstr "study buddies"
+
+msgid "format.goal.walks"
+msgstr "walk buddies"
+
+msgid "format.reason.abuse"
+msgstr "Abuse"
+
+msgid "format.reason.fake"
+msgstr "Fake or bot"
+
+msgid "format.reason.nsfw"
+msgstr "Inappropriate photos"
+
+msgid "format.reason.other"
+msgstr "Other"
+
+msgid "format.reason.scam"
+msgstr "Scam"
+
+msgid "format.reason.spam"
+msgstr "Spam or ads"
+
+msgid "format.reason.underage"
+msgstr "Looks younger than stated"
+
+msgid "kitchen.confirm"
+msgstr "Confirmation"
+
+msgid "kitchen.feed"
+msgstr "Feed"
+
+msgid "kitchen.location"
+msgstr "Location"
+
+msgid "kitchen.menu"
+msgstr "Main menu"
+
+msgid "kitchen.multi"
+msgstr "Multi-select"
+
+msgid "kitchen.option"
+msgstr "Option"
+
+msgid "ui.button.back"
+msgstr "◀️ Back"
+
+msgid "ui.button.done"
+msgstr "Done ▶️ ({count})"
+
+msgid "ui.button.send_location"
+msgstr "📍 Send location"
+
+msgid "ui.button.skip"
+msgstr "⏭ Skip"
+
+msgid "ui.menu.contacts"
+msgstr "🤝 My contacts"
+
+msgid "ui.menu.likes"
+msgstr "❤️ Who liked me"
+
+msgid "ui.menu.likes_count"
+msgstr "❤️ Who liked me ({count})"
+
+msgid "ui.menu.profile"
+msgstr "👤 My profile"
+
+msgid "ui.menu.search"
+msgstr "🔍 Browse profiles"
+
+msgid "ui.menu.settings"
+msgstr "⚙️ Settings"
+
+msgid "ui.people"
+msgid_plural "ui.people"
+msgstr[0] "{count} person"
+msgstr[1] "{count} people"
+
+msgid "ui.step_header"
+msgstr "Step {n} of {total}"

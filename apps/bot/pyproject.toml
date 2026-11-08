@@ -4,6 +4,8 @@ version = "0.0.0"
 description = "Svoi Telegram bot"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "aiogram>=3.15",
+    "babel>=2.16",
     "httpx>=0.28",
     "svoi-contracts",
 ]

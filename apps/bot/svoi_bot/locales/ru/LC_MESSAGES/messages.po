@@ -1,0 +1,236 @@
+# Russian translations for svoi.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the svoi project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: svoi VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-11-08 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || "
+"n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+msgid "cards.common"
+msgstr "✨ У вас общего: {items} · совпадение {percent}%"
+
+msgid "cards.completeness"
+msgstr "Анкета заполнена на {n}%"
+
+msgid "cards.completeness_hint"
+msgstr "Анкета заполнена на {n}% — {hint}"
+
+msgid "cards.height"
+msgstr "📏 {cm} см"
+
+msgid "cards.hint.institution"
+msgstr "укажи учебное заведение"
+
+msgid "cards.hint.photo"
+msgstr "добавь фото"
+
+msgid "cards.hint.prompt"
+msgstr "ответь на вопрос"
+
+msgid "cards.pending_media"
+msgstr "🕓 Фото на проверке"
+
+msgid "cards.same_institution"
+msgstr "одно учебное заведение"
+
+msgid "cards.seeks"
+msgstr "🎯 Ищет: {goals}"
+
+msgid "errors.age_locked"
+msgstr "Возраст уже нельзя изменить. Если ошибся — напиши в поддержку: /help"
+
+msgid "errors.age_too_young"
+msgstr "Бот доступен с 16 лет. Возвращайся, когда исполнится 16 🙂"
+
+msgid "errors.banned_forever"
+msgstr "Твоя анкета заблокирована навсегда."
+
+msgid "errors.banned_until"
+msgstr "Твоя анкета заблокирована до {date}."
+
+msgid "errors.captcha_required"
+msgstr "Сначала подтверди, что ты не бот."
+
+msgid "errors.content_blocked.age_mismatch"
+msgstr "В тексте указан другой возраст, чем в анкете. Исправь текст."
+
+msgid "errors.content_blocked.link"
+msgstr "Ссылки запрещены."
+
+msgid "errors.content_blocked.mention"
+msgstr "Упоминания @ запрещены. Контакты откроются после взаимной симпатии."
+
+msgid "errors.content_blocked.phone"
+msgstr "Номера телефонов запрещены."
+
+msgid "errors.content_blocked.stopword"
+msgstr "Текст похож на рекламу. Перепиши его."
+
+msgid "errors.forbidden"
+msgstr "Доступ запрещён"
+
+msgid "errors.generic"
+msgstr "Что-то пошло не так. Попробуй ещё раз через минуту."
+
+msgid "errors.limit_reached"
+msgstr "На сегодня анкеты закончились. Новые появятся в 00:00 — или пригласи друга и получи +20."
+
+msgid "errors.media_forbidden"
+msgstr "Для твоего возраста доступны только текстовые сообщения"
+
+msgid "errors.media_limit"
+msgstr "Можно добавить до 3 фото или видео."
+
+msgid "errors.profile_incomplete"
+msgstr "Сначала заполни анкету до конца."
+
+msgid "errors.rate_limited"
+msgstr "Помедленнее 🙂 Сделай паузу на минуту."
+
+msgid "errors.undo_unavailable"
+msgstr "Вернуть уже нельзя"
+
+msgid "errors.validation_error"
+msgstr "Проверь данные и попробуй ещё раз."
+
+msgid "format.distance.km100"
+msgstr "до 100 км"
+
+msgid "format.distance.km25"
+msgstr "до 25 км"
+
+msgid "format.distance.km5"
+msgstr "до 5 км"
+
+msgid "format.distance.same_city"
+msgstr "в твоём городе"
+
+msgid "format.gesture.ok_sign"
+msgstr "показываешь жест «ОК»"
+
+msgid "format.gesture.peace"
+msgstr "показываешь «викторию» ✌️"
+
+msgid "format.gesture.point_up"
+msgstr "показываешь пальцем вверх"
+
+msgid "format.gesture.three_fingers"
+msgstr "показываешь три пальца и улыбаешься"
+
+msgid "format.gesture.thumb_up"
+msgstr "показываешь большой палец вверх"
+
+msgid "format.gesture.wave"
+msgstr "машешь рукой"
+
+msgid "format.goal.chat"
+msgstr "с кем пообщаться"
+
+msgid "format.goal.creative"
+msgstr "людей для творчества"
+
+msgid "format.goal.friends"
+msgstr "друзей"
+
+msgid "format.goal.gaming"
+msgstr "с кем играть онлайн"
+
+msgid "format.goal.sport"
+msgstr "напарника для спорта"
+
+msgid "format.goal.study"
+msgstr "с кем учиться"
+
+msgid "format.goal.walks"
+msgstr "компанию для прогулок"
+
+msgid "format.reason.abuse"
+msgstr "Оскорбления"
+
+msgid "format.reason.fake"
+msgstr "Фейк или бот"
+
+msgid "format.reason.nsfw"
+msgstr "Неприемлемые фото"
+
+msgid "format.reason.other"
+msgstr "Другое"
+
+msgid "format.reason.scam"
+msgstr "Мошенничество"
+
+msgid "format.reason.spam"
+msgstr "Спам или реклама"
+
+msgid "format.reason.underage"
+msgstr "Выглядит младше указанного возраста"
+
+msgid "kitchen.confirm"
+msgstr "Подтверждение"
+
+msgid "kitchen.feed"
+msgstr "Лента"
+
+msgid "kitchen.location"
+msgstr "Геолокация"
+
+msgid "kitchen.menu"
+msgstr "Главное меню"
+
+msgid "kitchen.multi"
+msgstr "Мультивыбор"
+
+msgid "kitchen.option"
+msgstr "Вариант"
+
+msgid "ui.button.back"
+msgstr "◀️ Назад"
+
+msgid "ui.button.done"
+msgstr "Готово ▶️ ({count})"
+
+msgid "ui.button.send_location"
+msgstr "📍 Отправить геолокацию"
+
+msgid "ui.button.skip"
+msgstr "⏭ Пропустить"
+
+msgid "ui.menu.contacts"
+msgstr "🤝 Мои контакты"
+
+msgid "ui.menu.likes"
+msgstr "❤️ Меня лайкнули"
+
+msgid "ui.menu.likes_count"
+msgstr "❤️ Меня лайкнули ({count})"
+
+msgid "ui.menu.profile"
+msgstr "👤 Моя анкета"
+
+msgid "ui.menu.search"
+msgstr "🔍 Смотреть анкеты"
+
+msgid "ui.menu.settings"
+msgstr "⚙️ Настройки"
+
+msgid "ui.people"
+msgid_plural "ui.people"
+msgstr[0] "{count} человеку"
+msgstr[1] "{count} людям"
+msgstr[2] "{count} людям"
+
+msgid "ui.step_header"
+msgstr "Шаг {n} из {total}"
