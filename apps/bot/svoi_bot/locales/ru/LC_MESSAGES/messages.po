@@ -414,6 +414,101 @@ msgstr "Мультивыбор"
 msgid "kitchen.option"
 msgstr "Вариант"
 
+msgid "me.delete"
+msgstr "🗑 Удалить анкету"
+
+msgid "me.delete.ask"
+msgstr "Удалить анкету навсегда? Лайки и контакты исчезнут. Это нельзя отменить."
+
+msgid "me.delete.done"
+msgstr "Анкета удалена. Чтобы вернуться, нажми /start."
+
+msgid "me.delete.no"
+msgstr "◀️ Нет"
+
+msgid "me.delete.yes"
+msgstr "🗑 Да, удалить"
+
+msgid "me.edit.age"
+msgstr "🎂 Возраст"
+
+msgid "me.edit.city"
+msgstr "📍 Город"
+
+msgid "me.edit.goals"
+msgstr "🎯 Цель"
+
+msgid "me.edit.height"
+msgstr "📏 Рост"
+
+msgid "me.edit.institution"
+msgstr "🎓 Учёба"
+
+msgid "me.edit.interests"
+msgstr "🏷 Интересы"
+
+msgid "me.edit.name"
+msgstr "✏️ Имя"
+
+msgid "me.edit.photos"
+msgstr "🖼 Фото"
+
+msgid "me.edit.prompts"
+msgstr "💬 О себе"
+
+msgid "me.hidden"
+msgstr "Анкета скрыта. Ты не появляешься в чужих лентах, лайки и контакты сохранены."
+
+msgid "me.hide"
+msgstr "⏸ Скрыть анкету"
+
+msgid "me.pending"
+msgstr "Изменения на проверке. До её завершения другие видят прежнюю версию."
+
+msgid "me.photos.add"
+msgstr "➕ Добавить"
+
+msgid "me.photos.empty"
+msgstr "Пока нет ни одного."
+
+msgid "me.photos.pending"
+msgstr "на проверке"
+
+msgid "me.photos.photo"
+msgstr "📷 фото"
+
+msgid "me.photos.title"
+msgstr "Твои фото и видео:"
+
+msgid "me.photos.video"
+msgstr "🎬 видео"
+
+msgid "me.reset"
+msgstr "🔄 Заполнить заново"
+
+msgid "me.reset.ask"
+msgstr "Заполнить анкету заново? Лайки, контакты и показы сохранятся."
+
+msgid "me.reset.yes"
+msgstr "🔄 Да, заново"
+
+msgid "me.shown"
+msgstr "Анкета снова видна 👁"
+
+msgid "me.unhide"
+msgstr "👁 Показать анкету"
+
+msgid "menu.help"
+msgstr ""
+"Вопросы и жалобы: @{support}\n"
+"\n"
+"/search — смотреть анкеты\n"
+"/likes — кто тебя лайкнул\n"
+"/profile — моя анкета\n"
+"/contacts — взаимные симпатии\n"
+"/settings — фильтры и уведомления\n"
+"/pause — выйти из ленты в меню"
+
 msgid "menu.home"
 msgstr "Главное меню 👇"
 

@@ -1,7 +1,7 @@
 """/start router."""
 
 from aiogram import Router
-from aiogram.filters import CommandStart
+from aiogram.filters import Command, CommandStart
 
 from svoi_bot.features.onboarding import context
 from svoi_bot.features.start import handlers
@@ -12,4 +12,5 @@ def make_router() -> Router:
     router = Router(name="start")
     context.attach(router)
     router.message.register(handlers.on_start, CommandStart())
+    router.message.register(handlers.on_help, Command("help"))
     return router
