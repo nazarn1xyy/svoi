@@ -48,6 +48,33 @@ msgstr "same school"
 msgid "cards.seeks"
 msgstr "🎯 Looking for: {goals}"
 
+msgid "commands.contacts"
+msgstr "My contacts"
+
+msgid "commands.help"
+msgstr "Help"
+
+msgid "commands.likes"
+msgstr "Who liked me"
+
+msgid "commands.pause"
+msgstr "Pause, back to menu"
+
+msgid "commands.profile"
+msgstr "My profile"
+
+msgid "commands.search"
+msgstr "Browse profiles"
+
+msgid "commands.settings"
+msgstr "Settings"
+
+msgid "commands.start"
+msgstr "Start"
+
+msgid "commands.verify"
+msgstr "Verification"
+
 msgid "errors.age_locked"
 msgstr "Your age can no longer be changed. If it is wrong, contact support: /help"
 

@@ -49,6 +49,33 @@ msgstr "одно учебное заведение"
 msgid "cards.seeks"
 msgstr "🎯 Ищет: {goals}"
 
+msgid "commands.contacts"
+msgstr "Мои контакты"
+
+msgid "commands.help"
+msgstr "Помощь"
+
+msgid "commands.likes"
+msgstr "Кто меня лайкнул"
+
+msgid "commands.pause"
+msgstr "Пауза, выйти в меню"
+
+msgid "commands.profile"
+msgstr "Моя анкета"
+
+msgid "commands.search"
+msgstr "Смотреть анкеты"
+
+msgid "commands.settings"
+msgstr "Настройки"
+
+msgid "commands.start"
+msgstr "Начать"
+
+msgid "commands.verify"
+msgstr "Верификация"
+
 msgid "errors.age_locked"
 msgstr "Возраст уже нельзя изменить. Если ошибся — напиши в поддержку: /help"
 
