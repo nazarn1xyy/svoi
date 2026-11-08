@@ -1,12 +1,13 @@
 # tech.md — «Свої»: ядро проєкту
 
-**Версія ядра: v3** · 2026-11-08
+**Версія ядра: v4** · 2026-11-08
 
 ## Changelog
 
 - v1 — початкова заморозка: схема БД, контракти API слайсів S1–S14, контракти черги, примітиви UI бота, продуктові константи.
 - v2 — один Telegram-бот і одне середовище (`docs/adr/0001-single-bot.md`): прибрано компонент `admin-bot`, точку входу `svoi_bot.admin.main` і змінну `ADMIN_BOT_TOKEN`; модерація, `/user` і `/metrics` — адмін-розділ основного бота за `UserState.is_admin`; один VPS з деплоєм на мердж у `main` замість тестового і прод-VPS. Міграція: у `.env` видалити `ADMIN_BOT_TOKEN`; контракти API, черги, схема БД і константи не змінились.
 - v3 — `ck_profiles_pool` обгорнуто в `COALESCE(..., false)`: вираз давав NULL для віку без пулу і пулу без віку, а CHECK пропускає NULL. Міграція `0002` перестворює обмеження; існуючі рядки з віком без пулу треба виправити до неї. Контракти API, черги і константи не змінились.
+- v4 — додано dev-only топік `bot.demo` (`DemoPing`), тільки `ENV=local|test`: скелет перевіряє, що джоб від API доходить до `bot-worker` (K12, B0.2). Продуктові топіки не змінились.
 
 ## Правила цього документа
 
@@ -1166,6 +1167,8 @@ class NotifyNewPeople(JobBase):     # топік "bot.notify_new_people"
     user_id: int; tg_id: int; lang: Lang; interest_title: str; count: int
 class NotifyModeration(JobBase):    # топік "bot.notify_moderation"
     user_id: int; tg_id: int; lang: Lang; result: ModerationResultKind; until: datetime | None = None
+class DemoPing(JobBase):            # топік "bot.demo", тільки ENV=local|test: перевірка черги в скелеті
+    note: str
 
 # Черга api (продюсер: api; споживач: api-worker)
 class ModeratePhoto(JobBase):       # топік "api.moderate_photo"
@@ -1204,6 +1207,7 @@ Cron у `api-worker` (без payload, ідемпотентні за побудо
 | `bot.notify_reminder` | `reminder:{user_id}:{kind}:{last_active_date}` |
 | `bot.notify_new_people` | `newpeople:{user_id}:{yyyymmdd}` |
 | `bot.notify_moderation` | `mod:{queue_kind}:{item_id}:{action}` |
+| `bot.demo` | `demo:{uuid}` |
 | `api.moderate_photo` | `photo:{media_id}` |
 | `api.rebuild_feed` | `feed:{user_id}:{reason}:{yyyymmddHHMM}` |
 

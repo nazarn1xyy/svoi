@@ -74,6 +74,14 @@ class NotifyModeration(JobBase):
     until: datetime | None = None
 
 
+class DemoPing(JobBase):
+    """Queue bot, local and test only: proves an API job reaches bot-worker."""
+
+    topic: ClassVar[str] = "bot.demo"
+
+    note: str
+
+
 class ModeratePhoto(JobBase):
     """Queue api: classify an uploaded photo."""
 
