@@ -740,6 +740,18 @@ msgstr "Не удалось подтвердить верификацию. По�
 msgid "moderation.verified"
 msgstr "Готово! Твоя анкета верифицирована ✅"
 
+msgid "notify.day3"
+msgstr "Тебя уже ждут новые анкеты 👀 Посмотрим?"
+
+msgid "notify.day7"
+msgstr "Давно не виделись! В твоём городе появились новые люди."
+
+msgid "notify.look"
+msgstr "🔍 Смотреть"
+
+msgid "notify.new_people"
+msgstr "В твоём городе {count} новых людей, которые любят {interest} 👀"
+
 msgid "onboarding.age.ask"
 msgstr "Сколько тебе лет?"
 
