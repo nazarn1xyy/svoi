@@ -1,0 +1,54 @@
+[project]
+name = "svoi"
+version = "0.0.0"
+description = "Svoi: Telegram bot for finding friends by shared interests"
+requires-python = ">=3.12,<3.13"
+dependencies = ["svoi-contracts", "svoi-api", "svoi-bot"]
+
+[dependency-groups]
+dev = [
+    "hypothesis>=6.112",
+    "mypy>=1.13",
+    "pre-commit>=4.0",
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "pyyaml>=6.0.3",
+    "ruff>=0.8",
+    "types-pyyaml>=6.0.12.20261103",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = ["packages/contracts", "apps/api", "apps/bot"]
+
+[tool.uv.sources]
+svoi-contracts = { workspace = true }
+svoi-api = { workspace = true }
+svoi-bot = { workspace = true }
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+# docs/tech.md embeds pseudo-code blocks that are part of the frozen core, not runnable code
+extend-exclude = ["docs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC", "S", "PL", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# pytest relies on bare assert; tests compare against literal expected values
+"**/tests/**" = ["S101", "PLR2004"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+explicit_package_bases = true
+mypy_path = ["packages/contracts", "apps/api", "apps/bot"]
+
+[tool.pytest.ini_options]
+# each package keeps its own tests/; importlib mode avoids basename clashes between them
+addopts = ["--import-mode=importlib"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

@@ -1,0 +1,18 @@
+# FRONTEND.md section 6. The last matching rule wins: keep specific paths below `*`.
+*                                   @nazarn1xyy @Aryliadoch
+/docs/                              @nazarn1xyy
+/CLAUDE.md                          @nazarn1xyy
+/packages/contracts/                @nazarn1xyy
+/apps/api/svoi_api/db/              @nazarn1xyy
+/apps/api/migrations/               @nazarn1xyy
+/apps/api/svoi_api/seed/            @nazarn1xyy
+/apps/api/svoi_api/core/            @nazarn1xyy
+/apps/api/svoi_api/clients/         @nazarn1xyy
+/apps/api/svoi_api/config.py        @nazarn1xyy
+/apps/bot/svoi_bot/ui/              @nazarn1xyy
+/apps/bot/svoi_bot/api_client/      @nazarn1xyy
+/apps/bot/svoi_bot/middlewares/     @nazarn1xyy
+/infra/                             @nazarn1xyy
+/.github/                           @nazarn1xyy
+/apps/api/svoi_api/domains/         @Aryliadoch
+/apps/bot/svoi_bot/features/        @Aryliadoch

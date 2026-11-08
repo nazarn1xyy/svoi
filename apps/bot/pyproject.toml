@@ -1,0 +1,13 @@
+[project]
+name = "svoi-bot"
+version = "0.0.0"
+description = "Svoi Telegram bot"
+requires-python = ">=3.12,<3.13"
+dependencies = ["svoi-contracts"]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["svoi_bot"]
