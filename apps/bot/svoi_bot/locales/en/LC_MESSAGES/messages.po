@@ -288,6 +288,71 @@ msgstr "It can no longer be undone"
 msgid "errors.validation_error"
 msgstr "Check the data and try again."
 
+msgid "feed.empty.banned"
+msgstr "Your profile is blocked."
+
+msgid "feed.empty.hidden"
+msgstr "Your profile is hidden. Show it again?"
+
+msgid "feed.empty.no_candidates"
+msgstr "You've seen everyone with similar interests in your city. Widen the search?"
+
+msgid "feed.expand.any_online"
+msgstr "🎮 Online interests only"
+
+msgid "feed.expand.country"
+msgstr "🇺🇦 Whole country"
+
+msgid "feed.expand.km50"
+msgstr "🔭 Within 50 km"
+
+msgid "feed.expand.region"
+msgstr "🗺 Whole region"
+
+msgid "feed.invite"
+msgstr "🎁 Invite a friend"
+
+msgid "feed.keyboard"
+msgstr "Rate profiles with the buttons below 👇"
+
+msgid "feed.later"
+msgstr "⏰ Later"
+
+msgid "feed.message.adult"
+msgstr ""
+"Write a message for {name}, up to 300 characters. A voice message or round video up to 30 seconds"
+" works too."
+
+msgid "feed.message.cancel"
+msgstr "◀️ Cancel"
+
+msgid "feed.message.contacts_later"
+msgstr "Contacts open after a mutual like."
+
+msgid "feed.message.minor"
+msgstr "Write a message for {name}, up to 300 characters."
+
+msgid "feed.message.sent"
+msgstr "Like with a message sent 💌"
+
+msgid "feed.message.too_long_media"
+msgstr "Recordings up to 30 seconds"
+
+msgid "feed.message.too_long_text"
+msgstr "Messages are up to 300 characters"
+
+msgid "feed.paused"
+msgstr "Let's wait until someone sees your profile."
+
+msgid "feed.report"
+msgstr "⚠️ Report"
+
+msgid "feed.undo"
+msgstr "↩️ Undo"
+
+msgid "feed.unhide"
+msgstr "👁 Show"
+
 msgid "format.distance.km100"
 msgstr "within 100 km"
 
@@ -410,6 +475,27 @@ msgstr "Multi-select"
 
 msgid "kitchen.option"
 msgstr "Option"
+
+msgid "match.ice.goal"
+msgstr "Conversation starter: you're both looking for {goal}"
+
+msgid "match.ice.institution"
+msgstr "Conversation starter: you're both at {institution}"
+
+msgid "match.ice.interest"
+msgstr "Conversation starter: you both love {interest}; ask how it started"
+
+msgid "match.no_username"
+msgstr "🎉 It's a match! {name} has no username. Try opening the profile:"
+
+msgid "match.privacy_note"
+msgstr "The link may not open because of privacy settings"
+
+msgid "match.title"
+msgstr "🎉 It's a match with {name}! Write to @{username}"
+
+msgid "match.write"
+msgstr "💬 Write"
 
 msgid "me.delete"
 msgstr "🗑 Delete profile"

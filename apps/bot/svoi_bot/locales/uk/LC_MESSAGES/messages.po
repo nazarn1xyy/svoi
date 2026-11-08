@@ -291,6 +291,69 @@ msgstr "Повернути вже не можна"
 msgid "errors.validation_error"
 msgstr "Перевір дані й спробуй ще раз."
 
+msgid "feed.empty.banned"
+msgstr "Твою анкету заблоковано."
+
+msgid "feed.empty.hidden"
+msgstr "Твоя анкета прихована. Показати її знову?"
+
+msgid "feed.empty.no_candidates"
+msgstr "У твоєму місті зі схожими інтересами поки всіх переглянув. Розширити пошук?"
+
+msgid "feed.expand.any_online"
+msgstr "🎮 Тільки онлайн-інтереси"
+
+msgid "feed.expand.country"
+msgstr "🇺🇦 Уся країна"
+
+msgid "feed.expand.km50"
+msgstr "🔭 До 50 км"
+
+msgid "feed.expand.region"
+msgstr "🗺 Уся область"
+
+msgid "feed.invite"
+msgstr "🎁 Запросити друга"
+
+msgid "feed.keyboard"
+msgstr "Оцінюй анкети кнопками внизу 👇"
+
+msgid "feed.later"
+msgstr "⏰ Пізніше"
+
+msgid "feed.message.adult"
+msgstr "Напиши повідомлення для {name} — до 300 символів. Можна голосове або кружок до 30 секунд."
+
+msgid "feed.message.cancel"
+msgstr "◀️ Скасувати"
+
+msgid "feed.message.contacts_later"
+msgstr "Контакти відкриються після взаємної симпатії."
+
+msgid "feed.message.minor"
+msgstr "Напиши повідомлення для {name} — до 300 символів."
+
+msgid "feed.message.sent"
+msgstr "Лайк з повідомленням надіслано 💌"
+
+msgid "feed.message.too_long_media"
+msgstr "Запис до 30 секунд"
+
+msgid "feed.message.too_long_text"
+msgstr "Повідомлення — до 300 символів"
+
+msgid "feed.paused"
+msgstr "Почекаємо, поки хтось побачить твою анкету."
+
+msgid "feed.report"
+msgstr "⚠️ Поскаржитися"
+
+msgid "feed.undo"
+msgstr "↩️ Повернути"
+
+msgid "feed.unhide"
+msgstr "👁 Показати"
+
 msgid "format.distance.km100"
 msgstr "до 100 км"
 
@@ -413,6 +476,27 @@ msgstr "Мультивибір"
 
 msgid "kitchen.option"
 msgstr "Варіант"
+
+msgid "match.ice.goal"
+msgstr "Привід почати: ви обоє шукаєте {goal}"
+
+msgid "match.ice.institution"
+msgstr "Привід почати: ви з одного закладу — {institution}"
+
+msgid "match.ice.interest"
+msgstr "Привід почати: ви обоє любите {interest} — спитай, з чого все почалось"
+
+msgid "match.no_username"
+msgstr "🎉 Взаємна симпатія! У {name} немає username. Спробуй відкрити профіль:"
+
+msgid "match.privacy_note"
+msgstr "Посилання може не відкритися через налаштування приватності"
+
+msgid "match.title"
+msgstr "🎉 Взаємна симпатія з {name}! Пиши: @{username}"
+
+msgid "match.write"
+msgstr "💬 Написати"
 
 msgid "me.delete"
 msgstr "🗑 Видалити анкету"
