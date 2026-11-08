@@ -803,6 +803,17 @@ msgstr "Как к тебе обращаться?"
 msgid "onboarding.name.rules"
 msgstr "Имя — от 2 до 20 букв, без ссылок и цифр"
 
+msgid "referral.share"
+msgstr "📤 Поделиться"
+
+msgid "referral.share_text"
+msgstr "Находи своих людей по интересам 👇"
+
+msgid "referral.text"
+msgstr ""
+"Пригласи друга — он появится у тебя первым в ленте, а вы оба получите +{bonus} реакций. Твоя "
+"ссылка: {link} · Приглашено: {invited}"
+
 msgid "report.already"
 msgstr "Ты уже жаловался на эту анкету."
 

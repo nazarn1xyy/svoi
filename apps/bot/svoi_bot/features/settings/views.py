@@ -60,6 +60,7 @@ def main(f: FiltersOut, s: SettingsOut, lang: Lang) -> tuple[str, InlineKeyboard
         [nav_button(_("settings.privacy_button"), SET, "privacy")],
         [nav_button(_("settings.notify_button"), SET, "notify")],
         [nav_button(_("settings.lang_button"), SET, "lang")],
+        [nav_button(_("feed.invite"), "referral", "open")],
     ]
     return text, keyboards.markup(rows)
 

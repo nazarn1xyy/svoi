@@ -802,6 +802,17 @@ msgstr "What should we call you?"
 msgid "onboarding.name.rules"
 msgstr "Name: 2 to 20 letters, no links or digits"
 
+msgid "referral.share"
+msgstr "📤 Share"
+
+msgid "referral.share_text"
+msgstr "Find your people by shared interests 👇"
+
+msgid "referral.text"
+msgstr ""
+"Invite a friend: they'll be first in your feed and you both get +{bonus} reactions. Your link: "
+"{link} · Invited: {invited}"
+
 msgid "report.already"
 msgstr "You have already reported this profile."
 
