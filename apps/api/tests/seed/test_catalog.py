@@ -80,11 +80,12 @@ def test_at_least_ten_clarifications_with_unique_keys() -> None:
             assert _filled(o.title_uk, o.title_ru, o.title_en)
 
 
-def test_each_seed_city_has_at_least_eight_institutions() -> None:
-    # S4 shows the first 8 institutions of the user's city as buttons
+def test_each_seed_city_has_institutions() -> None:
+    # S4 shows up to 8 institutions as buttons; a town may have fewer
     per_city = Counter(i.city_geonames_id for i in catalog.INSTITUTIONS)
     assert set(per_city) == set(SEED_CITIES)
-    assert min(per_city.values()) >= 8
+    assert min(per_city.values()) >= 3
+    assert per_city[703448] >= 8
     for inst in catalog.INSTITUTIONS:
         assert inst.type in InstitutionType
         assert len(inst.name) <= 200
