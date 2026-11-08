@@ -29,6 +29,8 @@ svoi-bot = { workspace = true }
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+# docs/tech.md embeds pseudo-code blocks that are part of the frozen core, not runnable code
+extend-exclude = ["docs"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC", "S", "PL", "RUF"]
