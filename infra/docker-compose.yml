@@ -98,8 +98,6 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddydata:/data
-    depends_on:
-      - bot
 
 volumes:
   pgdata:
