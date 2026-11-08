@@ -1,0 +1,154 @@
+[
+  {
+    "id": 1,
+    "city_id": 700918,
+    "name": "Могилів-Подільський монтажно-економічний фаховий коледж",
+    "short_name": "МПМЕФК",
+    "type": "college",
+    "source_id": "666"
+  },
+  {
+    "id": 2,
+    "city_id": 700918,
+    "name": "Могилів-Подільський технолого-економічний фаховий коледж ВНАУ",
+    "short_name": "МПТЕФК ВНАУ",
+    "type": "college",
+    "source_id": "667"
+  },
+  {
+    "id": 3,
+    "city_id": 700918,
+    "name": "Могилів-Подільський медичний фаховий коледж",
+    "short_name": "МПМФК",
+    "type": "college",
+    "source_id": "976"
+  },
+  {
+    "id": 4,
+    "city_id": 689558,
+    "name": "Вінницький національний технічний університет",
+    "short_name": "ВНТУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 5,
+    "city_id": 689558,
+    "name": "Вінницький державний педагогічний університет імені Михайла Коцюбинського",
+    "short_name": "ВДПУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 6,
+    "city_id": 689558,
+    "name": "Вінницький національний медичний університет імені М. І. Пирогова",
+    "short_name": "ВНМУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 7,
+    "city_id": 689558,
+    "name": "Вінницький національний аграрний університет",
+    "short_name": "ВНАУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 8,
+    "city_id": 689558,
+    "name": "Донецький національний університет імені Василя Стуса",
+    "short_name": "ДонНУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 9,
+    "city_id": 689558,
+    "name": "Вінницький кооперативний інститут",
+    "short_name": "ВКІ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 10,
+    "city_id": 703448,
+    "name": "Київський національний університет імені Тараса Шевченка",
+    "short_name": "КНУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 11,
+    "city_id": 703448,
+    "name": "Національний технічний університет України «КПІ імені Ігоря Сікорського»",
+    "short_name": "КПІ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 12,
+    "city_id": 703448,
+    "name": "Національний університет «Києво-Могилянська академія»",
+    "short_name": "НаУКМА",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 13,
+    "city_id": 703448,
+    "name": "Національний медичний університет імені О. О. Богомольця",
+    "short_name": "НМУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 14,
+    "city_id": 703448,
+    "name": "Київський національний економічний університет імені Вадима Гетьмана",
+    "short_name": "КНЕУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 15,
+    "city_id": 703448,
+    "name": "Національний авіаційний університет",
+    "short_name": "НАУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 16,
+    "city_id": 703448,
+    "name": "Київський національний університет будівництва і архітектури",
+    "short_name": "КНУБА",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 17,
+    "city_id": 703448,
+    "name": "Київський столичний університет імені Бориса Грінченка",
+    "short_name": "КСУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 18,
+    "city_id": 703448,
+    "name": "Київський національний лінгвістичний університет",
+    "short_name": "КНЛУ",
+    "type": "university",
+    "source_id": null
+  },
+  {
+    "id": 19,
+    "city_id": 703448,
+    "name": "Національний університет біоресурсів і природокористування України",
+    "short_name": "НУБіП",
+    "type": "university",
+    "source_id": null
+  }
+]

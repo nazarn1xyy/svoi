@@ -1,0 +1,962 @@
+[
+  {
+    "id": 1,
+    "category_id": 1,
+    "code": "football",
+    "title_uk": "Футбол",
+    "title_ru": "Футбол",
+    "title_en": "Football"
+  },
+  {
+    "id": 2,
+    "category_id": 1,
+    "code": "basketball",
+    "title_uk": "Баскетбол",
+    "title_ru": "Баскетбол",
+    "title_en": "Basketball"
+  },
+  {
+    "id": 3,
+    "category_id": 1,
+    "code": "volleyball",
+    "title_uk": "Волейбол",
+    "title_ru": "Волейбол",
+    "title_en": "Volleyball"
+  },
+  {
+    "id": 4,
+    "category_id": 1,
+    "code": "gym",
+    "title_uk": "Тренажерний зал",
+    "title_ru": "Тренажёрный зал",
+    "title_en": "Gym"
+  },
+  {
+    "id": 5,
+    "category_id": 1,
+    "code": "running",
+    "title_uk": "Біг",
+    "title_ru": "Бег",
+    "title_en": "Running"
+  },
+  {
+    "id": 6,
+    "category_id": 1,
+    "code": "cycling",
+    "title_uk": "Велосипед",
+    "title_ru": "Велосипед",
+    "title_en": "Cycling"
+  },
+  {
+    "id": 7,
+    "category_id": 1,
+    "code": "swimming",
+    "title_uk": "Плавання",
+    "title_ru": "Плавание",
+    "title_en": "Swimming"
+  },
+  {
+    "id": 8,
+    "category_id": 1,
+    "code": "boxing",
+    "title_uk": "Бокс",
+    "title_ru": "Бокс",
+    "title_en": "Boxing"
+  },
+  {
+    "id": 9,
+    "category_id": 1,
+    "code": "yoga",
+    "title_uk": "Йога",
+    "title_ru": "Йога",
+    "title_en": "Yoga"
+  },
+  {
+    "id": 10,
+    "category_id": 1,
+    "code": "skateboarding",
+    "title_uk": "Скейтбординг",
+    "title_ru": "Скейтбординг",
+    "title_en": "Skateboarding"
+  },
+  {
+    "id": 11,
+    "category_id": 1,
+    "code": "table_tennis",
+    "title_uk": "Настільний теніс",
+    "title_ru": "Настольный теннис",
+    "title_en": "Table tennis"
+  },
+  {
+    "id": 12,
+    "category_id": 1,
+    "code": "martial_arts",
+    "title_uk": "Єдиноборства",
+    "title_ru": "Единоборства",
+    "title_en": "Martial arts"
+  },
+  {
+    "id": 13,
+    "category_id": 1,
+    "code": "tennis",
+    "title_uk": "Теніс",
+    "title_ru": "Теннис",
+    "title_en": "Tennis"
+  },
+  {
+    "id": 14,
+    "category_id": 2,
+    "code": "cs2",
+    "title_uk": "CS2",
+    "title_ru": "CS2",
+    "title_en": "CS2"
+  },
+  {
+    "id": 15,
+    "category_id": 2,
+    "code": "dota2",
+    "title_uk": "Dota 2",
+    "title_ru": "Dota 2",
+    "title_en": "Dota 2"
+  },
+  {
+    "id": 16,
+    "category_id": 2,
+    "code": "valorant",
+    "title_uk": "Valorant",
+    "title_ru": "Valorant",
+    "title_en": "Valorant"
+  },
+  {
+    "id": 17,
+    "category_id": 2,
+    "code": "minecraft",
+    "title_uk": "Minecraft",
+    "title_ru": "Minecraft",
+    "title_en": "Minecraft"
+  },
+  {
+    "id": 18,
+    "category_id": 2,
+    "code": "fortnite",
+    "title_uk": "Fortnite",
+    "title_ru": "Fortnite",
+    "title_en": "Fortnite"
+  },
+  {
+    "id": 19,
+    "category_id": 2,
+    "code": "gta",
+    "title_uk": "GTA",
+    "title_ru": "GTA",
+    "title_en": "GTA"
+  },
+  {
+    "id": 20,
+    "category_id": 2,
+    "code": "lol",
+    "title_uk": "League of Legends",
+    "title_ru": "League of Legends",
+    "title_en": "League of Legends"
+  },
+  {
+    "id": 21,
+    "category_id": 2,
+    "code": "pubg",
+    "title_uk": "PUBG",
+    "title_ru": "PUBG",
+    "title_en": "PUBG"
+  },
+  {
+    "id": 22,
+    "category_id": 2,
+    "code": "mobile_games",
+    "title_uk": "Мобільні ігри",
+    "title_ru": "Мобильные игры",
+    "title_en": "Mobile games"
+  },
+  {
+    "id": 23,
+    "category_id": 2,
+    "code": "board_games",
+    "title_uk": "Настільні ігри",
+    "title_ru": "Настольные игры",
+    "title_en": "Board games"
+  },
+  {
+    "id": 24,
+    "category_id": 2,
+    "code": "chess",
+    "title_uk": "Шахи",
+    "title_ru": "Шахматы",
+    "title_en": "Chess"
+  },
+  {
+    "id": 25,
+    "category_id": 3,
+    "code": "guitar",
+    "title_uk": "Гітара",
+    "title_ru": "Гитара",
+    "title_en": "Guitar"
+  },
+  {
+    "id": 26,
+    "category_id": 3,
+    "code": "piano",
+    "title_uk": "Фортепіано",
+    "title_ru": "Фортепиано",
+    "title_en": "Piano"
+  },
+  {
+    "id": 27,
+    "category_id": 3,
+    "code": "singing",
+    "title_uk": "Спів",
+    "title_ru": "Пение",
+    "title_en": "Singing"
+  },
+  {
+    "id": 28,
+    "category_id": 3,
+    "code": "rap",
+    "title_uk": "Реп",
+    "title_ru": "Рэп",
+    "title_en": "Rap"
+  },
+  {
+    "id": 29,
+    "category_id": 3,
+    "code": "rock",
+    "title_uk": "Рок",
+    "title_ru": "Рок",
+    "title_en": "Rock"
+  },
+  {
+    "id": 30,
+    "category_id": 3,
+    "code": "electronic",
+    "title_uk": "Електронна музика",
+    "title_ru": "Электронная музыка",
+    "title_en": "Electronic music"
+  },
+  {
+    "id": 31,
+    "category_id": 3,
+    "code": "ukrainian_music",
+    "title_uk": "Українська музика",
+    "title_ru": "Украинская музыка",
+    "title_en": "Ukrainian music"
+  },
+  {
+    "id": 32,
+    "category_id": 3,
+    "code": "concerts",
+    "title_uk": "Концерти",
+    "title_ru": "Концерты",
+    "title_en": "Concerts"
+  },
+  {
+    "id": 33,
+    "category_id": 3,
+    "code": "djing",
+    "title_uk": "Діджеїнг",
+    "title_ru": "Диджеинг",
+    "title_en": "DJing"
+  },
+  {
+    "id": 34,
+    "category_id": 3,
+    "code": "kpop",
+    "title_uk": "K-pop",
+    "title_ru": "K-pop",
+    "title_en": "K-pop"
+  },
+  {
+    "id": 35,
+    "category_id": 3,
+    "code": "festivals",
+    "title_uk": "Фестивалі",
+    "title_ru": "Фестивали",
+    "title_en": "Festivals"
+  },
+  {
+    "id": 36,
+    "category_id": 4,
+    "code": "anime",
+    "title_uk": "Аніме",
+    "title_ru": "Аниме",
+    "title_en": "Anime"
+  },
+  {
+    "id": 37,
+    "category_id": 4,
+    "code": "marvel",
+    "title_uk": "Marvel",
+    "title_ru": "Marvel",
+    "title_en": "Marvel"
+  },
+  {
+    "id": 38,
+    "category_id": 4,
+    "code": "horror",
+    "title_uk": "Жахи",
+    "title_ru": "Ужасы",
+    "title_en": "Horror"
+  },
+  {
+    "id": 39,
+    "category_id": 4,
+    "code": "comedies",
+    "title_uk": "Комедії",
+    "title_ru": "Комедии",
+    "title_en": "Comedies"
+  },
+  {
+    "id": 40,
+    "category_id": 4,
+    "code": "series",
+    "title_uk": "Серіали",
+    "title_ru": "Сериалы",
+    "title_en": "TV series"
+  },
+  {
+    "id": 41,
+    "category_id": 4,
+    "code": "documentaries",
+    "title_uk": "Документальне кіно",
+    "title_ru": "Документальное кино",
+    "title_en": "Documentaries"
+  },
+  {
+    "id": 42,
+    "category_id": 4,
+    "code": "cartoons",
+    "title_uk": "Мультфільми",
+    "title_ru": "Мультфильмы",
+    "title_en": "Cartoons"
+  },
+  {
+    "id": 43,
+    "category_id": 4,
+    "code": "sci_fi",
+    "title_uk": "Фантастика",
+    "title_ru": "Фантастика",
+    "title_en": "Sci-fi"
+  },
+  {
+    "id": 44,
+    "category_id": 4,
+    "code": "cinema",
+    "title_uk": "Похід у кіно",
+    "title_ru": "Поход в кино",
+    "title_en": "Going to the cinema"
+  },
+  {
+    "id": 45,
+    "category_id": 4,
+    "code": "k_dramas",
+    "title_uk": "Дорами",
+    "title_ru": "Дорамы",
+    "title_en": "K-dramas"
+  },
+  {
+    "id": 46,
+    "category_id": 5,
+    "code": "fantasy",
+    "title_uk": "Фентезі",
+    "title_ru": "Фэнтези",
+    "title_en": "Fantasy"
+  },
+  {
+    "id": 47,
+    "category_id": 5,
+    "code": "manga",
+    "title_uk": "Манга",
+    "title_ru": "Манга",
+    "title_en": "Manga"
+  },
+  {
+    "id": 48,
+    "category_id": 5,
+    "code": "comics",
+    "title_uk": "Комікси",
+    "title_ru": "Комиксы",
+    "title_en": "Comics"
+  },
+  {
+    "id": 49,
+    "category_id": 5,
+    "code": "classics",
+    "title_uk": "Класика",
+    "title_ru": "Классика",
+    "title_en": "Classics"
+  },
+  {
+    "id": 50,
+    "category_id": 5,
+    "code": "psychology",
+    "title_uk": "Психологія",
+    "title_ru": "Психология",
+    "title_en": "Psychology"
+  },
+  {
+    "id": 51,
+    "category_id": 5,
+    "code": "detective",
+    "title_uk": "Детективи",
+    "title_ru": "Детективы",
+    "title_en": "Detective stories"
+  },
+  {
+    "id": 52,
+    "category_id": 5,
+    "code": "poetry",
+    "title_uk": "Поезія",
+    "title_ru": "Поэзия",
+    "title_en": "Poetry"
+  },
+  {
+    "id": 53,
+    "category_id": 5,
+    "code": "self_development",
+    "title_uk": "Саморозвиток",
+    "title_ru": "Саморазвитие",
+    "title_en": "Self-development"
+  },
+  {
+    "id": 54,
+    "category_id": 5,
+    "code": "history",
+    "title_uk": "Історія",
+    "title_ru": "История",
+    "title_en": "History"
+  },
+  {
+    "id": 55,
+    "category_id": 6,
+    "code": "drawing",
+    "title_uk": "Малювання",
+    "title_ru": "Рисование",
+    "title_en": "Drawing"
+  },
+  {
+    "id": 56,
+    "category_id": 6,
+    "code": "photography",
+    "title_uk": "Фотографія",
+    "title_ru": "Фотография",
+    "title_en": "Photography"
+  },
+  {
+    "id": 57,
+    "category_id": 6,
+    "code": "video_editing",
+    "title_uk": "Монтаж відео",
+    "title_ru": "Монтаж видео",
+    "title_en": "Video editing"
+  },
+  {
+    "id": 58,
+    "category_id": 6,
+    "code": "design",
+    "title_uk": "Дизайн",
+    "title_ru": "Дизайн",
+    "title_en": "Design"
+  },
+  {
+    "id": 59,
+    "category_id": 6,
+    "code": "dancing",
+    "title_uk": "Танці",
+    "title_ru": "Танцы",
+    "title_en": "Dancing"
+  },
+  {
+    "id": 60,
+    "category_id": 6,
+    "code": "theatre",
+    "title_uk": "Театр",
+    "title_ru": "Театр",
+    "title_en": "Theatre"
+  },
+  {
+    "id": 61,
+    "category_id": 6,
+    "code": "handmade",
+    "title_uk": "Хендмейд",
+    "title_ru": "Хендмейд",
+    "title_en": "Handmade"
+  },
+  {
+    "id": 62,
+    "category_id": 6,
+    "code": "writing",
+    "title_uk": "Пишу тексти",
+    "title_ru": "Пишу тексты",
+    "title_en": "Writing"
+  },
+  {
+    "id": 63,
+    "category_id": 6,
+    "code": "blogging",
+    "title_uk": "Блогінг",
+    "title_ru": "Блогинг",
+    "title_en": "Blogging"
+  },
+  {
+    "id": 64,
+    "category_id": 6,
+    "code": "cosplay",
+    "title_uk": "Косплей",
+    "title_ru": "Косплей",
+    "title_en": "Cosplay"
+  },
+  {
+    "id": 65,
+    "category_id": 7,
+    "code": "programming",
+    "title_uk": "Програмування",
+    "title_ru": "Программирование",
+    "title_en": "Programming"
+  },
+  {
+    "id": 66,
+    "category_id": 7,
+    "code": "web_dev",
+    "title_uk": "Веброзробка",
+    "title_ru": "Веб-разработка",
+    "title_en": "Web development"
+  },
+  {
+    "id": 67,
+    "category_id": 7,
+    "code": "gamedev",
+    "title_uk": "Геймдев",
+    "title_ru": "Геймдев",
+    "title_en": "Game development"
+  },
+  {
+    "id": 68,
+    "category_id": 7,
+    "code": "ai",
+    "title_uk": "Штучний інтелект",
+    "title_ru": "Искусственный интеллект",
+    "title_en": "AI"
+  },
+  {
+    "id": 69,
+    "category_id": 7,
+    "code": "robotics",
+    "title_uk": "Робототехніка",
+    "title_ru": "Робототехника",
+    "title_en": "Robotics"
+  },
+  {
+    "id": 70,
+    "category_id": 7,
+    "code": "pc_building",
+    "title_uk": "Збирання ПК",
+    "title_ru": "Сборка ПК",
+    "title_en": "PC building"
+  },
+  {
+    "id": 71,
+    "category_id": 7,
+    "code": "crypto",
+    "title_uk": "Криптовалюти",
+    "title_ru": "Криптовалюты",
+    "title_en": "Crypto"
+  },
+  {
+    "id": 72,
+    "category_id": 7,
+    "code": "gadgets",
+    "title_uk": "Гаджети",
+    "title_ru": "Гаджеты",
+    "title_en": "Gadgets"
+  },
+  {
+    "id": 73,
+    "category_id": 7,
+    "code": "modeling_3d",
+    "title_uk": "3D-моделювання",
+    "title_ru": "3D-моделирование",
+    "title_en": "3D modeling"
+  },
+  {
+    "id": 74,
+    "category_id": 7,
+    "code": "cybersecurity",
+    "title_uk": "Кібербезпека",
+    "title_ru": "Кибербезопасность",
+    "title_en": "Cybersecurity"
+  },
+  {
+    "id": 75,
+    "category_id": 8,
+    "code": "english",
+    "title_uk": "Англійська мова",
+    "title_ru": "Английский язык",
+    "title_en": "English"
+  },
+  {
+    "id": 76,
+    "category_id": 8,
+    "code": "languages",
+    "title_uk": "Іноземні мови",
+    "title_ru": "Иностранные языки",
+    "title_en": "Foreign languages"
+  },
+  {
+    "id": 77,
+    "category_id": 8,
+    "code": "math",
+    "title_uk": "Математика",
+    "title_ru": "Математика",
+    "title_en": "Math"
+  },
+  {
+    "id": 78,
+    "category_id": 8,
+    "code": "physics",
+    "title_uk": "Фізика",
+    "title_ru": "Физика",
+    "title_en": "Physics"
+  },
+  {
+    "id": 79,
+    "category_id": 8,
+    "code": "biology",
+    "title_uk": "Біологія",
+    "title_ru": "Биология",
+    "title_en": "Biology"
+  },
+  {
+    "id": 80,
+    "category_id": 8,
+    "code": "chemistry",
+    "title_uk": "Хімія",
+    "title_ru": "Химия",
+    "title_en": "Chemistry"
+  },
+  {
+    "id": 81,
+    "category_id": 8,
+    "code": "nmt_prep",
+    "title_uk": "Підготовка до НМТ",
+    "title_ru": "Подготовка к НМТ",
+    "title_en": "NMT exam prep"
+  },
+  {
+    "id": 82,
+    "category_id": 8,
+    "code": "olympiads",
+    "title_uk": "Олімпіади",
+    "title_ru": "Олимпиады",
+    "title_en": "Olympiads"
+  },
+  {
+    "id": 83,
+    "category_id": 8,
+    "code": "economics",
+    "title_uk": "Економіка",
+    "title_ru": "Экономика",
+    "title_en": "Economics"
+  },
+  {
+    "id": 84,
+    "category_id": 8,
+    "code": "debates",
+    "title_uk": "Дебати",
+    "title_ru": "Дебаты",
+    "title_en": "Debates"
+  },
+  {
+    "id": 85,
+    "category_id": 9,
+    "code": "hiking",
+    "title_uk": "Походи",
+    "title_ru": "Походы",
+    "title_en": "Hiking"
+  },
+  {
+    "id": 86,
+    "category_id": 9,
+    "code": "camping",
+    "title_uk": "Кемпінг",
+    "title_ru": "Кемпинг",
+    "title_en": "Camping"
+  },
+  {
+    "id": 87,
+    "category_id": 9,
+    "code": "fishing",
+    "title_uk": "Риболовля",
+    "title_ru": "Рыбалка",
+    "title_en": "Fishing"
+  },
+  {
+    "id": 88,
+    "category_id": 9,
+    "code": "travel",
+    "title_uk": "Подорожі",
+    "title_ru": "Путешествия",
+    "title_en": "Travel"
+  },
+  {
+    "id": 89,
+    "category_id": 9,
+    "code": "city_walks",
+    "title_uk": "Прогулянки містом",
+    "title_ru": "Прогулки по городу",
+    "title_en": "City walks"
+  },
+  {
+    "id": 90,
+    "category_id": 9,
+    "code": "mountains",
+    "title_uk": "Гори",
+    "title_ru": "Горы",
+    "title_en": "Mountains"
+  },
+  {
+    "id": 91,
+    "category_id": 9,
+    "code": "road_trips",
+    "title_uk": "Автоподорожі",
+    "title_ru": "Автопутешествия",
+    "title_en": "Road trips"
+  },
+  {
+    "id": 92,
+    "category_id": 9,
+    "code": "gardening",
+    "title_uk": "Садівництво",
+    "title_ru": "Садоводство",
+    "title_en": "Gardening"
+  },
+  {
+    "id": 93,
+    "category_id": 9,
+    "code": "beach",
+    "title_uk": "Пляжний відпочинок",
+    "title_ru": "Пляжный отдых",
+    "title_en": "Beach holidays"
+  },
+  {
+    "id": 94,
+    "category_id": 10,
+    "code": "cooking",
+    "title_uk": "Кулінарія",
+    "title_ru": "Кулинария",
+    "title_en": "Cooking"
+  },
+  {
+    "id": 95,
+    "category_id": 10,
+    "code": "baking",
+    "title_uk": "Випічка",
+    "title_ru": "Выпечка",
+    "title_en": "Baking"
+  },
+  {
+    "id": 96,
+    "category_id": 10,
+    "code": "coffee",
+    "title_uk": "Кава",
+    "title_ru": "Кофе",
+    "title_en": "Coffee"
+  },
+  {
+    "id": 97,
+    "category_id": 10,
+    "code": "sushi",
+    "title_uk": "Суші",
+    "title_ru": "Суши",
+    "title_en": "Sushi"
+  },
+  {
+    "id": 98,
+    "category_id": 10,
+    "code": "pizza",
+    "title_uk": "Піца",
+    "title_ru": "Пицца",
+    "title_en": "Pizza"
+  },
+  {
+    "id": 99,
+    "category_id": 10,
+    "code": "street_food",
+    "title_uk": "Стрітфуд",
+    "title_ru": "Стритфуд",
+    "title_en": "Street food"
+  },
+  {
+    "id": 100,
+    "category_id": 10,
+    "code": "vegetarian",
+    "title_uk": "Вегетаріанство",
+    "title_ru": "Вегетарианство",
+    "title_en": "Vegetarian food"
+  },
+  {
+    "id": 101,
+    "category_id": 10,
+    "code": "tea",
+    "title_uk": "Чай",
+    "title_ru": "Чай",
+    "title_en": "Tea"
+  },
+  {
+    "id": 102,
+    "category_id": 10,
+    "code": "bbq",
+    "title_uk": "Шашлики",
+    "title_ru": "Шашлыки",
+    "title_en": "BBQ"
+  },
+  {
+    "id": 103,
+    "category_id": 11,
+    "code": "parties",
+    "title_uk": "Вечірки",
+    "title_ru": "Вечеринки",
+    "title_en": "Parties"
+  },
+  {
+    "id": 104,
+    "category_id": 11,
+    "code": "quests",
+    "title_uk": "Квести",
+    "title_ru": "Квесты",
+    "title_en": "Escape rooms"
+  },
+  {
+    "id": 105,
+    "category_id": 11,
+    "code": "karaoke",
+    "title_uk": "Караоке",
+    "title_ru": "Караоке",
+    "title_en": "Karaoke"
+  },
+  {
+    "id": 106,
+    "category_id": 11,
+    "code": "bowling",
+    "title_uk": "Боулінг",
+    "title_ru": "Боулинг",
+    "title_en": "Bowling"
+  },
+  {
+    "id": 107,
+    "category_id": 11,
+    "code": "volunteering",
+    "title_uk": "Волонтерство",
+    "title_ru": "Волонтёрство",
+    "title_en": "Volunteering"
+  },
+  {
+    "id": 108,
+    "category_id": 11,
+    "code": "memes",
+    "title_uk": "Меми",
+    "title_ru": "Мемы",
+    "title_en": "Memes"
+  },
+  {
+    "id": 109,
+    "category_id": 11,
+    "code": "astrology",
+    "title_uk": "Астрологія",
+    "title_ru": "Астрология",
+    "title_en": "Astrology"
+  },
+  {
+    "id": 110,
+    "category_id": 11,
+    "code": "podcasts",
+    "title_uk": "Подкасти",
+    "title_ru": "Подкасты",
+    "title_en": "Podcasts"
+  },
+  {
+    "id": 111,
+    "category_id": 11,
+    "code": "mafia",
+    "title_uk": "Мафія",
+    "title_ru": "Мафия",
+    "title_en": "Mafia party game"
+  },
+  {
+    "id": 112,
+    "category_id": 11,
+    "code": "standup",
+    "title_uk": "Стендап",
+    "title_ru": "Стендап",
+    "title_en": "Stand-up comedy"
+  },
+  {
+    "id": 113,
+    "category_id": 12,
+    "code": "dogs",
+    "title_uk": "Собаки",
+    "title_ru": "Собаки",
+    "title_en": "Dogs"
+  },
+  {
+    "id": 114,
+    "category_id": 12,
+    "code": "cats",
+    "title_uk": "Коти",
+    "title_ru": "Кошки",
+    "title_en": "Cats"
+  },
+  {
+    "id": 115,
+    "category_id": 12,
+    "code": "horses",
+    "title_uk": "Коні",
+    "title_ru": "Лошади",
+    "title_en": "Horses"
+  },
+  {
+    "id": 116,
+    "category_id": 12,
+    "code": "aquarium",
+    "title_uk": "Акваріумістика",
+    "title_ru": "Аквариумистика",
+    "title_en": "Aquarium fish"
+  },
+  {
+    "id": 117,
+    "category_id": 12,
+    "code": "reptiles",
+    "title_uk": "Рептилії",
+    "title_ru": "Рептилии",
+    "title_en": "Reptiles"
+  },
+  {
+    "id": 118,
+    "category_id": 12,
+    "code": "birds",
+    "title_uk": "Птахи",
+    "title_ru": "Птицы",
+    "title_en": "Birds"
+  },
+  {
+    "id": 119,
+    "category_id": 12,
+    "code": "animal_rescue",
+    "title_uk": "Допомога тваринам",
+    "title_ru": "Помощь животным",
+    "title_en": "Animal rescue"
+  },
+  {
+    "id": 120,
+    "category_id": 12,
+    "code": "pet_training",
+    "title_uk": "Дресирування",
+    "title_ru": "Дрессировка",
+    "title_en": "Pet training"
+  }
+]

@@ -1,0 +1,350 @@
+[
+  {
+    "id": 1,
+    "interest_id": 25,
+    "question_key": "guitar_play",
+    "priority": 10,
+    "options": [
+      {
+        "key": "plays",
+        "title_uk": "граю",
+        "title_ru": "играю",
+        "title_en": "I play"
+      },
+      {
+        "key": "listens",
+        "title_uk": "слухаю",
+        "title_ru": "слушаю",
+        "title_en": "I listen"
+      },
+      {
+        "key": "learning",
+        "title_uk": "вчуся",
+        "title_ru": "учусь",
+        "title_en": "learning"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "interest_id": 26,
+    "question_key": "piano_play",
+    "priority": 10,
+    "options": [
+      {
+        "key": "plays",
+        "title_uk": "граю",
+        "title_ru": "играю",
+        "title_en": "I play"
+      },
+      {
+        "key": "listens",
+        "title_uk": "слухаю",
+        "title_ru": "слушаю",
+        "title_en": "I listen"
+      },
+      {
+        "key": "learning",
+        "title_uk": "вчуся",
+        "title_ru": "учусь",
+        "title_en": "learning"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "interest_id": 1,
+    "question_key": "football_role",
+    "priority": 9,
+    "options": [
+      {
+        "key": "plays",
+        "title_uk": "граю",
+        "title_ru": "играю",
+        "title_en": "I play"
+      },
+      {
+        "key": "watches",
+        "title_uk": "дивлюся",
+        "title_ru": "смотрю",
+        "title_en": "I watch"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "interest_id": 2,
+    "question_key": "basketball_role",
+    "priority": 8,
+    "options": [
+      {
+        "key": "plays",
+        "title_uk": "граю",
+        "title_ru": "играю",
+        "title_en": "I play"
+      },
+      {
+        "key": "watches",
+        "title_uk": "дивлюся",
+        "title_ru": "смотрю",
+        "title_en": "I watch"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "interest_id": 14,
+    "question_key": "cs2_level",
+    "priority": 9,
+    "options": [
+      {
+        "key": "for_fun",
+        "title_uk": "для душі",
+        "title_ru": "для души",
+        "title_en": "for fun"
+      },
+      {
+        "key": "ranked",
+        "title_uk": "рейтинг",
+        "title_ru": "рейтинг",
+        "title_en": "ranked"
+      },
+      {
+        "key": "tournaments",
+        "title_uk": "турніри",
+        "title_ru": "турниры",
+        "title_en": "tournaments"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "interest_id": 15,
+    "question_key": "dota2_level",
+    "priority": 8,
+    "options": [
+      {
+        "key": "for_fun",
+        "title_uk": "для душі",
+        "title_ru": "для души",
+        "title_en": "for fun"
+      },
+      {
+        "key": "ranked",
+        "title_uk": "рейтинг",
+        "title_ru": "рейтинг",
+        "title_en": "ranked"
+      },
+      {
+        "key": "tournaments",
+        "title_uk": "турніри",
+        "title_ru": "турниры",
+        "title_en": "tournaments"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "interest_id": 4,
+    "question_key": "gym_goal",
+    "priority": 7,
+    "options": [
+      {
+        "key": "bulking",
+        "title_uk": "набираю масу",
+        "title_ru": "набираю массу",
+        "title_en": "bulking"
+      },
+      {
+        "key": "fit",
+        "title_uk": "тримаю форму",
+        "title_ru": "держу форму",
+        "title_en": "keeping fit"
+      },
+      {
+        "key": "beginner",
+        "title_uk": "тільки починаю",
+        "title_ru": "только начинаю",
+        "title_en": "just starting"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "interest_id": 5,
+    "question_key": "running_distance",
+    "priority": 6,
+    "options": [
+      {
+        "key": "short",
+        "title_uk": "до 5 км",
+        "title_ru": "до 5 км",
+        "title_en": "up to 5 km"
+      },
+      {
+        "key": "long",
+        "title_uk": "10 км і більше",
+        "title_ru": "10 км и больше",
+        "title_en": "10 km and more"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "interest_id": 55,
+    "question_key": "drawing_medium",
+    "priority": 6,
+    "options": [
+      {
+        "key": "paper",
+        "title_uk": "на папері",
+        "title_ru": "на бумаге",
+        "title_en": "on paper"
+      },
+      {
+        "key": "digital",
+        "title_uk": "діджитал",
+        "title_ru": "диджитал",
+        "title_en": "digital"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "interest_id": 56,
+    "question_key": "photo_gear",
+    "priority": 5,
+    "options": [
+      {
+        "key": "phone",
+        "title_uk": "на телефон",
+        "title_ru": "на телефон",
+        "title_en": "on a phone"
+      },
+      {
+        "key": "camera",
+        "title_uk": "на камеру",
+        "title_ru": "на камеру",
+        "title_en": "with a camera"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "interest_id": 65,
+    "question_key": "programming_level",
+    "priority": 7,
+    "options": [
+      {
+        "key": "learning",
+        "title_uk": "вчуся",
+        "title_ru": "учусь",
+        "title_en": "learning"
+      },
+      {
+        "key": "hobby",
+        "title_uk": "для себе",
+        "title_ru": "для себя",
+        "title_en": "as a hobby"
+      },
+      {
+        "key": "work",
+        "title_uk": "працюю",
+        "title_ru": "работаю",
+        "title_en": "professionally"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "interest_id": 75,
+    "question_key": "english_level",
+    "priority": 6,
+    "options": [
+      {
+        "key": "basic",
+        "title_uk": "базовий",
+        "title_ru": "базовый",
+        "title_en": "basic"
+      },
+      {
+        "key": "intermediate",
+        "title_uk": "середній",
+        "title_ru": "средний",
+        "title_en": "intermediate"
+      },
+      {
+        "key": "fluent",
+        "title_uk": "вільно",
+        "title_ru": "свободно",
+        "title_en": "fluent"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "interest_id": 36,
+    "question_key": "anime_format",
+    "priority": 4,
+    "options": [
+      {
+        "key": "subs",
+        "title_uk": "з субтитрами",
+        "title_ru": "с субтитрами",
+        "title_en": "subtitled"
+      },
+      {
+        "key": "dub",
+        "title_uk": "в озвучці",
+        "title_ru": "в озвучке",
+        "title_en": "dubbed"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "interest_id": 59,
+    "question_key": "dance_style",
+    "priority": 5,
+    "options": [
+      {
+        "key": "hiphop",
+        "title_uk": "хіп-хоп",
+        "title_ru": "хип-хоп",
+        "title_en": "hip-hop"
+      },
+      {
+        "key": "contemporary",
+        "title_uk": "контемпорарі",
+        "title_ru": "контемпорари",
+        "title_en": "contemporary"
+      },
+      {
+        "key": "ballroom",
+        "title_uk": "бальні",
+        "title_ru": "бальные",
+        "title_en": "ballroom"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "interest_id": 24,
+    "question_key": "chess_format",
+    "priority": 4,
+    "options": [
+      {
+        "key": "online",
+        "title_uk": "онлайн",
+        "title_ru": "онлайн",
+        "title_en": "online"
+      },
+      {
+        "key": "offline",
+        "title_uk": "наживо",
+        "title_ru": "вживую",
+        "title_en": "in person"
+      }
+    ]
+  }
+]

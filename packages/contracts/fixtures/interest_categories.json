@@ -1,0 +1,132 @@
+[
+  {
+    "id": 1,
+    "code": "sport",
+    "emoji": "⚽",
+    "title_uk": "Спорт",
+    "title_ru": "Спорт",
+    "title_en": "Sports",
+    "position": 1,
+    "hidden": false
+  },
+  {
+    "id": 2,
+    "code": "games",
+    "emoji": "🎮",
+    "title_uk": "Ігри",
+    "title_ru": "Игры",
+    "title_en": "Games",
+    "position": 2,
+    "hidden": false
+  },
+  {
+    "id": 3,
+    "code": "music",
+    "emoji": "🎵",
+    "title_uk": "Музика",
+    "title_ru": "Музыка",
+    "title_en": "Music",
+    "position": 3,
+    "hidden": false
+  },
+  {
+    "id": 4,
+    "code": "movies",
+    "emoji": "🎬",
+    "title_uk": "Кіно і серіали",
+    "title_ru": "Кино и сериалы",
+    "title_en": "Movies and TV",
+    "position": 4,
+    "hidden": false
+  },
+  {
+    "id": 5,
+    "code": "books",
+    "emoji": "📚",
+    "title_uk": "Книги",
+    "title_ru": "Книги",
+    "title_en": "Books",
+    "position": 5,
+    "hidden": false
+  },
+  {
+    "id": 6,
+    "code": "creative",
+    "emoji": "🎨",
+    "title_uk": "Творчість",
+    "title_ru": "Творчество",
+    "title_en": "Creativity",
+    "position": 6,
+    "hidden": false
+  },
+  {
+    "id": 7,
+    "code": "tech",
+    "emoji": "💻",
+    "title_uk": "Технології",
+    "title_ru": "Технологии",
+    "title_en": "Tech",
+    "position": 7,
+    "hidden": false
+  },
+  {
+    "id": 8,
+    "code": "study",
+    "emoji": "🎓",
+    "title_uk": "Навчання",
+    "title_ru": "Учёба",
+    "title_en": "Learning",
+    "position": 8,
+    "hidden": false
+  },
+  {
+    "id": 9,
+    "code": "outdoor",
+    "emoji": "🏕",
+    "title_uk": "Природа і подорожі",
+    "title_ru": "Природа и путешествия",
+    "title_en": "Outdoors",
+    "position": 9,
+    "hidden": false
+  },
+  {
+    "id": 10,
+    "code": "food",
+    "emoji": "🍕",
+    "title_uk": "Їжа",
+    "title_ru": "Еда",
+    "title_en": "Food",
+    "position": 10,
+    "hidden": false
+  },
+  {
+    "id": 11,
+    "code": "leisure",
+    "emoji": "🎉",
+    "title_uk": "Дозвілля",
+    "title_ru": "Досуг",
+    "title_en": "Leisure",
+    "position": 11,
+    "hidden": false
+  },
+  {
+    "id": 12,
+    "code": "animals",
+    "emoji": "🐾",
+    "title_uk": "Тварини",
+    "title_ru": "Животные",
+    "title_en": "Animals",
+    "position": 12,
+    "hidden": false
+  },
+  {
+    "id": 13,
+    "code": "other",
+    "emoji": "✨",
+    "title_uk": "Інше",
+    "title_ru": "Другое",
+    "title_en": "Other",
+    "position": 99,
+    "hidden": true
+  }
+]
