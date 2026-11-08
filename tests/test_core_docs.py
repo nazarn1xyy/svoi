@@ -51,6 +51,10 @@ def test_no_second_bot_or_second_environment_remains() -> None:
     )
     for doc in DOCS:
         text = doc.read_text()
+        # the changelog has to name what v2 removed
+        if "## Changelog" in text:
+            head, rest = text.split("## Changelog", 1)
+            text = head + rest.split("\n## ", 1)[1]
         for phrase in banned:
             assert phrase not in text, f"{doc.name}: {phrase}"
 
