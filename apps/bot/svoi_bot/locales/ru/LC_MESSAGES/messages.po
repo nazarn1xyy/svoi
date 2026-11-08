@@ -250,6 +250,39 @@ msgstr "Спам или реклама"
 msgid "format.reason.underage"
 msgstr "Выглядит младше указанного возраста"
 
+msgid "interests.ask"
+msgstr "Что тебе нравится? Выбери от 3 до 15."
+
+msgid "interests.counter"
+msgstr "Выбрано: {count}"
+
+msgid "interests.custom"
+msgstr "✍️ Своё"
+
+msgid "interests.custom_ask"
+msgstr "Напиши свой интерес одним-двумя словами."
+
+msgid "interests.custom_length"
+msgstr "Интерес — от 2 до 30 символов."
+
+msgid "interests.custom_matched"
+msgstr "Нашёл: «{title}» — добавил в выбор."
+
+msgid "interests.custom_pending"
+msgstr "Отправил «{title}» на проверку. После проверки появится в анкете."
+
+msgid "interests.goals.ask"
+msgstr "Зачем ты здесь? Можно выбрать несколько."
+
+msgid "interests.goals.min"
+msgstr "Выбери хотя бы одну цель"
+
+msgid "interests.max"
+msgstr "Максимум 15 интересов"
+
+msgid "interests.min"
+msgstr "Выбери хотя бы 3 интереса"
+
 msgid "kitchen.confirm"
 msgstr "Подтверждение"
 

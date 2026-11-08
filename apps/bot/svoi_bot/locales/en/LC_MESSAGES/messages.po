@@ -249,6 +249,39 @@ msgstr "Spam or ads"
 msgid "format.reason.underage"
 msgstr "Looks younger than stated"
 
+msgid "interests.ask"
+msgstr "What do you like? Pick 3 to 15."
+
+msgid "interests.counter"
+msgstr "Selected: {count}"
+
+msgid "interests.custom"
+msgstr "✍️ My own"
+
+msgid "interests.custom_ask"
+msgstr "Describe your interest in a word or two."
+
+msgid "interests.custom_length"
+msgstr "An interest is 2 to 30 characters."
+
+msgid "interests.custom_matched"
+msgstr "Found «{title}» and added it to your picks."
+
+msgid "interests.custom_pending"
+msgstr "Sent «{title}» for review. It will appear on your profile once approved."
+
+msgid "interests.goals.ask"
+msgstr "What are you here for? You can pick several."
+
+msgid "interests.goals.min"
+msgstr "Pick at least one goal"
+
+msgid "interests.max"
+msgstr "15 interests at most"
+
+msgid "interests.min"
+msgstr "Pick at least 3 interests"
+
 msgid "kitchen.confirm"
 msgstr "Confirmation"
 
