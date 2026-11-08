@@ -6,24 +6,23 @@ import uuid
 from collections.abc import Iterator
 from pathlib import Path
 
-import asyncpg
 import pytest
 from alembic.config import Config
+from sqlalchemy import text
 from sqlalchemy.engine import make_url
+from sqlalchemy.ext.asyncio import create_async_engine
 
 ALEMBIC_INI = Path(__file__).resolve().parents[2] / "alembic.ini"
 
 
-def _admin_dsn(url: str) -> str:
-    return make_url(url).set(drivername="postgresql").render_as_string(hide_password=False)
-
-
-async def _exec(dsn: str, sql: str) -> None:
-    conn = await asyncpg.connect(dsn)
+async def _exec(url: str, sql: str) -> None:
+    # CREATE/DROP DATABASE cannot run inside a transaction
+    engine = create_async_engine(url, isolation_level="AUTOCOMMIT")
     try:
-        await conn.execute(sql)
+        async with engine.connect() as conn:
+            await conn.execute(text(sql))
     finally:
-        await conn.close()
+        await engine.dispose()
 
 
 @pytest.fixture(scope="session")
@@ -32,7 +31,7 @@ def database_url() -> Iterator[str]:
     if not base:
         pytest.skip("DATABASE_URL is not set; CI provides postgis/postgis:16-3.4")
     name = f"svoi_test_{uuid.uuid4().hex[:8]}"
-    admin = _admin_dsn(base)
+    admin = base
     asyncio.run(_exec(admin, f'CREATE DATABASE "{name}"'))
     try:
         yield make_url(base).set(database=name).render_as_string(hide_password=False)

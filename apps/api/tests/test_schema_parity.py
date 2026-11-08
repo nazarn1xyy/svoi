@@ -105,15 +105,17 @@ def test_indexes_and_constraints_match(name: str) -> None:
     table = _table(name)
     spec = TABLES[name]
     indexes = {
-        i.name: (tuple(c.name for c in i.columns), i.dialect_options["postgresql"]["using"])
+        i.name: (tuple(c.name for c in i.columns), i.dialect_options["postgresql"]["using"] or None)
         for i in table.indexes
         if isinstance(i, Index)
     }
     assert indexes == spec.indexes
+    # column-level unique=True also shows up as a constraint; columns cover those
     uniques = {
         tuple(c.name for c in con.columns)
         for con in table.constraints
         if isinstance(con, UniqueConstraint)
+        and not (len(con.columns) == 1 and next(iter(con.columns)).unique)
     }
     assert uniques == spec.uniques
     checks = {str(con.name) for con in table.constraints if isinstance(con, CheckConstraint)}
