@@ -31,6 +31,7 @@ from aiogram.methods.base import TelegramType
 from aiogram.types import (
     CallbackQuery,
     Chat,
+    ErrorEvent,
     InlineKeyboardMarkup,
     Location,
     Message,
@@ -168,6 +169,10 @@ class BotHarness:
         self.dp: Dispatcher = build_dispatcher(
             self.api, self.storage, self.settings, extra_routers=routers, clock=self.clock
         )
+        self.errors: list[BaseException] = []
+        catcher = Router(name="harness_errors")
+        catcher.errors.register(self._record_error)
+        self.dp.include_router(catcher)
         self._update_ids = itertools.count(1)
         self._message_ids = itertools.count(1)
 
@@ -182,9 +187,16 @@ class BotHarness:
             **fields,
         )
 
+    async def _record_error(self, event: ErrorEvent) -> bool:
+        self.errors.append(event.exception)
+        return True
+
     async def _feed(self, **update: Any) -> None:
         self.clock.tick()
         await self.dp.feed_update(self.bot, Update(update_id=next(self._update_ids), **update))
+        if self.errors:
+            # a handler crashed and aiogram would only log it; fail the test instead
+            raise self.errors.pop()
 
     async def send_text(self, text: str) -> None:
         """User types a message."""
