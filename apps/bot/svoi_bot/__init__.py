@@ -1,0 +1,1 @@
+"""Svoi Telegram bot."""
