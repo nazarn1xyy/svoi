@@ -6,11 +6,11 @@ from typing import Any, ClassVar
 from aiogram import Bot
 from arq.connections import RedisSettings
 from arq.worker import Function, func
-from svoi_contracts.jobs import DemoPing
+from svoi_contracts.jobs import DemoPing, NotifyLikes, NotifyMatch
 
 from svoi_bot.config import Settings
 from svoi_bot.main import init_sentry, make_api, make_bot
-from svoi_bot.workers import demo
+from svoi_bot.workers import demo, notify
 from svoi_bot.workers.delivery import MAX_TRIES
 
 QUEUE = "bot"
@@ -19,7 +19,10 @@ JobFn = Callable[..., Coroutine[Any, Any, Any]]
 
 def functions(settings: Settings) -> list[Function]:
     """Topic name = arq function name; slices add their notify_* handlers here."""
-    registry: dict[str, JobFn] = {}
+    registry: dict[str, JobFn] = {
+        NotifyLikes.topic: notify.notify_likes,
+        NotifyMatch.topic: notify.notify_match,
+    }
     if settings.dev_routes:
         registry[DemoPing.topic] = demo.demo
     return [func(fn, name=topic, max_tries=MAX_TRIES) for topic, fn in registry.items()]

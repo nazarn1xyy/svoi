@@ -226,6 +226,9 @@ async def on_nav(query: CallbackQuery, callback_data: NavCb, step: StepContext) 
         radius = RadiusMode(arg.removeprefix("expand-"))
         await step.state.update_data({KEYBOARD: False})
         await _render(step, await step.api.feed_expand(step.tg_user.id, ExpandIn(radius=radius)))
+    elif arg == "open":
+        await step.state.update_data({KEYBOARD: False})
+        await next_card(step)
     elif arg == "later":
         await send_menu(step.bot, step.api, step.tg_user.id, views.paused())
     elif arg == "unhide":
