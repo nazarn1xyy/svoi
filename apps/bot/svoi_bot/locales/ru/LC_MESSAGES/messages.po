@@ -563,6 +563,138 @@ msgstr "Как к тебе обращаться?"
 msgid "onboarding.name.rules"
 msgstr "Имя — от 2 до 20 букв, без ссылок и цифр"
 
+msgid "settings.age"
+msgstr "🎂 Возраст: {low}–{high}"
+
+msgid "settings.age_fixed"
+msgstr "Для твоего возраста поиск только среди 16–17"
+
+msgid "settings.freq.daily"
+msgstr "Раз в день"
+
+msgid "settings.freq.hourly"
+msgstr "Раз в час"
+
+msgid "settings.freq.instant"
+msgstr "Сразу"
+
+msgid "settings.gender"
+msgstr "👥 С кем: {value}"
+
+msgid "settings.gender.all"
+msgstr "Все"
+
+msgid "settings.gender.female"
+msgstr "Девушки"
+
+msgid "settings.gender.male"
+msgstr "Парни"
+
+msgid "settings.gender_pick.all"
+msgstr "Со всеми"
+
+msgid "settings.gender_pick.female"
+msgstr "С девушками"
+
+msgid "settings.gender_pick.male"
+msgstr "С парнями"
+
+msgid "settings.gender_title"
+msgstr "С кем хочешь общаться?"
+
+msgid "settings.lang"
+msgstr "🌐 Язык: {value}"
+
+msgid "settings.lang_button"
+msgstr "🌐 Язык"
+
+msgid "settings.max_down"
+msgstr "− макс"
+
+msgid "settings.max_up"
+msgstr "+ макс"
+
+msgid "settings.min_down"
+msgstr "− мин"
+
+msgid "settings.min_up"
+msgstr "+ мин"
+
+msgid "settings.notify"
+msgstr "🔔 Уведомления: {value} · тихие часы {quiet}"
+
+msgid "settings.notify_button"
+msgstr "🔔 Уведомления"
+
+msgid "settings.notify_title"
+msgstr "Как часто уведомлять и когда не беспокоить?"
+
+msgid "settings.off"
+msgstr "выкл"
+
+msgid "settings.on"
+msgstr "вкл"
+
+msgid "settings.privacy"
+msgstr "🔒 Расстояние: {distance} · учебное заведение: {institution}"
+
+msgid "settings.privacy_button"
+msgstr "🔒 Приватность"
+
+msgid "settings.privacy_title"
+msgstr "Что показывать в анкете?"
+
+msgid "settings.quiet.off"
+msgstr "нет"
+
+msgid "settings.quiet_pick.22-09"
+msgstr "22:00–09:00"
+
+msgid "settings.quiet_pick.23-08"
+msgstr "23:00–08:00"
+
+msgid "settings.quiet_pick.off"
+msgstr "Без тихих часов"
+
+msgid "settings.radius"
+msgstr "📍 Где искать: {value}"
+
+msgid "settings.radius.any_online"
+msgstr "География не важна (онлайн)"
+
+msgid "settings.radius.city"
+msgstr "Мой город"
+
+msgid "settings.radius.country"
+msgstr "Вся страна"
+
+msgid "settings.radius.km100"
+msgstr "До 100 км"
+
+msgid "settings.radius.km25"
+msgstr "До 25 км"
+
+msgid "settings.radius.km50"
+msgstr "До 50 км"
+
+msgid "settings.radius.region"
+msgstr "Вся область"
+
+msgid "settings.radius_title"
+msgstr "Где искать?"
+
+msgid "settings.show_distance"
+msgstr "Показывать расстояние: {value}"
+
+msgid "settings.show_institution"
+msgstr "Показывать учебное заведение: {value}"
+
+msgid "settings.title"
+msgstr "⚙️ Настройки"
+
+msgid "settings.verified"
+msgstr "✅ Только верифицированные: {value}"
+
 msgid "ui.button.back"
 msgstr "◀️ Назад"
 
