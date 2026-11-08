@@ -2,6 +2,8 @@
 
 import asyncio
 import logging
+import time
+from collections.abc import Callable
 
 import structlog
 from aiogram import Bot, Dispatcher, Router
@@ -33,13 +35,16 @@ def build_dispatcher(
     storage: BaseStorage,
     settings: Settings,
     extra_routers: list[Router] | None = None,
+    clock: Callable[[], float] = time.monotonic,
 ) -> Dispatcher:
-    """Dispatcher with middlewares and routers; tests call it with fakes."""
+    """Dispatcher with middlewares and routers; tests pass fakes and a virtual clock."""
     dp = Dispatcher(storage=storage, api=api, settings=settings)
+    throttle = ThrottleMiddleware(clock)
+    user_context = UserContextMiddleware(api, clock)
     for observer in (dp.message, dp.callback_query):
-        observer.outer_middleware(ThrottleMiddleware())
+        observer.outer_middleware(throttle)
         observer.outer_middleware(I18nMiddleware())
-        observer.outer_middleware(UserContextMiddleware(api))
+        observer.outer_middleware(user_context)
     dp.include_router(errors.make_router())
     for router in [*(extra_routers or []), *features.routers()]:
         dp.include_router(router)
