@@ -106,3 +106,10 @@ async def on_contact(query: CallbackQuery, callback_data: NavCb, step: StepConte
         city=contact.partner.city_name,
     )
     await step.screen.replace(title, keyboards.markup(rows))
+
+
+async def reopen(step: StepContext) -> None:
+    """After reporting a contact: the first page again."""
+    await step.state.update_data({_CURSORS: [None]})
+    await step.screen.clear()
+    await _show_page(step, 0)

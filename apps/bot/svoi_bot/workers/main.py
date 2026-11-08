@@ -6,11 +6,11 @@ from typing import Any, ClassVar
 from aiogram import Bot
 from arq.connections import RedisSettings
 from arq.worker import Function, func
-from svoi_contracts.jobs import DemoPing, NotifyLikes, NotifyMatch
+from svoi_contracts.jobs import DemoPing, NotifyLikes, NotifyMatch, NotifyModeration
 
 from svoi_bot.config import Settings
 from svoi_bot.main import init_sentry, make_api, make_bot
-from svoi_bot.workers import demo, notify
+from svoi_bot.workers import demo, moderation, notify
 from svoi_bot.workers.delivery import MAX_TRIES
 
 QUEUE = "bot"
@@ -22,6 +22,7 @@ def functions(settings: Settings) -> list[Function]:
     registry: dict[str, JobFn] = {
         NotifyLikes.topic: notify.notify_likes,
         NotifyMatch.topic: notify.notify_match,
+        NotifyModeration.topic: moderation.notify_moderation,
     }
     if settings.dev_routes:
         registry[DemoPing.topic] = demo.demo
