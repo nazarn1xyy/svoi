@@ -50,10 +50,10 @@ def build_dispatcher(
     dp.include_router(errors.make_router())
     # admin first: moderators reach queues even with an unfinished profile (ADR 0001)
     dp.include_router(admin.make_router())
-    for router in [*(extra_routers or []), *features.routers()]:
-        dp.include_router(router)
     if settings.dev_routes:
         dp.include_router(kitchen_sink.make_router())
+    for router in [*(extra_routers or []), *features.routers()]:
+        dp.include_router(router)
     return dp
 
 

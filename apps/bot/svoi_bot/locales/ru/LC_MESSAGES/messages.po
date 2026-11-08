@@ -226,6 +226,60 @@ msgstr "Мультивыбор"
 msgid "kitchen.option"
 msgstr "Вариант"
 
+msgid "menu.home"
+msgstr "Главное меню 👇"
+
+msgid "onboarding.age.ask"
+msgstr "Сколько тебе лет?"
+
+msgid "onboarding.age.not_a_number"
+msgstr "Напиши возраст цифрами, например 19"
+
+msgid "onboarding.consent.go"
+msgstr "👌 Поехали"
+
+msgid "onboarding.consent.how"
+msgstr "❓ Как это работает"
+
+msgid "onboarding.consent.how_text"
+msgstr ""
+"1. Заполняешь анкету: интересы, город, цель.\n"
+"2. Смотришь анкеты людей рядом с общими интересами.\n"
+"3. Лайкаешь. Если лайк взаимный — получаете username друг друга и пишете в личку."
+
+msgid "onboarding.consent.text"
+msgstr ""
+"Привет! Я помогаю найти людей с общими интересами — друзей, компанию, напарников. Это не сайт "
+"знакомств. Заполним анкету за 2 минуты?\n"
+"\n"
+"❗ Бот не просит документов и личных данных. В интернете люди могут выдавать себя за других.\n"
+"\n"
+"Продолжая, ты принимаешь правила и политику конфиденциальности."
+
+msgid "onboarding.gender.ask"
+msgstr "Ты…"
+
+msgid "onboarding.gender.female"
+msgstr "Девушка"
+
+msgid "onboarding.gender.hidden"
+msgstr "Не указывать"
+
+msgid "onboarding.gender.hint"
+msgstr "Нужно только для фильтра «с кем хочу общаться», в анкете можно скрыть"
+
+msgid "onboarding.gender.male"
+msgstr "Парень"
+
+msgid "onboarding.lang.ask"
+msgstr "Choose your language 👇"
+
+msgid "onboarding.name.ask"
+msgstr "Как к тебе обращаться?"
+
+msgid "onboarding.name.rules"
+msgstr "Имя — от 2 до 20 букв, без ссылок и цифр"
+
 msgid "ui.button.back"
 msgstr "◀️ Назад"
 

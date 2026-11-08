@@ -10,7 +10,9 @@ async def test_admin_gets_the_admin_section_before_onboarding() -> None:
     assert harness.last_text() == "Адмін-розділ. Черги модерації з'являться тут."
 
 
-async def test_non_admin_gets_no_answer() -> None:
+async def test_non_admin_gets_no_admin_section() -> None:
+    # /admin is an unknown command for others: they see what any message shows them
     harness = BotHarness(FakeApiClient(admin_ids={1}), user_id=100)
     await harness.send_command("admin")
-    assert harness.shown() == []
+    assert all("Адмін" not in text for text in harness.texts())
+    assert harness.texts() == ["Choose your language 👇"]
