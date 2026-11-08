@@ -52,6 +52,48 @@ msgstr "один заклад"
 msgid "cards.seeks"
 msgstr "🎯 Шукає: {goals}"
 
+msgid "city.ask"
+msgstr "З якого ти міста? Напиши назву або надішли геолокацію — так я покажу тих, хто ближче."
+
+msgid "city.located"
+msgstr "Ти в місті {name}?"
+
+msgid "city.location_failed"
+msgstr "Не вдалося визначити місто. Напиши його назву."
+
+msgid "city.many"
+msgstr "Обери своє місто:"
+
+msgid "city.not_found"
+msgstr "Не знайшов таке місто. Спробуй написати інакше."
+
+msgid "city.not_this"
+msgstr "🔄 Ні, інше"
+
+msgid "city.one"
+msgstr "{label}?"
+
+msgid "city.other"
+msgstr "🔄 Інше"
+
+msgid "city.privacy"
+msgstr "Точну геопозицію ми не зберігаємо — тільки місто і приблизну точку (±1 км)."
+
+msgid "city.saved"
+msgstr "📍 {name}"
+
+msgid "city.too_short"
+msgstr "Напиши хоча б 2 літери"
+
+msgid "city.type_hint"
+msgstr "Напиши назву свого міста."
+
+msgid "city.type_instead"
+msgstr "✍️ Напишу назву"
+
+msgid "city.yes"
+msgstr "✅ Так"
+
 msgid "commands.contacts"
 msgstr "Мої контакти"
 

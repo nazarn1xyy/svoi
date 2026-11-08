@@ -83,7 +83,10 @@ async def test_full_s1_flow_reaches_the_city_step_with_one_message_per_inline_st
     names = [type(m).__name__ for m in harness.shown()]
     # lang → consent → age edit one message; typed age and name produce new messages
     assert names[:3] == ["SendMessage", "EditMessageText", "EditMessageText"]
-    assert NAME_Q in harness.texts() and harness.texts()[-1].startswith(GENDER_Q)
+    assert NAME_Q in harness.texts()
+    assert any(t.startswith(GENDER_Q) for t in harness.texts())
+    # S2 registered the city screen, so the next step follows right away
+    assert harness.texts()[-1].startswith("Крок 4 з 10")
 
 
 @pytest.mark.parametrize(

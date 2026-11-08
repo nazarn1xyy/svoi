@@ -52,6 +52,48 @@ msgstr "одно учебное заведение"
 msgid "cards.seeks"
 msgstr "🎯 Ищет: {goals}"
 
+msgid "city.ask"
+msgstr "Из какого ты города? Напиши название или отправь геолокацию — так я покажу тех, кто ближе."
+
+msgid "city.located"
+msgstr "Ты в городе {name}?"
+
+msgid "city.location_failed"
+msgstr "Не удалось определить город. Напиши его название."
+
+msgid "city.many"
+msgstr "Выбери свой город:"
+
+msgid "city.not_found"
+msgstr "Не нашёл такой город. Попробуй написать иначе."
+
+msgid "city.not_this"
+msgstr "🔄 Нет, другой"
+
+msgid "city.one"
+msgstr "{label}?"
+
+msgid "city.other"
+msgstr "🔄 Другой"
+
+msgid "city.privacy"
+msgstr "Точную геопозицию мы не храним — только город и примерную точку (±1 км)."
+
+msgid "city.saved"
+msgstr "📍 {name}"
+
+msgid "city.too_short"
+msgstr "Напиши хотя бы 2 буквы"
+
+msgid "city.type_hint"
+msgstr "Напиши название своего города."
+
+msgid "city.type_instead"
+msgstr "✍️ Напишу название"
+
+msgid "city.yes"
+msgstr "✅ Да"
+
 msgid "commands.contacts"
 msgstr "Мои контакты"
 

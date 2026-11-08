@@ -51,6 +51,48 @@ msgstr "same school"
 msgid "cards.seeks"
 msgstr "🎯 Looking for: {goals}"
 
+msgid "city.ask"
+msgstr "Which city are you from? Type its name or send your location so I can show people nearby."
+
+msgid "city.located"
+msgstr "Are you in {name}?"
+
+msgid "city.location_failed"
+msgstr "I couldn't tell the city. Please type its name."
+
+msgid "city.many"
+msgstr "Pick your city:"
+
+msgid "city.not_found"
+msgstr "I couldn't find that city. Try spelling it differently."
+
+msgid "city.not_this"
+msgstr "🔄 No, another one"
+
+msgid "city.one"
+msgstr "{label}?"
+
+msgid "city.other"
+msgstr "🔄 Another one"
+
+msgid "city.privacy"
+msgstr "We never store your exact location: only the city and a rough point (±1 km)."
+
+msgid "city.saved"
+msgstr "📍 {name}"
+
+msgid "city.too_short"
+msgstr "Type at least 2 letters"
+
+msgid "city.type_hint"
+msgstr "Type the name of your city."
+
+msgid "city.type_instead"
+msgstr "✍️ I'll type it"
+
+msgid "city.yes"
+msgstr "✅ Yes"
+
 msgid "commands.contacts"
 msgstr "My contacts"
 
