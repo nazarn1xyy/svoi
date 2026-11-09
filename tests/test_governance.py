@@ -1,4 +1,4 @@
-"""K4 acceptance: CODEOWNERS and main protection follow FRONTEND.md section 6."""
+"""Governance: one maintainer owns the repo; main takes PRs with green CI only (2026-11-09)."""
 
 import json
 from pathlib import Path
@@ -8,24 +8,6 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 LEAD = "@nazarn1xyy"
-BACKEND = "@Aryliadoch"
-LEAD_PATHS = (
-    "/docs/",
-    "/CLAUDE.md",
-    "/packages/contracts/",
-    "/apps/api/svoi_api/db/",
-    "/apps/api/migrations/",
-    "/apps/api/svoi_api/seed/",
-    "/apps/api/svoi_api/core/",
-    "/apps/api/svoi_api/clients/",
-    "/apps/api/svoi_api/config.py",
-    "/apps/bot/svoi_bot/ui/",
-    "/apps/bot/svoi_bot/api_client/",
-    "/apps/bot/svoi_bot/middlewares/",
-    "/infra/",
-    "/.github/",
-)
-BACKEND_PATHS = ("/apps/api/svoi_api/domains/", "/apps/bot/svoi_bot/features/")
 
 
 def _owners() -> list[tuple[str, list[str]]]:
@@ -42,19 +24,13 @@ def _json(name: str) -> dict[str, Any]:
     return data
 
 
-def test_codeowners_matches_section_6_in_order() -> None:
-    # GitHub applies the last matching rule, so order is part of the contract
-    expected = [("*", [LEAD, BACKEND])]
-    expected += [(path, [LEAD]) for path in LEAD_PATHS]
-    expected += [(path, [BACKEND]) for path in BACKEND_PATHS]
-    assert _owners() == expected
+def test_single_maintainer_owns_everything() -> None:
+    assert _owners() == [("*", [LEAD])]
 
 
-def test_main_needs_one_code_owner_approval() -> None:
-    reviews = _json("branch-protection.json")["required_pull_request_reviews"]
-    assert reviews["required_approving_review_count"] == 1
-    assert reviews["require_code_owner_reviews"] is True
-    assert reviews["dismiss_stale_reviews"] is True
+def test_main_needs_no_approval() -> None:
+    # a sole maintainer cannot approve their own PR; CI is the gate
+    assert _json("branch-protection.json")["required_pull_request_reviews"] is None
 
 
 def test_required_checks_are_exactly_the_pr_gate_jobs() -> None:
