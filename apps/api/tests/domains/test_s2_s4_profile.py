@@ -206,3 +206,14 @@ async def test_photo_download_error_retries(user: UserFactory, ctx: Ctx, clients
         await moderate_photo(ctx, ModeratePhoto(dedupe_key=f"photo:{media_id}", media_id=media_id))
     media = await ctx.session.get(Media, media_id)
     assert media is not None and media.moderation_status.value == "pending"
+
+
+async def test_without_model_photos_wait_for_admin(user: UserFactory, ctx: Ctx) -> None:
+    from svoi_api.clients.nsfw import ManualReview  # noqa: PLC0415
+
+    media_id = await _photo(user, "photo-m")
+    ctx.clients.nsfw = ManualReview()
+    outcome = await moderate_photo(
+        ctx, ModeratePhoto(dedupe_key=f"photo:{media_id}", media_id=media_id)
+    )
+    assert outcome == "review"

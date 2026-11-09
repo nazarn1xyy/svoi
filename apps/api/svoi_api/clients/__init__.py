@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from svoi_api.clients.files import FakeTelegramFiles, HttpTelegramFiles, TelegramFilesClient
 from svoi_api.clients.hasher import ImageHasher, PHasher
-from svoi_api.clients.nsfw import FakeNsfw, HttpNsfw, NsfwClassifier
+from svoi_api.clients.nsfw import FakeNsfw, HttpNsfw, ManualReview, NsfwClassifier
 from svoi_api.config import Settings
 
 
@@ -21,7 +21,8 @@ def make_clients(settings: Settings) -> Clients:
     """Fakes when USE_FAKE_CLIENTS=true, real HTTP clients otherwise."""
     if settings.use_fake_clients:
         return Clients(FakeTelegramFiles(), FakeNsfw(), PHasher())
-    return Clients(HttpTelegramFiles(settings.bot_token), HttpNsfw(settings.nsfw_url), PHasher())
+    nsfw: NsfwClassifier = HttpNsfw(settings.nsfw_url) if settings.nsfw_url else ManualReview()
+    return Clients(HttpTelegramFiles(settings.bot_token), nsfw, PHasher())
 
 
 __all__ = [

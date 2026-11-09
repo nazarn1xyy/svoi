@@ -3,6 +3,7 @@
 from typing import Protocol
 
 import httpx
+from svoi_contracts.constants import NSFW_REVIEW
 
 from svoi_api.clients._faults import ClientError, ClientTimeout, Faults
 
@@ -33,6 +34,14 @@ class HttpNsfw:
             raise ClientTimeout(str(exc)) from exc
         except httpx.HTTPError as exc:
             raise ClientError(str(exc)) from exc
+
+
+class ManualReview:
+    """No model deployed: every photo lands in the admin `photos` queue."""
+
+    async def score(self, image: bytes) -> float:
+        """NSFW_REVIEW: neither auto-approved nor auto-rejected."""
+        return NSFW_REVIEW
 
 
 class FakeNsfw(Faults):
