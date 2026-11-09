@@ -12,6 +12,7 @@
 - Перед задачею звір версію ядра в заголовку `tech.md` з версією, на яку посилається задача. Ядро новіше — перечитай changelog.
 - Контракти не вигадуються: схема БД, моделі запитів і відповідей, енуми, топіки, payload, константи — тільки з `tech.md` і `svoi_contracts`.
 - Одна задача за раз, сфокусований дифф.
+- Що шле бот і що віддає кожен ендпоінт (шлях, заголовки, тіло, відповідь) — розділ 7 цього файлу.
 - Твій слайс повторює структуру еталонного слайса S1-BE: `apps/api/svoi_api/domains/users` і `domains/profiles` (`router.py` → `service.py` → `repo.py`, чиста логіка в `rules.py`). Не вигадуй свою розкладку.
 
 ---
@@ -472,3 +473,235 @@ Workaround until resolved: <локальна заглушка в межах тв
 ### v2 (S15–S19)
 
 Контракти заморожуються новою версією ядра на старті v2: питання дня (таблиці питань і відповідей, поле в картці), компанії за інтересами (підбір груп 3–5 людей за містом, пулом, інтересом і метою), події (зустрічі з радіусом 10 км і списком учасників, тільки свій пул), анонімний чат (ретрансляція через бота з фільтром контенту), монетизація (Telegram Stars, буст, безлімітне «Повернути»).
+
+---
+
+## 7. HTTP-довідник API: що шле бот і що віддає бекенд
+
+Зведення розділів 6–7 `tech.md` у форматі «запит → відповідь» для кожного ендпоінта. Джерело істини лишається `tech.md` і `svoi_contracts`; при розбіжності перемагають вони, а цей розділ виправляє тимлід.
+
+### 7.1. Загальне для всіх запитів
+
+- Базова адреса: `http://api:8000/v1`. Усі шляхи нижче — відносно неї.
+- Заголовки кожного запиту від бота:
+
+```
+Authorization: Bearer <INTERNAL_API_TOKEN>
+X-Tg-User-Id: <tg_id>
+Content-Type: application/json        # тільки коли є тіло
+```
+
+- **Хто робить запит, визначає заголовок `X-Tg-User-Id`, а не шлях і не тіло.** Тому `GET /users/me`, а не `/users/me/{tg_id}`. `me` у шляху означає «користувач із заголовка». Бекенд бере його в `deps.current_user`.
+- `tg_id` у шляху є тільки там, де він означає іншу людину: `GET /admin/users/{tg_id}` (адмін дивиться чужу анкету) і `POST /internal/users/{tg_id}/bot-blocked`.
+- `/internal/*` викликає `bot-worker` без `X-Tg-User-Id`, тільки з `Authorization`.
+- Без токена або з хибним токеном → `401`. Невідомий `X-Tg-User-Id` → `404 not_found` на всіх ендпоінтах, крім `POST /users/start`.
+- Тіло запиту і відповіді — JSON моделей `svoi_contracts` (`model_dump(mode="json")`). Дати — ISO 8601 з tz (UTC), `time` — `"HH:MM:SS"`, енуми — рядки.
+- Зайве поле в тілі або хибний тип → `422 validation_error`. Скаляри в `*In` суворі: `"18"` замість `18` теж `422`.
+- `204` — порожнє тіло.
+- Будь-яка помилка — тіло `ApiError` зі статусом з розділу 6.2 `tech.md`:
+
+```json
+{"code": "age_too_young", "message": "age below 16", "details": null}
+```
+
+```json
+{"code": "content_blocked", "message": "link in name", "details": {"field": "name", "reason": "link"}}
+```
+
+```json
+{"code": "limit_reached", "message": "daily reactions", "details": {"reactions_left": 0, "messages_left": 3, "resets_at": "2026-11-09T22:00:00Z"}}
+```
+
+### 7.2. Спільні відповіді
+
+Більшість ендпоінтів онбордингу і профілю повертають `UserState`, щоб бот одразу знав наступний крок:
+
+```json
+{
+  "user_id": 2,
+  "tg_id": 914462173,
+  "status": "onboarding",
+  "lang": "uk",
+  "onboarding_step": "lang",
+  "pool": null,
+  "needs_username": false,
+  "captcha_required": false,
+  "is_admin": false,
+  "counters": {"incoming_likes": 0}
+}
+```
+
+`ProfileCard`, `MatchResult`, `Limits`, `MediaRef`, `Page[T]` — розділ 6.3 `tech.md`. `Page[T]`: `{"items": [...], "next_cursor": "..." | null}`.
+
+### 7.3. Приклад повного запиту
+
+Бот на `/start` від користувача `914462173`:
+
+```http
+POST /v1/users/start
+Authorization: Bearer change-me
+X-Tg-User-Id: 914462173
+Content-Type: application/json
+
+{"tg_username": "ira", "tg_first_name": "Ira", "tg_language_code": "uk", "has_tg_profile_photo": true, "referral_code": null}
+```
+
+Бекенд створює користувача (або повертає існуючого) і віддає `200` з `UserState` з 7.2. Забанений → `403 banned`, `details: {"until": "...ISO..." | null}`.
+
+Бот питає свій стан:
+
+```http
+GET /v1/users/me
+Authorization: Bearer change-me
+X-Tg-User-Id: 914462173
+```
+
+Тіла немає, відповідь `200` з `UserState`.
+
+### 7.4. Усі ендпоінти
+
+Колонка «Тіло» — JSON-поля запиту; `?` — query-параметри; `—` — тіла немає. `{x}` у шляху — параметр шляху.
+
+#### S1 — старт, мова, згода, вік, ім'я, стать
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `POST /users/start` | `StartIn {tg_username: str\|null, tg_first_name: str\|null, tg_language_code: str\|null, has_tg_profile_photo: bool, referral_code: str\|null = null}` | `UserState` | `banned` |
+| `GET /users/me` | — | `UserState` | — |
+| `PUT /users/me/lang` | `LangIn {lang: Lang}` | `UserState` | — |
+| `POST /users/me/consent` | — | `UserState` | `conflict` |
+| `PUT /profile/age` | `AgeIn {age: int}` | `UserState` | `age_too_young`, `age_locked`, `validation_error` |
+| `PUT /profile/name` | `NameIn {name: str}` | `UserState` | `content_blocked`, `validation_error` |
+| `PUT /profile/gender` | `GenderIn {gender: Gender}` | `UserState` | — |
+| `POST /onboarding/skip` | `SkipIn {step: OnboardingStep}` | `UserState` | `conflict` |
+
+#### S2 — місто
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `GET /catalog/cities/search` | `?q=str (min 2)&limit=int (5)` | `list[CityOut {id, name, region, country_code}]` | — |
+| `GET /catalog/cities/by-location` | `?lat=float&lon=float` | `CityOut` | `not_found` |
+| `PUT /profile/city` | `CityIn {city_id: int, lat: float\|null = null, lon: float\|null = null}` | `UserState` | `not_found` |
+
+#### S3 — цілі та інтереси
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `GET /catalog/goals` | — | `list[GoalOut {code, title, emoji}]` | — |
+| `PUT /profile/goals` | `GoalsIn {codes: list[GoalCode]}` | `UserState` | `validation_error` |
+| `GET /catalog/interest-categories` | — | `list[CategoryOut {id, code, emoji, title}]` | — |
+| `GET /catalog/interests` | `?category_id=int` | `list[InterestOut {id, category_id, title}]` | `not_found` |
+| `PUT /profile/interests` | `InterestsIn {interest_ids: list[int]}` | `UserState` | `validation_error` |
+| `POST /catalog/interests/custom` | `CustomInterestIn {title: str}` | `CustomInterestOut {matched: InterestOut\|null, pending: bool}` | `content_blocked`, `validation_error` |
+
+#### S4 — уточнення, заклад, зріст, промпти, медіа, завершення
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `GET /profile/clarifications` | — | `list[ClarificationOut {interest_id, interest_title, question_key, options: list[{key, title}]}]` | — |
+| `PUT /profile/interests/{interest_id}/note` | `NoteIn {option_key: str}` | `UserState` | `not_found`, `validation_error` |
+| `GET /catalog/institutions/search` | `?city_id=int&q=str ("")&limit=int (8)` | `list[InstitutionOut {id, name, short_name, type}]` | — |
+| `PUT /profile/institution` | `InstitutionIn {institution_id: int\|null}` | `UserState` | `not_found` |
+| `PUT /profile/height` | `HeightIn {height_cm: int\|null}` | `UserState` | `validation_error` |
+| `GET /catalog/prompts` | — | `list[PromptOut {id, title}]` | — |
+| `PUT /profile/prompts` | `PromptsIn {answers: list[{prompt_id: int, text: str}]}` | `UserState` | `content_blocked`, `validation_error` |
+| `POST /profile/media` | `MediaIn {kind: MediaKind, file_id: str, file_unique_id: str}` | `MediaRef {id, kind, file_id, moderation_status}` | `media_limit` |
+| `DELETE /profile/media/{media_id}` | — | `UserState` | `not_found` |
+| `PUT /profile/media/order` | `MediaOrderIn {ids: list[int]}` | `list[MediaRef]` | `validation_error` |
+| `POST /onboarding/complete` | — | `UserState` | `profile_incomplete` (`details: {"missing": [...]}`) |
+
+#### S5 — картка, приховати, видалити
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `GET /profile/me/card` | — | `ProfileCard` (з `completeness`) | `profile_incomplete` |
+| `POST /profile/reset` | — | `UserState` | — |
+| `POST /profile/hide` | — | `UserState` | — |
+| `POST /profile/unhide` | — | `UserState` | `conflict` |
+| `DELETE /users/me` | — | `204` | — |
+
+#### S6 — фільтри і налаштування
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `GET /filters` | — | `FiltersOut {age_min, age_max, age_bounds: [int, int], gender, radius, verified_only}` | — |
+| `PUT /filters` | `FiltersIn {age_min: int, age_max: int, gender: GenderFilter, radius: RadiusMode, verified_only: bool}` | `FiltersOut` | `validation_error` |
+| `GET /settings` | — | `SettingsOut {notify_frequency, quiet_from, quiet_to, show_distance, show_institution}` | — |
+| `PUT /settings` | `SettingsIn` (ті самі поля, що `SettingsOut`) | `SettingsOut` | `validation_error` |
+
+#### S7 — стрічка
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `GET /feed/next` | — | `FeedResponse`: `{"kind": "item", card, can_undo}` або `{"kind": "empty", reason, expand_options, resets_at}` | — |
+| `POST /feed/expand` | `ExpandIn {radius: RadiusMode}` | `FeedResponse` | `validation_error` |
+
+#### S8 — реакції
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `POST /reactions` | `ReactionIn {target_id: int, type: ReactionType, message: str\|null = null, media: {kind, file_id, duration_s}\|null = null}` | `ReactionOut {match: MatchResult\|null, limits: Limits}` | `limit_reached`, `rate_limited`, `content_blocked`, `media_forbidden`, `captcha_required`, `conflict` |
+| `POST /reactions/undo` | — | `FeedItem` | `undo_unavailable` |
+| `GET /limits` | — | `Limits {reactions_left, messages_left, resets_at}` | — |
+
+`target_id` — це `user_id` з `ProfileCard`, не `tg_id`.
+
+#### S9 — вхідні лайки, взаємність, контакти
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `GET /likes/incoming/count` | — | `CountOut {count}` | — |
+| `GET /likes/incoming/next` | — | `IncomingResponse`: `{"kind": "like", like_id, card, message, media}` або `{"kind": "none"}` | — |
+| `POST /likes/{like_id}/respond` | `RespondIn {decision: LikeDecision}` | `RespondOut {match: MatchResult\|null}` | `not_found`, `conflict` |
+| `GET /matches/{match_id}` | — | `MatchResult` | `not_found` |
+| `GET /contacts` | `?cursor=str&limit=int (20)` | `Page[ContactOut {match_id, partner: ProfileCardShort, partner_username, partner_tg_id, matched_at}]` | — |
+| `DELETE /contacts/{match_id}` | — | `204` | `not_found` |
+
+#### S10, S10b — скарги, блоки, адмін
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `POST /reports` | `ReportIn {target_id: int, reason: ReportReason, text: str\|null = null, context: ReportContext}` | `204` | `conflict`, `content_blocked` |
+| `POST /blocks` | `BlockIn {target_id: int}` | `204` | — |
+| `DELETE /blocks/{target_id}` | — | `204` | `not_found` |
+| `GET /admin/queue` | `?kind=AdminQueueKind` | `AdminQueueItem` або `null` | `forbidden` |
+| `GET /admin/queue/stats` | — | `{"reports": int, "photos": int, "verifications": int, "custom_tags": int, "texts": int}` | `forbidden` |
+| `POST /admin/actions` | `AdminActionIn {kind: AdminQueueKind, item_id: int, action: AdminAction, reason: str\|null = null}` | `204` | `forbidden`, `not_found`, `conflict` |
+| `GET /admin/users/{tg_id}` | — | `AdminUserOut` | `forbidden`, `not_found` |
+| `GET /admin/metrics` | `?days=int (7, 1..90)` | `MetricsOut` | `forbidden`, `validation_error` |
+
+У `/admin/*` заголовок `X-Tg-User-Id` — це адмін, а `{tg_id}` у шляху — користувач, якого він шукає.
+
+#### S11 — капча
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `POST /users/me/captcha` | — | `CaptchaChallenge {challenge_id, target_emoji, options: list[str]}` | `conflict` |
+| `POST /users/me/captcha/verify` | `CaptchaAnswerIn {challenge_id: str, answer: str}` | `UserState` | `not_found`, `validation_error` |
+
+#### S12 — верифікація
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `POST /verification/start` | — | `GestureOut {verification_id, gesture}` | `conflict` (`details.reason`: `already_verified` \| `pending` \| `no_photo`) |
+| `POST /verification/submit` | `VerificationIn {verification_id: int, video_note_file_id: str}` | `VerificationOut {status: ModerationStatus\|null}` | `not_found`, `conflict` |
+| `GET /verification/status` | — | `VerificationOut` | — |
+
+#### S13 — внутрішні (викликає `bot-worker`, без `X-Tg-User-Id`)
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `POST /internal/users/{tg_id}/bot-blocked` | — | `204` | `not_found` |
+| `POST /internal/notifications/{dedupe_key}/sent` | — | `204` | `not_found` |
+
+`dedupe_key` у шляху URL-кодується (містить `:`).
+
+#### S14 — рефералка
+
+| Метод і шлях | Тіло / query | Відповідь | Помилки |
+| --- | --- | --- | --- |
+| `GET /referral` | — | `ReferralOut {code, invited_count, bonus_per_invite}` | — |
+
+### 7.5. Як перевірити свій ендпоінт проти бота
+
+Бот ходить в API через `HttpApiClient` (`apps/bot/svoi_bot/api_client`), де кожен рядок таблиці вище — один `Op(name, method, path, response, body)`. Твоя відповідь має проходити `Model.model_validate(response.json())` тієї самої моделі, інакше бот впаде на валідації. Саме це перевіряє `assert_contract` з розділу 5.
