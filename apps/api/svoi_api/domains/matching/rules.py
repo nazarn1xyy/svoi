@@ -80,17 +80,20 @@ class Catalog:
 
 
 def interests_score(a: frozenset[int], b: frozenset[int], cat: Catalog) -> float:
-    """Weighted Jaccard plus partial credit for shared categories without a shared tag."""
+    """Weighted Jaccard plus partial credit for shared categories.
+
+    Every shared category counts, also one with a shared tag: if it did not, turning a
+    same-category pair into a shared tag could lower the score.
+    """
     union = a | b
     if not union:
         return 0.0
     w = sum(cat.idf.get(i, 1.0) for i in a & b) / sum(cat.idf.get(i, 1.0) for i in union)
     cats_a = {cat.category.get(i) for i in a} - {None}
     cats_b = {cat.category.get(i) for i in b} - {None}
-    shared_tag_cats = {cat.category.get(i) for i in a & b}
     cat_union = cats_a | cats_b
-    partial = len((cats_a & cats_b) - shared_tag_cats) / len(cat_union) if cat_union else 0.0
-    return min(1.0, w + CATEGORY_PARTIAL_MATCH * partial * (1 - w))
+    shared = len(cats_a & cats_b) / len(cat_union) if cat_union else 0.0
+    return min(1.0, w + CATEGORY_PARTIAL_MATCH * shared * (1 - w))
 
 
 def geo_score(v: Person, t: Person, km: float | None, radius: RadiusMode) -> float:
