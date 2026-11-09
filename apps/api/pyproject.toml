@@ -5,10 +5,18 @@ description = "Svoi backend API"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "alembic>=1.14",
+    "arq>=0.28.0",
     "asyncpg>=0.30",
+    "fastapi>=0.162.2",
     "geoalchemy2>=0.15",
+    "imagehash>=4.3.2",
+    "pydantic-settings>=2.16.2",
+    "redis>=5.3.1",
+    "sentry-sdk>=2.74.0",
     "sqlalchemy[asyncio]>=2.0.36",
+    "structlog>=26.1.0",
     "svoi-contracts",
+    "uvicorn[standard]>=0.54.0",
 ]
 
 [build-system]

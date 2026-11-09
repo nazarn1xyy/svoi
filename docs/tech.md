@@ -1,6 +1,6 @@
 # tech.md — «Свої»: ядро проєкту
 
-**Версія ядра: v4** · 2026-11-08
+**Версія ядра: v5** · 2026-11-09
 
 ## Changelog
 
@@ -8,6 +8,7 @@
 - v2 — один Telegram-бот і одне середовище (`docs/adr/0001-single-bot.md`): прибрано компонент `admin-bot`, точку входу `svoi_bot.admin.main` і змінну `ADMIN_BOT_TOKEN`; модерація, `/user` і `/metrics` — адмін-розділ основного бота за `UserState.is_admin`; один VPS з деплоєм на мердж у `main` замість тестового і прод-VPS. Міграція: у `.env` видалити `ADMIN_BOT_TOKEN`; контракти API, черги, схема БД і константи не змінились.
 - v3 — `ck_profiles_pool` обгорнуто в `COALESCE(..., false)`: вираз давав NULL для віку без пулу і пулу без віку, а CHECK пропускає NULL. Міграція `0002` перестворює обмеження; існуючі рядки з віком без пулу треба виправити до неї. Контракти API, черги і константи не змінились.
 - v4 — додано dev-only топік `bot.demo` (`DemoPing`), тільки `ENV=local|test`: скелет перевіряє, що джоб від API доходить до `bot-worker` (K12, B0.2). Продуктові топіки не змінились.
+- v5 — `MetricsOut` доповнено поточними підсумками для `/metrics`: усього користувачів, розподіл за статусом і пулом, верифіковані, тіньові бани, заблокували бота, активні за день / 7 / 30 днів, покази, пропуски, лайки з повідомленням і скарги за період, лайки й взаємності за весь час, лайки в очікуванні. Поля додано в кінець; старі значення не змінились. Міграції БД немає.
 
 ## Правила цього документа
 
@@ -1080,6 +1081,22 @@ class MetricsOut(BaseModel):
     d7_retention: float                # частка нових, активних на 7-й день
     reports_per_1000_views: float
     confirmed_reports_rate: float      # accepted / (accepted + rejected)
+    users_total: int                   # v5: усі рядки users зараз
+    users_by_status: dict[UserStatus, int]   # кожен статус, і з нулем
+    users_by_pool: dict[Pool, int]     # анкети з віком
+    verified_total: int
+    shadow_banned_total: int
+    bot_blocked_total: int
+    active_today: int                  # user_activity_days за сьогодні (Europe/Kyiv)
+    active_7d: int                     # різні користувачі за останні 7 днів
+    active_30d: int
+    views_total: int                   # покази за період
+    skips_total: int                   # пропуски за період
+    likes_with_message: int            # лайки з повідомленням за період
+    reports_total: int                 # скарги користувачів за період (без системних)
+    likes_all_time: int
+    matches_all_time: int
+    likes_pending: int                 # лайки, що зараз чекають відповіді
 class AdminUserOut(BaseModel):
     user_id: int; tg_id: int; status: UserStatus; shadow_banned: bool
     banned_until: datetime | None; risk_score: int; card: ProfileCard | None

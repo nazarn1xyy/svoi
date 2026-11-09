@@ -76,21 +76,25 @@ def _texts(markup: InlineKeyboardMarkup | ReplyKeyboardMarkup) -> list[list[str]
 def test_card_renders_the_tech_md_example() -> None:
     text = cards.render_card(CARD, "feed").text
     assert text.splitlines() == [
-        "<b>Назар, 18</b> ✅ · Могилів-Подільський · до 5 км",
-        "🎯 Шукає: друзів, напарника для спорту",
-        "🏷 CS2 · футбол (граю) · гітара (граю) · аніме",
-        "🎓 МПМЕФК",
-        "📏 182 см",
-        "🌅 Ідеальні вихідні — це катка з друзями і вечір біля річки",
+        "<b>Назар, 18</b> ✅",
+        "📍 Могилів-Подільський · до 5 км",
+        "🎓 МПМЕФК · 📏 182 см",
         "",
-        "✨ У вас спільного: CS2, футбол, один заклад · збіг 78%",
+        "🎯 <b>Шукає:</b> друзів, напарника для спорту",
+        "🏷 <b>CS2</b> · <b>футбол <i>(граю)</i></b> · гітара <i>(граю)</i> · аніме",
+        "",
+        "<i>🌅 Ідеальні вихідні — це…</i>",
+        "<blockquote>катка з друзями і вечір біля річки</blockquote>",
+        "",
+        "✨ <b>Спільне:</b> CS2, футбол, один заклад",
+        "📊 Збіг 78%",
     ]
 
 
 def test_common_block_only_in_feed_and_incoming() -> None:
     for mode in ("own", "match", "admin"):
-        assert "У вас спільного" not in cards.render_card(CARD, mode).text
-    assert "У вас спільного" in cards.render_card(CARD, "incoming").text
+        assert "Спільне:" not in cards.render_card(CARD, mode).text
+    assert "Спільне:" in cards.render_card(CARD, "incoming").text
 
 
 def test_empty_fields_are_skipped_and_text_is_escaped() -> None:
@@ -109,7 +113,7 @@ def test_empty_fields_are_skipped_and_text_is_escaped() -> None:
     )
     assert (
         cards.render_card(bare, "feed").text
-        == "<b>&lt;b&gt;x&lt;/b&gt;, 18</b> · Могилів-Подільський"
+        == "<b>&lt;b&gt;x&lt;/b&gt;, 18</b>\n📍 Могилів-Подільський"
     )
 
 

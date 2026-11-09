@@ -3,4 +3,4 @@
 from typing import Final
 
 # Equals the version in the docs/tech.md header; test_core_version_matches_tech_md guards it.
-CORE_VERSION: Final = 4
+CORE_VERSION: Final = 5

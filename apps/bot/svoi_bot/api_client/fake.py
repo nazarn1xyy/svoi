@@ -1398,6 +1398,26 @@ class FakeApiClient(ApiClient):
             d7_retention=0.0,
             reports_per_1000_views=0.0,
             confirmed_reports_rate=0.0,
+            users_total=len(self.users),
+            users_by_status={
+                st: sum(1 for u in self.users.values() if u.status is st) for st in UserStatus
+            },
+            users_by_pool={
+                pool: sum(1 for u in self.users.values() if u.pool is pool) for pool in Pool
+            },
+            verified_total=0,
+            shadow_banned_total=0,
+            bot_blocked_total=0,
+            active_today=starts,
+            active_7d=starts,
+            active_30d=starts,
+            views_total=0,
+            skips_total=0,
+            likes_with_message=sum(1 for x in self.likes if x.message or x.media),
+            reports_total=len(self.reports),
+            likes_all_time=likes,
+            matches_all_time=len(self.matches),
+            likes_pending=sum(1 for x in self.likes if x.status == "pending"),
         )
 
     # ---- S11 ---------------------------------------------------------------------------

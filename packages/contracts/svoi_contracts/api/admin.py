@@ -10,6 +10,7 @@ from svoi_contracts.enums import (
     AdminAction,
     AdminQueueKind,
     GestureCode,
+    Pool,
     ReportReason,
     UserStatus,
 )
@@ -64,6 +65,23 @@ class MetricsOut(Contract):
     d7_retention: float  # share of new users active on day 7
     reports_per_1000_views: float
     confirmed_reports_rate: float  # accepted / (accepted + rejected)
+    # v5: totals right now, activity and more period counts
+    users_total: int
+    users_by_status: dict[UserStatus, int]  # every status, zeros included
+    users_by_pool: dict[Pool, int]  # profiles with an age
+    verified_total: int
+    shadow_banned_total: int
+    bot_blocked_total: int
+    active_today: int  # activity day today (Europe/Kyiv)
+    active_7d: int
+    active_30d: int
+    views_total: int  # period
+    skips_total: int  # period
+    likes_with_message: int  # period
+    reports_total: int  # user reports in the period
+    likes_all_time: int
+    matches_all_time: int
+    likes_pending: int
 
 
 class AdminUserOut(Contract):
