@@ -200,7 +200,9 @@ msgid "captcha.wrong"
 msgstr "Not quite, try again"
 
 msgid "cards.common"
-msgstr "✨ In common: {items} · {percent}% match"
+msgstr ""
+"✨ <b>In common:</b> {items}\n"
+"📊 Match {percent}%"
 
 msgid "cards.completeness"
 msgstr "Profile {n}% complete"
@@ -227,7 +229,7 @@ msgid "cards.same_institution"
 msgstr "same school"
 
 msgid "cards.seeks"
-msgstr "🎯 Looking for: {goals}"
+msgstr "🎯 <b>Looking for:</b> {goals}"
 
 msgid "city.ask"
 msgstr "Which city are you from? Type its name or send your location so I can show people nearby."

@@ -52,35 +52,38 @@ def _completeness(card: ProfileCard) -> str:
     return _("cards.completeness_hint", n=n, hint=_(hint))
 
 
+def _chip(title: str, note: str | None, common: bool) -> str:
+    text = escape(_lower(title)) + (f" <i>({escape(note)})</i>" if note else "")
+    return f"<b>{text}</b>" if common else text
+
+
 def render_card(card: ProfileCard, mode: CardMode) -> RenderedCard:
-    """Text and media of a card; empty fields are skipped, shared interests come first."""
-    head = f"<b>{escape(card.name)}, {card.age}</b>"
-    if card.verified:
-        head += " ✅"
-    head += f" · {escape(card.city_name)}"
+    """Text and media in blocks: who, where, goals, interests, prompts, what you share."""
+    head = f"<b>{escape(card.name)}, {card.age}</b>" + (" ✅" if card.verified else "")
+    place = f"📍 {escape(card.city_name)}"
     if card.distance is not None:
-        head += f" · {distance_label(card.distance)}"
-    lines = [head]
+        place += f" · {distance_label(card.distance)}"
+    lines = [head, place]
+    extra = []
+    if card.institution_name:
+        extra.append(f"🎓 {escape(card.institution_name)}")
+    if card.height_cm:
+        extra.append(_("cards.height", cm=card.height_cm))
+    if extra:
+        lines.append(" · ".join(extra))
     if card.goals:
-        lines.append(_("cards.seeks", goals=", ".join(goal_label(g) for g in card.goals)))
+        lines += ["", _("cards.seeks", goals=", ".join(goal_label(g) for g in card.goals))]
     if card.interests:
         chips = sorted(card.interests, key=lambda c: not c.common)
-        lines.append(
-            "🏷 "
-            + " · ".join(
-                escape(_lower(c.title)) + (f" ({escape(c.note)})" if c.note else "") for c in chips
-            )
-        )
-    if card.institution_name:
-        lines.append(f"🎓 {escape(card.institution_name)}")
-    if card.height_cm:
-        lines.append(_("cards.height", cm=card.height_cm))
+        common = mode in ("feed", "incoming")
+        lines.append("🏷 " + " · ".join(_chip(c.title, c.note, common and c.common) for c in chips))
     for prompt in card.prompts:
-        lines.append(f"{escape(prompt.title.rstrip('…').rstrip())} {escape(prompt.text)}")
+        title = escape(prompt.title.rstrip("…").rstrip())
+        lines += ["", f"<i>{title}…</i>", f"<blockquote>{escape(prompt.text)}</blockquote>"]
     if mode in ("own", "admin") and any(
         m.moderation_status is ModerationStatus.pending for m in card.media
     ):
-        lines.append(_("cards.pending_media"))
+        lines += ["", _("cards.pending_media")]
     if mode in ("feed", "incoming") and card.common is not None:
         items = [escape(_lower(t)) for t in card.common.interest_titles]
         if card.common.same_institution:
@@ -91,7 +94,7 @@ def render_card(card: ProfileCard, mode: CardMode) -> RenderedCard:
                 _("cards.common", items=", ".join(items), percent=card.common.match_percent),
             ]
     if mode == "own":
-        lines += ["", _completeness(card)]
+        lines += ["", f"<i>{_completeness(card)}</i>"]
     media = (
         list(card.media)
         if mode in ("own", "admin")

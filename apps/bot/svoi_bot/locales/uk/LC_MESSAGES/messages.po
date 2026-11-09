@@ -203,7 +203,9 @@ msgid "captcha.wrong"
 msgstr "Не вгадав, спробуй ще"
 
 msgid "cards.common"
-msgstr "✨ У вас спільного: {items} · збіг {percent}%"
+msgstr ""
+"✨ <b>Спільне:</b> {items}\n"
+"📊 Збіг {percent}%"
 
 msgid "cards.completeness"
 msgstr "Анкета заповнена на {n}%"
@@ -230,7 +232,7 @@ msgid "cards.same_institution"
 msgstr "один заклад"
 
 msgid "cards.seeks"
-msgstr "🎯 Шукає: {goals}"
+msgstr "🎯 <b>Шукає:</b> {goals}"
 
 msgid "city.ask"
 msgstr "З якого ти міста? Напиши назву або надішли геолокацію — так я покажу тих, хто ближче."
