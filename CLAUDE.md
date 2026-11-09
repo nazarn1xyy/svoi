@@ -11,15 +11,15 @@
 - Одна задача за раз, сфокусований дифф.
 - Слайс повторює структуру еталонного слайса S1 (`apps/api/svoi_api/domains/{users,profiles}`, `apps/bot/svoi_bot/features/{start,onboarding}`).
 
-## Визнач роль за назвою гілки (`git branch --show-current`)
+## Одна людина, одна роль
 
-- `lead/*` або `fe/*` → прочитай `docs/FRONTEND.md` і працюй за ним.
-- `be/*` → прочитай `docs/BACKEND.md` і працюй за ним.
-- `main` або інша назва → не пиши код. Попроси створити гілку `<lead|fe|be>/SVO-<n>-<slug>` під задачу Linear.
+З 2026-11-09 в команді одна людина: тимлід пише і бот, і бекенд. Окремих ролей `fe`/`be` більше немає.
 
-## Заборонено без рев'ю тимліда
-
-`docs/`, `CLAUDE.md`, `packages/contracts/`, `apps/api/svoi_api/db/`, `apps/api/migrations/`, `apps/api/svoi_api/{core,clients,seed}/`, `apps/api/svoi_api/config.py`, `apps/bot/svoi_bot/{ui,api_client,middlewares}/`, `infra/`, `.github/`. Роль `be` міграцій не пише взагалі.
+- Бот (`apps/bot`) → працюй за `docs/FRONTEND.md`.
+- API (`apps/api`) → працюй за `docs/BACKEND.md`.
+- Гілка: `lead/SVO-<n>-<slug>` (старі `fe/*` і `be/*` теж валідні). На `main` код не пиши.
+- Контракти, моделі БД і міграції змінюй сам, але тільки разом з `docs/tech.md`: нова версія ядра і рядок у changelog. Правило «не вигадувати контракт» лишається: спершу ядро, потім код.
+- PR мерджиться без апруву, коли CI зелений (branch protection вимагає тільки перевірки).
 
 ## Коміти, PR, коментарі
 
