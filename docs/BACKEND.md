@@ -1,29 +1,276 @@
 # BACKEND.md — бекенд
 
-Файл для сесії нейромережі бекендера. Ти пишеш API, бізнес-логіку, алгоритм підбору, безпеку, модерацію, фонові джоби. Бот, тексти й клавіатури пише фронтенд (тимлід).
+Файл для бекендера і його сесії нейромережі. Ти пишеш API, бізнес-логіку, алгоритм підбору, безпеку, модерацію і фонові джоби. Бот, тексти й клавіатури пише фронтенд (тимлід).
 
 Ядро: `docs/tech.md`, поточна версія **v2**.
+
+Як читати цей файл:
+
+1. Розділи 1–5 — правила: що таке контракт, де лежать файли, що твоє, як влаштований домен і запит.
+2. Розділ 6 — довідник роутерів: для кожного ендпоінта Request, Response, що змінюється в БД, помилки.
+3. Розділ 7 — робочий цикл і тести.
+4. Додаток — детальні бізнес-правила і критерії приймання кожного слайсу.
 
 ---
 
 ## 0. Прочитай першим
 
 - `docs/tech.md` — джерело істини. Підкоряйся йому дослівно. У Claude Code ядро підтягується через `CLAUDE.md` автоматично; в іншій сесії приклади `tech.md` до цього файлу.
-- Перед задачею звір версію ядра в заголовку `tech.md` з версією, на яку посилається задача. Ядро новіше — перечитай changelog.
-- Контракти не вигадуються: схема БД, моделі запитів і відповідей, енуми, топіки, payload, константи — тільки з `tech.md` і `svoi_contracts`.
+- Перед задачею звір версію ядра в заголовку `tech.md` з версією в задачі. Ядро новіше — перечитай changelog.
+- Нічого не вигадуй: таблиці, поля, моделі запитів і відповідей, енуми, топіки, константи — тільки з `tech.md` і `svoi_contracts`.
 - Одна задача за раз, сфокусований дифф.
-- Що шле бот і що віддає кожен ендпоінт (шлях, заголовки, тіло, відповідь) — розділ 7 цього файлу.
-- Твій слайс повторює структуру еталонного слайса S1-BE: `apps/api/svoi_api/domains/users` і `domains/profiles` (`router.py` → `service.py` → `repo.py`, чиста логіка в `rules.py`). Не вигадуй свою розкладку.
+- Чогось бракує або незрозуміло, як працює ендпоінт — не придумуй, пиши `CONTRACT GAP` (розділ 5) або питай тимліда.
 
 ---
 
-## 1. CONTRACT GAP
+## 1. Що таке контракт
+
+**Контракт** — це домовленість між ботом і бекендом, яку жоден з них не міняє сам. Бот шле рівно те, що описано, бекенд віддає рівно те, що описано. Тоді бот, написаний проти фейкового API, запрацює з твоїм справжнім API без доробок.
+
+Контракт складається з:
+
+| Що | Де лежить | Що там |
+| --- | --- | --- |
+| Моделі запитів і відповідей | `packages/contracts/svoi_contracts/api/<домен>.py` | `StartIn`, `AgeIn`, `FeedItem`, … — pydantic-класи. **Готові, писати їх не треба** |
+| Спільні моделі | `svoi_contracts/cards.py` | `UserState`, `ProfileCard`, `MatchResult`, `Limits`, `Page[T]` |
+| Енуми | `svoi_contracts/enums.py` | `OnboardingStep`, `Gender`, `Pool`, `ReactionType`, … |
+| Помилки | `svoi_contracts/errors.py` | `ErrorCode`, `ApiError`, `ContentBlockDetails` |
+| Константи | `svoi_contracts/constants.py` | `AGE_MIN`, `REACTIONS_PER_DAY`, … Код імпортує, не хардкодить |
+| Payload джобів | `svoi_contracts/jobs.py` | `ModeratePhoto`, `RebuildFeed`, `NotifyMatch`, … |
+| Таблиці БД | `apps/api/svoi_api/db/models.py` | SQLAlchemy-моделі `User`, `Profile`, `Like`, … |
+| Міграції | `apps/api/migrations/` | Alembic, генерує тимлід |
+| Сид і фікстури | `apps/api/svoi_api/seed/`, `packages/contracts/fixtures/` | каталоги, 845 міст, 50 демо-анкет |
+| Опис усього цього словами | `docs/tech.md`, розділи 4–8 | |
+
+Усі моделі успадковують `Contract` (`svoi_contracts/base.py`): `extra="forbid"` (зайве поле в тілі → 422) і `frozen=True`. Скаляри запитів суворі (`StrictInt`, `StrictStr`, `StrictBool`): `{"age": "18"}` — це 422, а не 18.
+
+> **Стан на 2026-11-09.** Моделі контрактів (`svoi_contracts`) — у PR #6, моделі БД і перша міграція — у PR #7, сид — у PR #8. Поки вони не змерджені в `main`, у твоїй гілці цих файлів немає. Спершу дочекайся мерджу і підтягни `main`.
+
+Як імпортувати:
+
+```python
+from svoi_contracts.api.profile import SkipIn
+from svoi_contracts.cards import UserState
+from svoi_contracts.enums import OnboardingStep
+from svoi_contracts.errors import ErrorCode
+from svoi_contracts.constants import AGE_MIN
+from svoi_api.db.models import User, Profile
+```
+
+---
+
+## 2. Що твоє, а що ні
+
+**Твоє (пишеш сам, рев'ю звичайне):**
+
+- `apps/api/svoi_api/domains/<домен>/` — `__init__.py`, `router.py`, `service.py`, `repo.py`, `rules.py`, `jobs.py` для всіх доменів з розділу 6;
+- `apps/api/tests/domains/<домен>/` — тести;
+- рядок реєстрації своїх джобів у `apps/api/svoi_api/jobs/worker.py`.
+
+**Твоє за делегуванням тимліда (рев'ю тимліда обов'язкове, CODEOWNERS):**
+
+- B0.1 `main.py` (app factory, підключення роутерів), `deps.py` (`current_user`, `admin_user`, сесія БД), `core/errors.py` (`DomainError` → `ApiError`, pydantic → 422), `/health`;
+- B0.2 `core/queue.py` (`enqueue`), `jobs/worker.py` з демо-джобом і cron;
+- B0.3 `clients/` (`TelegramFilesClient`, `NsfwClassifier`, `ImageHasher` + фейки);
+- B0.4 еталонний слайс S1-BE.
+
+**Не твоє (тільки читаєш):**
+
+- `packages/contracts/**` — моделі вже готові. Потрібна зміна → `CONTRACT GAP`;
+- `apps/api/svoi_api/db/models.py`, `apps/api/migrations/` — **міграцій не пишеш взагалі**. Потрібна колонка → `CONTRACT GAP`;
+- `docs/`, `seed/`, `infra/`, `.github/`, `config.py`;
+- `apps/bot/**` — фронтенд;
+- чужий домен напряму: домени спілкуються тільки через публічні функції `service`, перелічені в `domains/<домен>/__init__.py`.
+
+---
+
+## 3. Як влаштований домен
+
+Кожен домен — папка `apps/api/svoi_api/domains/<домен>/`:
+
+| Файл | Що робить | Чого не робить |
+| --- | --- | --- |
+| `router.py` | FastAPI `APIRouter`: приймає `XxxIn`, викликає `service`, повертає `XxxOut` | бізнес-логіки, SQL |
+| `service.py` | бізнес-правила, транзакція, кидає `DomainError` | HTTP, SQL напряму |
+| `repo.py` | SQL-запити через SQLAlchemy | правил |
+| `rules.py` | чисті функції без I/O (порядок кроків, скоринг, фільтр тексту) — їх тестує hypothesis | БД, Redis, час |
+| `jobs.py` | хендлери джобів черги `api` | |
+| `__init__.py` | публічні функції `service`, які можуть викликати інші домени | |
+
+Приклад повністю: `POST /onboarding/skip` (домен `users`).
+
+```python
+# domains/users/rules.py
+from svoi_contracts.enums import OnboardingStep
+
+OPTIONAL_STEPS = frozenset({
+    OnboardingStep.clarify, OnboardingStep.institution, OnboardingStep.height,
+    OnboardingStep.prompts, OnboardingStep.media,
+})
+_ORDER = list(OnboardingStep)
+
+
+def next_step(step: OnboardingStep) -> OnboardingStep:
+    """Step after this one in OnboardingStep order."""
+    return _ORDER[_ORDER.index(step) + 1]
+
+
+# domains/users/service.py
+from svoi_contracts.errors import ErrorCode
+from svoi_api.core.errors import DomainError
+from svoi_api.domains.users import repo, rules
+
+
+async def skip_step(session: AsyncSession, user: User, step: OnboardingStep) -> UserState:
+    """Skip the current optional onboarding step."""
+    if step not in rules.OPTIONAL_STEPS or step != user.onboarding_step:
+        raise DomainError(ErrorCode.conflict, {"current": user.onboarding_step})
+    user.onboarding_step = rules.next_step(step)
+    await session.commit()
+    return await repo.user_state(session, user)
+
+
+# domains/users/router.py
+from fastapi import APIRouter
+from svoi_contracts.api.profile import SkipIn
+from svoi_contracts.cards import UserState
+
+router = APIRouter(tags=["users"])
+
+
+@router.post("/onboarding/skip", response_model=UserState)
+async def skip(body: SkipIn, user: CurrentUser, session: DbSession) -> UserState:
+    """POST /onboarding/skip."""
+    return await service.skip_step(session, user, body.step)
+```
+
+`CurrentUser` і `DbSession` — залежності з `deps.py` (B0.1). Шаблон той самий для всіх ендпоінтів: router розпаковує запит → service перевіряє правила і пише в БД → repo збирає відповідь.
+
+---
+
+## 4. Як проходить будь-який запит
+
+### 4.1. Заголовки
+
+Бот ходить на `http://api:8000/v1/...` з заголовками:
+
+```
+Authorization: Bearer <INTERNAL_API_TOKEN>
+X-Tg-User-Id: <tg_id>
+Content-Type: application/json        # тільки коли є тіло
+```
+
+- **Хто робить запит, визначає заголовок `X-Tg-User-Id`, а не шлях і не тіло.** Тому `GET /users/me`, а не `/users/me/{tg_id}`: `me` — «користувач із заголовка». `deps.current_user` читає заголовок, знаходить `users` за `tg_id` і віддає в роутер.
+- `tg_id` у шляху є тільки там, де він означає **іншу** людину: `GET /admin/users/{tg_id}` і `POST /internal/users/{tg_id}/bot-blocked`.
+- `/internal/*` викликає `bot-worker` без `X-Tg-User-Id`, тільки з токеном.
+
+### 4.2. Що робить `deps.current_user` до твого коду
+
+1. Немає або хибний токен → `401`.
+2. Немає користувача з таким `tg_id` → `404 not_found` (крім `POST /users/start`).
+3. `status = banned` → `403 banned` з `details: {"until": ...}` (крім `GET /users/me`). Бан з `banned_until` у минулому знімається.
+4. Оновлює `users.last_active_at` не частіше ніж раз на хвилину, пише день у `user_activity_days`.
+5. Для `/admin/*`: `tg_id` не в `ADMIN_TG_IDS` → `403 forbidden`.
+
+Твій ендпоінт отримує вже перевіреного `User`.
+
+### 4.3. Помилки
+
+У коді кидаєш `DomainError(ErrorCode.xxx, details)`. `core/errors.py` перетворює його на HTTP-статус і тіло `ApiError`:
+
+```json
+{"code": "conflict", "message": "step is not current", "details": {"current": "height"}}
+```
+
+| `code` | HTTP | Коли |
+| --- | --- | --- |
+| `validation_error` | 422 | pydantic не пропустив тіло або бізнес-межа (вік > 99, радіус без geo) |
+| `not_found` | 404 | немає об'єкта або він не твій |
+| `conflict` | 409 | дія не в тому стані (крок не поточний, уже скаржився, вже відповів) |
+| `forbidden` | 403 | не адмін |
+| `banned` | 403 | бан, `details.until` |
+| `age_too_young` | 400 | вік < 16 |
+| `age_locked` | 400 | вік змінювати вже не можна |
+| `profile_incomplete` | 400 | `details.missing: [...]` |
+| `content_blocked` | 400 | `details: {"field": ..., "reason": ...}` |
+| `media_forbidden` | 400 | медіа в повідомленні для пулу minor |
+| `media_limit` | 400 | уже 3 медіа |
+| `limit_reached` | 429 | `details` = `Limits` |
+| `rate_limited` | 429 | занадто швидкі реакції |
+| `captcha_required` | 403 | треба пройти капчу |
+| `undo_unavailable` | 409 | «Повернути» вже недоступне |
+| `internal` | 500 | непередбачена помилка |
+
+Бот показує свій текст за `code`, `message` — англійською для логів.
+
+### 4.4. Онбординг: машина кроків
+
+Це головне для S1–S4, без цього `consent` і `skip` не написати.
+
+- `users.onboarding_step` — поточний крок. Порядок — порядок `OnboardingStep`:
+  `lang → consent → age → name → gender → city → goals → interests → clarify → institution → height → prompts → media → preview → done`.
+- Кожен ендпоінт кроку перевіряє `onboarding_step` користувача:
+
+| Ендпоінт викликали, коли крок… | Що робити |
+| --- | --- |
+| …дорівнює кроку ендпоінта | зберегти дані, `onboarding_step` = наступний крок |
+| …вже пройдений (редагування анкети) | зберегти дані, крок не міняти |
+| …ще попереду | `409 conflict`, нічого не зберігати |
+
+- Опційні кроки (`clarify`, `institution`, `height`, `prompts`, `media`) можна пропустити через `POST /onboarding/skip`.
+- Відповідь — завжди `UserState` після зміни. Бот за `onboarding_step` малює наступний екран.
+- Користувач з `status != onboarding` (анкета вже завершена) редагує будь-які поля без перевірки кроку.
+- `POST /onboarding/complete` крок не перевіряє: перевіряє обов'язкові поля, ставить `onboarding_step = done` і `status = active`.
+
+| Ендпоінт | Крок |
+| --- | --- |
+| `PUT /users/me/lang` | `lang` |
+| `POST /users/me/consent` | `consent` (тільки поточний, редагування немає) |
+| `PUT /profile/age` | `age` |
+| `PUT /profile/name` | `name` |
+| `PUT /profile/gender` | `gender` |
+| `PUT /profile/city` | `city` |
+| `PUT /profile/goals` | `goals` |
+| `PUT /profile/interests` | `interests` |
+| `PUT /profile/interests/{id}/note`, `POST /onboarding/skip {"step": "clarify"}` | `clarify` |
+| `PUT /profile/institution` | `institution` |
+| `PUT /profile/height` | `height` |
+| `PUT /profile/prompts` | `prompts` |
+| `POST /profile/media` (крок не міняє), `POST /onboarding/skip {"step": "media"}` | `media` |
+| `POST /onboarding/complete` | `preview` (бот кличе з екрана перегляду) |
+
+Уточнення (`clarify`) і медіа (`media`) приймають кілька запитів поспіль, тому `PUT .../note` і `POST /profile/media` крок **не** просувають. Крок закриває бот через `POST /onboarding/skip` («Готово» або «Пропустити»).
+
+### 4.5. Як збирається `UserState`
+
+`UserState` повертають майже всі ендпоінти S1–S5. Збирає одна функція в `users/repo.py`:
+
+| Поле | Звідки |
+| --- | --- |
+| `user_id`, `tg_id`, `status`, `lang`, `onboarding_step` | `users` |
+| `pool` | `profiles.pool` |
+| `needs_username` | `users.tg_username IS NULL` |
+| `captcha_required` | S11b; до нього `false` |
+| `is_admin` | `tg_id in ADMIN_TG_IDS` |
+| `counters.incoming_likes` | кількість вхідних `pending`-лайків (S9); до S9 — `0` |
+
+```json
+{
+  "user_id": 2, "tg_id": 914462173, "status": "onboarding", "lang": "uk",
+  "onboarding_step": "consent", "pool": null, "needs_username": false,
+  "captcha_required": false, "is_admin": false, "counters": {"incoming_likes": 0}
+}
+```
+
+---
+
+## 5. CONTRACT GAP
 
 Бракує поля, таблиці, ендпоінта, енуму, константи, топіка → **СТОП**. Видай блок:
 
 ```
 CONTRACT GAP
-Core version: v1
+Core version: v2
 Slice: S7-BE
 Need: <що потрібно>
 Why: <який критерій приймання без цього не виконати>
@@ -32,61 +279,713 @@ Proposed shape:
 Workaround until resolved: <локальна заглушка в межах твого домену>
 ```
 
-Код з вигаданим типом не пиши. Відкрий issue з міткою `contract-change`, встав блок, продовжуй на заглушці всередині `domains/<твій домен>/`. Тимлід додасть контракт у `tech.md`, бампне версію, оновить `svoi_contracts`, моделі і міграцію. Після мерджу підтягни `main` і прибери заглушку.
+Код з вигаданим типом не пиши. Відкрий issue з міткою `contract-change`, встав блок, продовжуй на заглушці всередині `domains/<твій домен>/`. Тимлід додасть контракт у `tech.md`, підніме версію, оновить `svoi_contracts`, моделі і міграцію. Після мерджу підтягни `main` і прибери заглушку.
+
+Незрозуміло, як має працювати ендпоінт, хоча все є? Це не GAP — це питання тимліду. Не вгадуй.
 
 ---
 
-## 2. Що тобі належить
+## 6. Довідник роутерів
 
-- `apps/api/svoi_api/domains/*` — усі домени з розділу 3.3 `tech.md`: `router.py`, `service.py`, `repo.py`, `rules.py`, `jobs.py`;
-- реєстрація хендлерів своїх джобів у `jobs/worker.py` (рядок у реєстрі, без зміни інфраструктури воркера);
-- тести `apps/api/tests/domains/<domain>/`.
+### 6.1. Роутери за доменами
 
-На етапі 0 за делегуванням тимліда (рев'ю тимліда обов'язкове, CODEOWNERS):
+Кожен домен має один `router.py`, підключений у `main.py` з префіксом `/v1`.
 
-- B0.1 FastAPI app factory (`main.py`), `deps.py`: перевірка `Authorization: Bearer <INTERNAL_API_TOKEN>` (401), `current_user` за `X-Tg-User-Id` (404 для невідомого, 403 `banned`, оновлення `last_active_at` не частіше ніж раз на хвилину, ліниве зняття протермінованого бану з outbox `unbanned`), `admin_user` (`ADMIN_TG_IDS`, 403), `core/errors.py` (`DomainError` → `ApiError`, pydantic → 422 `validation_error`), `/health` (БД + Redis);
-- B0.2 `core/queue.py`: `async def enqueue(job: JobBase, queue: Literal["api", "bot"]) -> None` з `_job_id=job.dedupe_key`; `jobs/worker.py` з демо-джобом і реєстром cron з розділу 8 `tech.md`;
-- B0.3 `clients/`: `TelegramFilesClient`, `NsfwClassifier` (Protocol + реальна + фейк з `fail_next`, `timeout_next`), `ImageHasher`;
-- B0.4 S1-BE (еталонний слайс бекенду, розділ 6).
+| Домен | Файл | Ендпоінти |
+| --- | --- | --- |
+| `users` | `domains/users/router.py` | `POST /users/start`, `GET /users/me`, `PUT /users/me/lang`, `POST /users/me/consent`, `POST /onboarding/skip`, `POST /onboarding/complete`, `DELETE /users/me` |
+| `profiles` | `domains/profiles/router.py` | `PUT /profile/age`, `/name`, `/gender`, `/city`, `/goals`, `/interests`, `/interests/{id}/note`, `/institution`, `/height`, `/prompts`; `GET /profile/clarifications`; `POST/DELETE/PUT /profile/media…`; `GET /profile/me/card`; `POST /profile/reset`, `/hide`, `/unhide` |
+| `catalog` | `domains/catalog/router.py` | `GET /catalog/cities/search`, `/cities/by-location`, `/goals`, `/interest-categories`, `/interests`, `/institutions/search`, `/prompts`; `POST /catalog/interests/custom` |
+| `prefs` | `domains/prefs/router.py` | `GET/PUT /filters`, `GET/PUT /settings` |
+| `matching` | `domains/matching/router.py` | `GET /feed/next`, `POST /feed/expand` |
+| `reactions` | `domains/reactions/router.py` | `POST /reactions`, `POST /reactions/undo`, `GET /limits` |
+| `likes` | `domains/likes/router.py` | `GET /likes/incoming/count`, `/likes/incoming/next`, `POST /likes/{like_id}/respond`, `GET /matches/{match_id}`, `GET /contacts`, `DELETE /contacts/{match_id}` |
+| `moderation` | `domains/moderation/router.py` | `POST /reports`, `POST /blocks`, `DELETE /blocks/{target_id}`, `GET /admin/queue`, `/admin/queue/stats`, `POST /admin/actions`, `GET /admin/users/{tg_id}` |
+| `metrics` | `domains/metrics/router.py` | `GET /admin/metrics` |
+| `safety` | `domains/safety/router.py` | `POST /users/me/captcha`, `POST /users/me/captcha/verify` |
+| `verification` | `domains/verification/router.py` | `POST /verification/start`, `/verification/submit`, `GET /verification/status` |
+| `notifications` | `domains/notifications/router.py` | `POST /internal/users/{tg_id}/bot-blocked`, `POST /internal/notifications/{dedupe_key}/sent` |
+| `referrals` | `domains/referrals/router.py` | `GET /referral` |
 
-## 3. Що НЕ чіпати
+`POST /onboarding/complete` живе в `users`, бо міняє `users.status`, але перевіряє поля анкети через публічну функцію `profiles.service`.
 
-- `apps/api/svoi_api/db/models.py` і `apps/api/migrations/` — **міграцій не пишеш взагалі**. Потрібна колонка — `CONTRACT GAP`.
-- `packages/contracts`, `docs/`, `seed/`, `infra/`, `.github/`, `config.py` — через тимліда.
-- `apps/bot/*` — фронтенд. Там тільки рев'ю PR тимліда.
-- Чужий домен напряму: домени спілкуються тільки через публічні функції `service`, перелічені в `domains/<domain>/__init__.py`.
+### 6.2. Формат опису ендпоінта
+
+- **Коли** — у який момент бот робить запит;
+- **Request** — модель з `svoi_contracts` (вже готова) і приклад JSON; `—` — тіла немає, вистачає заголовків з 4.1;
+- **Response** — статус, модель і приклад;
+- **БД** — що читати і що писати;
+- **Логіка** — кроки;
+- **Помилки** — коли яку кидати.
+
+Детальні правила і критерії приймання — у Додатку, розділ слайса `S<n>-BE`.
+
+### 6.3. S1 — старт, мова, згода, вік, ім'я, стать
+
+Моделі (`svoi_contracts.api.users`, `svoi_contracts.api.profile`):
+
+```python
+class StartIn(Contract):
+    tg_username: StrictStr | None
+    tg_first_name: StrictStr | None
+    tg_language_code: StrictStr | None      # мова за замовчуванням
+    has_tg_profile_photo: StrictBool        # для ризик-скорингу
+    referral_code: StrictStr | None = None  # з /start r_<code>
+
+class LangIn(Contract):   lang: Lang
+class AgeIn(Contract):    age: StrictInt     # 0..150; бізнес-межі перевіряєш ти
+class NameIn(Contract):   name: StrictStr
+class GenderIn(Contract): gender: Gender
+class SkipIn(Contract):   step: OnboardingStep
+```
+
+#### `POST /users/start` — реєстрація або повернення
+
+- **Коли:** перше повідомлення людини в сесії бота (`/start`, `/start r_<code>`, будь-яке повідомлення після перезапуску).
+- **Request:** `StartIn`
+  ```json
+  {"tg_username": "ira", "tg_first_name": "Ira", "tg_language_code": "uk", "has_tg_profile_photo": true, "referral_code": null}
+  ```
+- **Response:** `200 UserState`.
+- **БД:**
+  - новий `tg_id` → `INSERT users` (`tg_id`, `tg_username`, `tg_first_name`, `lang`, `referral_code`, `referred_by_id`) + `INSERT profiles` (тільки `user_id`, решта `NULL`);
+  - існуючий → `UPDATE users SET tg_username, tg_first_name, bot_blocked = false`.
+- **Логіка:**
+  1. Знайти `users` за `X-Tg-User-Id`. Тут невідомий `tg_id` — норма, не 404.
+  2. Новий: `lang` = `uk`, якщо `tg_language_code` = `uk`; `ru`, якщо `ru`; інакше `uk`. `referral_code` — 8 символів base32, унікальний. `referred_by_id` — `users.id` власника коду, якщо код існує і не свій.
+  3. `status = onboarding`, `onboarding_step = lang` — дефолти таблиці.
+  4. Повернути `UserState`.
+- **Помилки:** `403 banned` — користувач забанений (`details.until`).
+
+#### `GET /users/me` — поточний стан
+
+- **Коли:** бот оновлює кеш стану (раз на 60 с) або після дії, що могла змінити лічильники.
+- **Request:** —
+- **Response:** `200 UserState`.
+- **БД:** тільки читання.
+- **Логіка:** зібрати `UserState` (розділ 4.5). Єдиний ендпоінт, де забанений отримує `200`, щоб бот показав екран бану.
+
+#### `PUT /users/me/lang` — мова
+
+- **Коли:** крок `lang` або «Налаштування → Мова».
+- **Request:** `LangIn` — `{"lang": "ru"}`
+- **Response:** `200 UserState`.
+- **БД:** `UPDATE users SET lang`; на кроці `lang` ще `onboarding_step = consent`.
+- **Логіка:** правило кроку з 4.4. Усі `title`/`name` у наступних відповідях — цією мовою.
+- **Помилки:** `422` — мова не `uk|ru|en`.
+
+#### `POST /users/me/consent` — згода з правилами
+
+- **Коли:** кнопка «Погоджуюсь» на кроці `consent`.
+- **Request:** — (тіла немає; хто погоджується — із заголовка).
+- **Response:** `200 UserState` з `onboarding_step = "age"`.
+- **БД:** `UPDATE users SET consent_at = now(), onboarding_step = 'age'`.
+- **Логіка:**
+  1. `user.onboarding_step != consent` → `409 conflict`. Згоду не «редагують».
+  2. Записати `consent_at`, перевести на `age`.
+- **Помилки:** `409 conflict`.
+
+#### `PUT /profile/age` — вік
+
+- **Коли:** користувач ввів число на кроці `age` або змінює вік у «Моїй анкеті».
+- **Request:** `AgeIn` — `{"age": 18}`
+- **Response:** `200 UserState`, у ньому вже є `pool` (`minor` або `adult`).
+- **БД:** `profiles.age`, `age_set_at` (перше введення), `age_edits` (+1 при зміні), `pool`, `age_rejected_at` (при віці < 16); `users.onboarding_step`.
+- **Логіка (по порядку):**
+  1. Правило кроку (4.4).
+  2. `age_rejected_at` молодше 30 днів → `age_locked`.
+  3. `age < 16` → записати `age_rejected_at = now`, `age_too_young`.
+  4. `age > 99` → `validation_error`.
+  5. Віку ще не було → `age`, `age_set_at = now`, `pool = adult` при `age ≥ 18`, інакше `minor`.
+  6. Вік уже є → дозволено один раз (`age_edits = 0`) і тільки протягом 24 год від `age_set_at`; перехід `minor → adult` заборонений завжди; інакше `age_locked`.
+- **Помилки:** `400 age_too_young`, `400 age_locked`, `422 validation_error`.
+
+#### `PUT /profile/name` — ім'я
+
+- **Request:** `NameIn` — `{"name": "Ira"}`
+- **Response:** `200 UserState`.
+- **БД:** `profiles.name`, крок.
+- **Логіка:** обрізати пробіли; 2–20 символів; тільки літери, пробіл, дефіс, апостроф; без цифр; `safety.check_text(field=name)`.
+- **Помилки:** `400 content_blocked` (`{"field": "name", "reason": "link"}`), `422 validation_error`, `409 conflict` (крок ще попереду).
+
+#### `PUT /profile/gender` — стать
+
+- **Request:** `GenderIn` — `{"gender": "female"}` (`male | female | hidden`)
+- **Response:** `200 UserState`.
+- **БД:** `profiles.gender`, крок.
+- **Помилки:** `409 conflict`.
+
+#### `POST /onboarding/skip` — пропустити опційний крок
+
+- **Коли:** кнопка «Пропустити» або «Готово» на кроках `clarify`, `institution`, `height`, `prompts`, `media`.
+- **Request:** `SkipIn` — `{"step": "height"}`; `step` — крок, який бот зараз показує.
+- **Response:** `200 UserState` з наступним кроком (`height` → `prompts`, `media` → `preview`).
+- **БД:** `UPDATE users SET onboarding_step = <наступний>`. Дані анкети не чіпаються.
+- **Логіка:**
+  1. `step` не опційний (`lang`, `age`, `city`, …) → `409 conflict`.
+  2. `step != user.onboarding_step` → `409 conflict` (захист від подвійного натискання і старих кнопок).
+  3. `onboarding_step` = наступний за порядком `OnboardingStep`.
+- **Помилки:** `409 conflict`.
+- Повний код — приклад у розділі 3.
 
 ---
 
-## 4. Робочий цикл задачі
+### 6.4. S2 — місто
+
+```python
+class CityOut(Contract): id: int; name: str; region: str; country_code: str
+class CityIn(Contract):  city_id: StrictInt; lat: float | None = None; lon: float | None = None
+```
+
+#### `GET /catalog/cities/search?q=вінн&limit=5` — пошук міста
+
+- **Коли:** користувач пише назву міста текстом.
+- **Request:** query `q` (мінімум 2 символи), `limit` (за замовчуванням 5).
+- **Response:** `200 list[CityOut]`; нічого не знайдено → `[]`.
+  ```json
+  [{"id": 12, "name": "Вінниця", "region": "Вінницька область", "country_code": "UA"}]
+  ```
+- **БД:** читання `cities`; `similarity()` з `pg_trgm` по `name_uk/ru/en`, поріг 0.3, сортування за схожістю, потім за `population`. `name` і `region` — мовою користувача.
+- **Помилки:** `422` — `q` коротше 2 символів.
+
+#### `GET /catalog/cities/by-location?lat=48.44&lon=27.79` — місто за геолокацією
+
+- **Коли:** користувач натиснув «Надіслати геолокацію».
+- **Response:** `200 CityOut` — найближче місто в радіусі 30 км (`ST_DWithin`).
+- **Помилки:** `404 not_found` — поруч немає міста.
+
+#### `PUT /profile/city` — зберегти місто
+
+- **Request:** `CityIn` — `{"city_id": 12, "lat": 48.44, "lon": 27.79}`; `lat/lon` тільки якщо була геолокація.
+- **Response:** `200 UserState`.
+- **БД:** `profiles.city_id`; `profiles.geo` = точка, округлена до 2 знаків, або `NULL` без координат; крок; джоб `RebuildFeed(reason=profile_changed)`.
+- **Помилки:** `404 not_found` — немає такого `city_id`; `422` — координати далі 50 км від міста.
+
+---
+
+### 6.5. S3 — цілі та інтереси
+
+```python
+class GoalOut(Contract):           code: GoalCode; title: str; emoji: str
+class GoalsIn(Contract):           codes: list[GoalCode]       # 1..7
+class CategoryOut(Contract):       id: int; code: str; emoji: str; title: str
+class InterestOut(Contract):       id: int; category_id: int; title: str
+class InterestsIn(Contract):       interest_ids: list[StrictInt]  # 3..15, без дублів
+class CustomInterestIn(Contract):  title: StrictStr            # 2..30 символів
+class CustomInterestOut(Contract): matched: InterestOut | None; pending: bool
+```
+
+#### `GET /catalog/goals` — список цілей
+
+- **Response:** `200 list[GoalOut]`, усі 7 `GoalCode`:
+  ```json
+  [{"code": "friends", "title": "Знайти друзів", "emoji": "👫"}]
+  ```
+- **БД:** немає. Назви й емодзі — словник у `catalog/rules.py` (uk, ru, en).
+
+#### `PUT /profile/goals` — вибрані цілі
+
+- **Request:** `GoalsIn` — `{"codes": ["friends", "sport"]}`
+- **Response:** `200 UserState`.
+- **БД:** `DELETE profile_goals WHERE user_id` + `INSERT` нового набору; крок; `RebuildFeed(profile_changed)`.
+- **Помилки:** `422` — 0 або більше 7, дублі.
+
+#### `GET /catalog/interest-categories` — категорії
+
+- **Response:** `200 list[CategoryOut]` за `position`, без прихованої `other`.
+
+#### `GET /catalog/interests?category_id=1` — теги категорії
+
+- **Response:** `200 list[InterestOut]`, тільки `moderation_status = approved`.
+- **Помилки:** `404 not_found` — немає категорії.
+
+#### `PUT /profile/interests` — вибрані інтереси
+
+- **Request:** `InterestsIn` — `{"interest_ids": [101, 102, 205]}`
+- **Response:** `200 UserState`.
+- **БД:** повна заміна `profile_interests`; `note_key` інтересів, що лишились у наборі, зберігається; перерахунок `completeness`, `snapshot_hash`; крок; `RebuildFeed(profile_changed)`.
+- **Помилки:** `422` — менше 3 або більше 15, дублі, неіснуючий чи не `approved` id.
+
+#### `POST /catalog/interests/custom` — свій тег
+
+- **Request:** `CustomInterestIn` — `{"title": "бордгейми"}`
+- **Response:** `200 CustomInterestOut`:
+  - знайдено схожий `approved` тег (similarity ≥ 0.6) → `{"matched": {"id": 140, "category_id": 3, "title": "Настолки"}, "pending": false}`; бот сам додасть його до вибору;
+  - не знайдено → `{"matched": null, "pending": true}`.
+- **БД:** у другому випадку `INSERT interests` (`is_custom = true`, `moderation_status = pending`, категорія `other`, `created_by_id`, однакова назва в трьох мовах). Тег з'явиться в анкеті після схвалення модератором (S10).
+- **Помилки:** `400 content_blocked`, `422`.
+
+---
+
+### 6.6. S4 — уточнення, заклад, зріст, промпти, медіа, завершення
+
+```python
+class OptionOut(Contract):        key: str; title: str
+class ClarificationOut(Contract): interest_id: int; interest_title: str; question_key: str; options: list[OptionOut]
+class NoteIn(Contract):           option_key: StrictStr
+class InstitutionOut(Contract):   id: int; name: str; short_name: str | None; type: InstitutionType
+class InstitutionIn(Contract):    institution_id: StrictInt | None   # None — прибрати
+class HeightIn(Contract):         height_cm: StrictInt | None        # None — прибрати
+class PromptOut(Contract):        id: int; title: str
+class PromptAnswerIn(Contract):   prompt_id: StrictInt; text: StrictStr  # ≤ 300
+class PromptsIn(Contract):        answers: list[PromptAnswerIn]      # ≤ 2; [] — прибрати
+class MediaIn(Contract):          kind: MediaKind; file_id: StrictStr; file_unique_id: StrictStr
+class MediaOrderIn(Contract):     ids: list[StrictInt]
+# відповіді: MediaRef, UserState — svoi_contracts.cards
+```
+
+#### `GET /profile/clarifications` — питання-уточнення
+
+- **Коли:** крок `clarify`, після кожної відповіді бот питає знову.
+- **Response:** `200 list[ClarificationOut]`, не більше 2; порожній список — питань не лишилось.
+  ```json
+  [{"interest_id": 25, "interest_title": "Гітара", "question_key": "guitar_play", "options": [{"key": "plays", "title": "граю"}, {"key": "listens", "title": "слухаю"}, {"key": "learning", "title": "вчуся"}]}]
+  ```
+- **БД:** інтереси користувача, для яких є рядок у `clarifications` і ще немає `note_key`, за `priority`. `question_key` — ключ перекладу в боті, тому береться тільки з таблиці.
+
+#### `PUT /profile/interests/{interest_id}/note` — відповідь на уточнення
+
+- **Request:** path `interest_id` (напр. `25`), тіло `NoteIn` — `{"option_key": "plays"}`
+- **Response:** `200 UserState`. Крок **не** змінюється (4.4).
+- **БД:** `UPDATE profile_interests SET note_key`.
+- **Помилки:** `404 not_found` — інтересу немає в анкеті або для нього немає уточнення; `422` — `option_key` немає в `options`.
+
+#### `GET /catalog/institutions/search?city_id=12&q=мпрек&limit=8` — заклади
+
+- **Response:** `200 list[InstitutionOut]`
+  ```json
+  [{"id": 7, "name": "Могилів-Подільський промислово-економічний фаховий коледж", "short_name": "МПРЕК", "type": "college"}]
+  ```
+- **БД:** `institutions WHERE city_id`; порожній `q` → за кількістю анкет із цим закладом, потім за назвою; з `q` — trigram по `name`.
+
+#### `PUT /profile/institution` — заклад
+
+- **Request:** `{"institution_id": 7}` або `{"institution_id": null}` — прибрати.
+- **Response:** `200 UserState`.
+- **БД:** `profiles.institution_id`, `completeness`, крок.
+- **Помилки:** `404 not_found`.
+
+#### `PUT /profile/height` — зріст
+
+- **Request:** `{"height_cm": 182}` або `{"height_cm": null}`.
+- **Response:** `200 UserState`.
+- **БД:** `profiles.height_cm`, крок.
+- **Помилки:** `422` — поза 120–230.
+
+#### `GET /catalog/prompts` — навідні запитання
+
+- **Response:** `200 list[PromptOut]` з `prompts WHERE active`: `[{"id": 3, "title": "Ідеальні вихідні — це…"}]`.
+
+#### `PUT /profile/prompts` — відповіді на промпти
+
+- **Request:** `PromptsIn`
+  ```json
+  {"answers": [{"prompt_id": 3, "text": "катка з друзями і вечір біля річки"}]}
+  ```
+- **Response:** `200 UserState`.
+- **БД:** повна заміна `profile_prompts`; `completeness`; крок.
+- **Логіка:** кожен текст через `safety.check_text(field=prompt)`. Ознаки віку < 18 у пулі adult не блокують: промпт `pending`, `profiles.hidden_by_moderation = true`, системна скарга `underage` (S11).
+- **Помилки:** `400 content_blocked`, `422` — неіснуючий `prompt_id`, більше 2 відповідей, текст > 300.
+
+#### `POST /profile/media` — додати фото або відео
+
+- **Коли:** користувач надіслав фото чи відео на кроці `media` або в «Моїй анкеті». Файл лежить у Telegram, бот передає тільки його `file_id`.
+- **Request:** `MediaIn` — `{"kind": "photo", "file_id": "AgACAgIAAxk...", "file_unique_id": "AQADBb4x..."}`
+- **Response:** `200 MediaRef`
+  ```json
+  {"id": 55, "kind": "photo", "file_id": "AgACAgIAAxk...", "moderation_status": "pending"}
+  ```
+- **БД:** `INSERT media` (`position` — наступна вільна, `moderation_status = pending`). Фото → джоб `ModeratePhoto(media_id)`; відео → одразу в ручну чергу `photos`. Крок не змінюється.
+- **Помилки:** `400 media_limit` — уже 3 медіа.
+
+#### `DELETE /profile/media/{media_id}` — видалити медіа
+
+- **Response:** `200 UserState`.
+- **БД:** `DELETE media`, ущільнити `position` решти.
+- **Помилки:** `404 not_found` — немає або не твоє.
+
+#### `PUT /profile/media/order` — новий порядок
+
+- **Request:** `MediaOrderIn` — `{"ids": [57, 55, 56]}`, рівно всі медіа користувача.
+- **Response:** `200 list[MediaRef]` у новому порядку.
+- **БД:** `UPDATE media SET position`.
+- **Помилки:** `422` — не той набір id.
+
+#### `POST /onboarding/complete` — завершити анкету
+
+- **Коли:** кнопка «Все вірно» на екрані перегляду анкети (крок `preview`).
+- **Request:** —
+- **Response:** `200 UserState` з `status = "active"`, `onboarding_step = "done"`.
+- **БД:** `users.status`, `onboarding_step`; `INSERT filters` (вік ±3 у межах пулу, `gender = all`, `radius = city`); `INSERT settings` (дефолти); `reaction_bonuses` для рефералки (S14); `RebuildFeed(profile_changed)`.
+- **Логіка:** перевірити `age`, `name`, `gender`, `city_id`, ≥1 мету, ≥3 інтереси. Чогось бракує → `profile_incomplete`.
+- **Помилки:** `400 profile_incomplete` з `details: {"missing": ["city", "interests"]}`. Ключі `missing`: `age`, `name`, `gender`, `city`, `goals`, `interests`.
+
+---
+
+### 6.7. S5 — картка, «Моя анкета», приховати, видалити
+
+#### `GET /profile/me/card` — своя анкета
+
+- **Коли:** «👤 Моя анкета», попередній перегляд перед `complete`.
+- **Response:** `200 ProfileCard` (`svoi_contracts.cards`) у режимі `own`: усі медіа й промпти з їхнім `moderation_status`, `completeness` 0..100, `common = null`.
+  ```json
+  {"user_id": 2, "name": "Ira", "age": 18, "verified": false, "gender": "female", "city_name": "Вінниця",
+   "distance": null, "goals": ["friends"], "interests": [{"id": 101, "title": "CS2", "note": "граю", "common": false}],
+   "institution_name": null, "height_cm": null, "prompts": [], "media": [], "common": null, "completeness": 40}
+  ```
+- **Логіка:** `profiles.service.build_card(viewer, target, mode)` — одна функція на всі режими (S5 у Додатку).
+- **Помилки:** `400 profile_incomplete` — ще немає віку, імені або міста.
+
+#### `POST /profile/reset` — «Заповнити заново»
+
+- **Response:** `200 UserState` з `status = onboarding`, `onboarding_step = age`.
+- **БД:** тільки `users.status`, `onboarding_step`. Вік, лайки, контакти, покази лишаються.
+
+#### `POST /profile/hide` / `POST /profile/unhide` — приховати / показати анкету
+
+- **Response:** `200 UserState` (`status = hidden` / `active`).
+- **Помилки:** `unhide` не з `hidden` → `409 conflict`.
+
+#### `DELETE /users/me` — видалити все
+
+- **Response:** `204`, тіла немає.
+- **БД:** `DELETE users` (каскад видаляє решту). Забанений: лишити рядок `users` з `tg_id` і `status = banned`, решту видалити.
+
+---
+
+### 6.8. S6 — фільтри і налаштування
+
+```python
+class FiltersOut(Contract):
+    age_min: int; age_max: int
+    age_bounds: tuple[int, int]     # (16, 17) або (18, 99)
+    gender: GenderFilter; radius: RadiusMode; verified_only: bool
+class FiltersIn(Contract):
+    age_min: StrictInt; age_max: StrictInt; gender: GenderFilter; radius: RadiusMode; verified_only: StrictBool
+class SettingsOut(Contract):
+    notify_frequency: NotifyFrequency; quiet_from: time; quiet_to: time
+    show_distance: StrictBool; show_institution: StrictBool
+class SettingsIn(SettingsOut): ...
+```
+
+#### `GET /filters` / `PUT /filters`
+
+- **Request (PUT):** `{"age_min": 18, "age_max": 22, "gender": "all", "radius": "city", "verified_only": false}`
+- **Response:** `200 FiltersOut` — те саме плюс `"age_bounds": [18, 99]`.
+- **БД:** `filters`; після PUT — `RebuildFeed(filters_changed)`.
+- **Помилки:** `422` — вік поза `age_bounds` або `age_min > age_max`; `km25|km50|km100` без `geo` → `422` з `details: {"reason": "no_geo"}`.
+
+#### `GET /settings` / `PUT /settings`
+
+- **Request (PUT) і Response:**
+  ```json
+  {"notify_frequency": "instant", "quiet_from": "23:00:00", "quiet_to": "08:00:00", "show_distance": true, "show_institution": true}
+  ```
+  `quiet_from == quiet_to` — тихих годин немає.
+- **БД:** `settings`.
+
+---
+
+### 6.9. S7 — стрічка
+
+```python
+class FeedItem(Contract):  kind: Literal["item"] = "item"; card: ProfileCard; can_undo: bool
+class FeedEmpty(Contract): kind: Literal["empty"] = "empty"; reason: FeedEmptyReason
+                           expand_options: list[RadiusMode]; resets_at: datetime | None
+FeedResponse = FeedItem | FeedEmpty   # розрізняє поле kind
+class ExpandIn(Contract):  radius: RadiusMode
+```
+
+#### `GET /feed/next` — наступна анкета
+
+- **Коли:** «🔍 Дивитися анкети» і після кожної реакції.
+- **Response:** `200 FeedResponse`, один з двох варіантів:
+  ```json
+  {"kind": "item", "card": {"user_id": 37, "name": "Max", "...": "ProfileCard у режимі feed, з common"}, "can_undo": false}
+  ```
+  ```json
+  {"kind": "empty", "reason": "no_candidates", "expand_options": ["region", "country"], "resets_at": null}
+  ```
+  Порожня стрічка — це `200`, не помилка. `reason`: `no_candidates`, `limit_reached` (з `resets_at`), `profile_hidden`, `profile_incomplete`, `banned`.
+- **БД:** читає `profiles`, `filters`, `views`, `likes`, `blocks`, `matches`, `reports`; Redis `feed:batch`, `feed:seen`, `exposure`. Пише `views(viewer, target, action = shown)` **до** відповіді.
+- **Логіка:** жорсткі фільтри → скоринг → пачка → видача (S7 у Додатку).
+
+#### `POST /feed/expand` — розширити пошук
+
+- **Коли:** кнопка «Шукати в області» чи «по країні» на порожній стрічці.
+- **Request:** `ExpandIn` — `{"radius": "region"}`; значення з `expand_options`.
+- **Response:** `200 FeedResponse` — перша анкета з новим радіусом.
+- **БД:** `filters.radius`, перебудова `feed:batch`.
+- **Помилки:** `422` — радіуса немає в `expand_options`.
+
+---
+
+### 6.10. S8 — реакції
+
+```python
+class MessageMedia(Contract): kind: MessageMediaKind; file_id: StrictStr; duration_s: StrictInt  # ≤ 30
+class ReactionIn(Contract):
+    target_id: StrictInt              # user_id з картки, не tg_id
+    type: ReactionType                # like | like_msg | skip
+    message: StrictStr | None = None  # ≤ 300
+    media: MessageMedia | None = None # для like_msg треба message або media
+class ReactionOut(Contract): match: MatchResult | None; limits: Limits
+```
+
+#### `POST /reactions` — лайк, лайк з повідомленням, пропуск
+
+- **Коли:** ❤️, 💌 (+ текст, голосове або кружок), 👎 під карткою.
+- **Request:**
+  ```json
+  {"target_id": 37, "type": "like"}
+  ```
+  ```json
+  {"target_id": 37, "type": "like_msg", "message": "Привіт! Теж граєш у CS2?"}
+  ```
+  ```json
+  {"target_id": 37, "type": "like_msg", "media": {"kind": "voice", "file_id": "AwACAgIAAxk...", "duration_s": 12}}
+  ```
+- **Response:** `200 ReactionOut`
+  ```json
+  {"match": null, "limits": {"reactions_left": 99, "messages_left": 20, "resets_at": "2026-11-09T22:00:00Z"}}
+  ```
+  Якщо `target` уже лайкнув тебе, `match` — `MatchResult` (картка, `partner_username`, `partner_tg_id`, `icebreaker`).
+- **БД:** `views.action`, `views.acted_at`; `likes` (`pending` або `matched`); `matches`; `notification_outbox` (`likes` або `match` для другої сторони); Redis `lim:react`, `lim:msg`, `rate:react`, `feed:undo`.
+- **Логіка:** перевірити, що анкету показували; ліміти; ритм; фільтр тексту; взаємність (S8 у Додатку).
+- **Помилки:** `429 limit_reached` (`details` = `Limits`), `429 rate_limited`, `400 content_blocked`, `400 media_forbidden` (медіа в пулі minor), `403 captcha_required`, `409 conflict` (анкету не показували або реакція вже була).
+
+#### `POST /reactions/undo` — «↩️ Повернути»
+
+- **Request:** —
+- **Response:** `200 FeedItem` — пропущена анкета, `can_undo = false`.
+- **БД:** Redis `feed:undo:{user_id}` (живе 60 с), `views.action = undo`.
+- **Помилки:** `409 undo_unavailable`.
+
+#### `GET /limits`
+
+- **Response:** `200 Limits` — `{"reactions_left": 80, "messages_left": 18, "resets_at": "2026-11-09T22:00:00Z"}`.
+
+---
+
+### 6.11. S9 — вхідні лайки, взаємність, контакти
+
+```python
+class CountOut(Contract):     count: int
+class IncomingLike(Contract): kind: Literal["like"] = "like"; like_id: int; card: ProfileCard
+                              message: str | None; media: MessageMedia | None
+class NoIncoming(Contract):   kind: Literal["none"] = "none"
+class RespondIn(Contract):    decision: LikeDecision   # accept | decline
+class RespondOut(Contract):   match: MatchResult | None
+class ContactOut(Contract):   match_id: int; partner: ProfileCardShort; partner_username: str | None
+                              partner_tg_id: int; matched_at: datetime
+```
+
+#### `GET /likes/incoming/count`
+
+- **Response:** `200 {"count": 3}` — кількість `pending`-лайків до тебе від видимих авторів.
+
+#### `GET /likes/incoming/next` — наступний вхідний лайк
+
+- **Коли:** «💌 Хто мене лайкнув» і перед стрічкою: вхідні показуються першими.
+- **Response:**
+  ```json
+  {"kind": "like", "like_id": 812, "card": {"...": "ProfileCard у режимі incoming"}, "message": "Привіт!", "media": null}
+  ```
+  або `{"kind": "none"}`. Найстаріший лайк першим.
+
+#### `POST /likes/{like_id}/respond` — відповісти на лайк
+
+- **Request:** `{"decision": "accept"}` або `{"decision": "decline"}`
+- **Response:** `200 RespondOut` — при `accept` `{"match": MatchResult}`, при `decline` `{"match": null}`.
+- **БД:** `accept` → `INSERT matches` (`user_a_id < user_b_id`), обидва лайки `matched`, outbox `match` для автора. `decline` → лайк `declined`, автору нічого.
+- **Помилки:** `404 not_found` — лайк не тобі; `409 conflict` — уже відповів.
+
+#### `GET /matches/{match_id}` — деталі взаємності
+
+- **Коли:** користувач відкрив сповіщення про взаємність.
+- **Response:** `200 MatchResult` — картка партнера, його поточний `tg_username` як `partner_username`, `partner_tg_id`, `icebreaker`.
+- **Помилки:** `404 not_found` — ти не учасник.
+
+#### `GET /contacts?cursor=&limit=20` — список взаємностей
+
+- **Response:** `200 Page[ContactOut]`
+  ```json
+  {"items": [{"match_id": 9, "partner": {"user_id": 37, "name": "Max", "age": 18, "city_name": "Вінниця"}, "partner_username": "max", "partner_tg_id": 5551, "matched_at": "2026-11-08T17:00:00Z"}], "next_cursor": null}
+  ```
+- **БД:** `matches` без `removed_by_id`, нові першими; курсор — закодована пара `(created_at, id)`.
+
+#### `DELETE /contacts/{match_id}`
+
+- **Response:** `204`. **БД:** `matches.removed_by_id = user_id`; контакт зникає в обох. **Помилки:** `404`.
+
+---
+
+### 6.12. S10, S10b — скарги, блоки, адмін-розділ
+
+```python
+class ReportIn(Contract):  target_id: StrictInt; reason: ReportReason; text: StrictStr | None = None; context: ReportContext
+class BlockIn(Contract):   target_id: StrictInt
+class AdminActionIn(Contract): kind: AdminQueueKind; item_id: StrictInt; action: AdminAction; reason: StrictStr | None = None
+# відповіді: AdminQueueItem, AdminUserOut, MetricsOut — svoi_contracts.api.admin
+```
+
+#### `POST /reports` — скарга
+
+- **Request:** `{"target_id": 37, "reason": "spam", "text": null, "context": "feed"}`; для `reason = other` потрібен `text`; `context = system` від бота заборонений (модель уже не пропустить).
+- **Response:** `204`.
+- **БД:** `INSERT reports`; `views.action = report`; автоприховування `profiles.hidden_by_moderation` за сумою ваг або одразу при `underage`.
+- **Помилки:** `409 conflict` — уже скаржився на цю людину; `400 content_blocked` — у тексті.
+
+#### `POST /blocks` / `DELETE /blocks/{target_id}`
+
+- **Request (POST):** `{"target_id": 37}`. **Response:** `204`.
+- **БД:** `INSERT blocks`, матч між ними отримує `removed_by_id`, `views.action = block`. `DELETE` видаляє рядок блоку, матч не відновлюється.
+- **Помилки (DELETE):** `404 not_found`.
+
+Усі `/admin/*` — тільки для `X-Tg-User-Id` з `ADMIN_TG_IDS`, інакше `403 forbidden`. Перевіряє `deps.admin_user`.
+
+#### `GET /admin/queue?kind=photos` — наступний елемент черги
+
+- **Response:** `200 AdminQueueItem` або `200 null`, коли черга порожня. Найстаріший елемент.
+  ```json
+  {"item_id": 55, "kind": "photos", "target_user_id": 37, "target_tg_id": 5551, "target_card": {"...": "ProfileCard admin"},
+   "reports": [], "media": {"id": 55, "kind": "photo", "file_id": "AgAC...", "moderation_status": "pending"},
+   "verification_file_id": null, "verification_gesture": null, "custom_interest_title": null, "flagged_text": null,
+   "created_at": "2026-11-09T10:00:00Z"}
+  ```
+  `item_id` — id скарги, медіа, верифікації, тега або промпту залежно від `kind`.
+
+#### `GET /admin/queue/stats`
+
+- **Response:** `200 {"reports": 2, "photos": 5, "verifications": 0, "custom_tags": 1, "texts": 0}` — завжди всі п'ять ключів.
+
+#### `POST /admin/actions` — рішення модератора
+
+- **Request:** `{"kind": "photos", "item_id": 55, "action": "delete_media", "reason": null}`
+- **Response:** `204`.
+- **БД:** зміни за дією (S10 у Додатку) + `INSERT mod_actions` + outbox `moderation` користувачу.
+- **Помилки:** `404 not_found`; `409 conflict` — елемент уже оброблено.
+
+#### `GET /admin/users/{tg_id}` — команда `/user <tg_id>`
+
+- `{tg_id}` — людина, яку шукає адмін; адмін — у заголовку.
+- **Response:** `200 AdminUserOut` — `user_id`, `tg_id`, `status`, `shadow_banned`, `banned_until`, `risk_score`, `card`, `reports_total`, `mod_actions` (рядки історії).
+- **Помилки:** `404 not_found`.
+
+#### `GET /admin/metrics?days=7` — команда `/metrics`
+
+- **Response:** `200 MetricsOut` — старти, завершені онбординги, лайки, взаємності, retention D1/D7, скарги на 1000 показів.
+- **Помилки:** `422` — `days` поза 1..90.
+
+---
+
+### 6.13. S11 — капча
+
+```python
+class CaptchaChallenge(Contract): challenge_id: str; target_emoji: str; options: list[str]
+class CaptchaAnswerIn(Contract):  challenge_id: StrictStr; answer: StrictStr
+```
+
+#### `POST /users/me/captcha` — видати капчу
+
+- **Коли:** `UserState.captcha_required = true` або реакція повернула `captcha_required`.
+- **Response:** `200 {"challenge_id": "c1f9...", "target_emoji": "🐱", "options": ["🐶", "🐱", "🦊", "🐻", "🐼", "🐸"]}`
+- **БД:** Redis `captcha:{challenge_id}` з TTL 300 с.
+- **Помилки:** `409 conflict` — капча не потрібна.
+
+#### `POST /users/me/captcha/verify` — відповідь
+
+- **Request:** `{"challenge_id": "c1f9...", "answer": "🐱"}`
+- **Response:** `200 UserState`: правильно → `captcha_required = false`; неправильно → `captcha_required = true`, бот попросить нову.
+- **БД:** видалити ключ капчі; правильно → `users.captcha_passed_at`, `risk_score − 30`; неправильно → лічильник помилок +1.
+- **Помилки:** `404 not_found` — капча протухла або не існує.
+
+---
+
+### 6.14. S12 — верифікація
+
+```python
+class GestureOut(Contract):       verification_id: int; gesture: GestureCode
+class VerificationIn(Contract):   verification_id: StrictInt; video_note_file_id: StrictStr
+class VerificationOut(Contract):  status: ModerationStatus | None   # None — не подавав
+```
+
+#### `POST /verification/start` — видати жест
+
+- **Response:** `200 {"verification_id": 4, "gesture": "peace"}`.
+- **БД:** `INSERT verifications` (`pending`, без файлу).
+- **Помилки:** `409 conflict`, `details.reason`: `already_verified` | `pending` | `no_photo` (немає схваленого фото для порівняння).
+
+#### `POST /verification/submit` — надіслати кружок
+
+- **Request:** `{"verification_id": 4, "video_note_file_id": "DQACAgIAAxk..."}`
+- **Response:** `200 {"status": "pending"}`.
+- **БД:** `verifications.video_note_file_id`; запис з'являється в черзі `verifications`.
+- **Помилки:** `404 not_found` — не твій запис; `409 conflict` — файл уже надіслано.
+
+#### `GET /verification/status`
+
+- **Response:** `200 {"status": "approved"}` (`pending`, `rejected` або `null` — не подавав).
+
+---
+
+### 6.15. S13 — внутрішні (викликає `bot-worker`)
+
+Без `X-Tg-User-Id`, тільки з токеном.
+
+#### `POST /internal/users/{tg_id}/bot-blocked`
+
+- **Коли:** Telegram відповів 403 на сповіщення: людина заблокувала бота.
+- **Response:** `204`.
+- **БД:** `users.bot_blocked = true`; `pending`-outbox цього користувача → `cancelled`.
+- **Помилки:** `404 not_found`.
+
+#### `POST /internal/notifications/{dedupe_key}/sent`
+
+- **Коли:** `bot-worker` успішно доставив сповіщення.
+- **Response:** `204`.
+- **БД:** `notification_outbox.status = sent` за `dedupe_key`. Ключ приходить URL-кодованим (`match%3A9%3A37`), FastAPI розкодує сам.
+- **Помилки:** `404 not_found`.
+
+---
+
+### 6.16. S14 — рефералка
+
+#### `GET /referral`
+
+- **Response:** `200 {"code": "AB12CD34", "invited_count": 2, "bonus_per_invite": 20}`.
+- **БД:** `users.referral_code`; `invited_count` — запрошені (`referred_by_id = ти`) зі статусом `active`. Посилання `https://t.me/<bot>?start=r_<code>` будує бот.
+
+---
+
+## 7. Робочий цикл і тести
+
+### 7.1. Цикл задачі
 
 1. Задача Linear → гілка `be/SVO-<n>-<slug>`.
-2. Коміти по ходу роботи, маленькі, англійською: `feat(matching): add hard filters query`. Формат з розділу 13 `tech.md`, кожен коміт за можливості проходить mypy.
-3. PR: заголовок `SVO-<n> <domain>: <summary>`, тіло — що робить слайс, які ендпоінти й моделі контракту зачіпає (версія ядра), чим покрито тестами.
+2. Коміти маленькі, англійською: `feat(users): add onboarding skip`. Формат — розділ 13 `tech.md`.
+3. PR: заголовок `SVO-<n> <domain>: <summary>`, тіло — що робить, які ендпоінти й моделі зачіпає (версія ядра), чим покрито тестами.
 4. CI зелений → рев'ю тимліда → squash-merge → автодеплой на VPS.
-5. Перевір ендпоінти на VPS через бота, коли фронтенд-частина слайса змерджена.
+5. Перевір ендпоінти через бота на VPS, коли фронтенд-частина слайса змерджена.
+
+### 7.2. Тести на слайс
+
+- **З критеріїв приймання**, не з коду: спершу перенеси кожен критерій з Додатку в назву тесту, потім пиши реалізацію.
+- **Контрактні:** відповідь кожного ендпоінта валідується моделлю (`assert_contract(response, UserState)` у `tests/conftest.py`), кожен джоб — payload-моделлю з `jobs.py`. Якщо відповідь не проходить модель, бот на ній впаде.
+- **Шлях помилки:** кожен код з колонки «Помилки» — окремий тест зі статусом і `code`.
+- **Ідемпотентність:** кожен джоб і cron двічі з тим самим payload → рівно один ефект.
+- **Property-based (hypothesis)** на всьому з `rules.py`.
+- Справжній Postgres з PostGIS, транзакція на тест з rollback; час через `core/time.now()`.
+
+### 7.3. Як перевірити ендпоінт проти бота
+
+Бот ходить в API через `apps/bot/svoi_bot/api_client/http.py`; список усіх ендпоінтів з методом, шляхом, моделлю тіла і відповіді — `apps/bot/svoi_bot/api_client/base.py` (`_OPS`). Бот без бекенду працює на `FakeApiClient` (`fake.py`): якщо сумніваєшся, як має поводитись ендпоінт, подивись, що робить фейк, і спитай тимліда, якщо він розходиться з цим файлом.
 
 ---
 
-## 5. Тести на слайс
+## Додаток. Бізнес-правила і критерії приймання слайсів
 
-Доктрина з розділу 11 `tech.md`. Коротко для бекенду:
-
-- **Тести з критеріїв приймання**, не з коду. Спершу перенеси кожен критерій задачі в назву тесту, потім пиши реалізацію.
-- **Контрактні.** Відповідь кожного ендпоінта слайса валідується моделлю `svoi_contracts` (`Model.model_validate(response.json())`); кожен поставлений джоб — payload-моделлю з `jobs.py`. Хелпер `assert_contract(response, Model)` у `tests/conftest.py`.
-- **Ідемпотентність.** Кожен хендлер джоба і кожен cron — запуск двічі з тим самим payload → рівно один ефект (один запис, одна зміна статусу, один outbox).
-- **Шлях помилки.** Фейк клієнта повертає 500 і таймаут → джоб ретраїться або коректно падає, стан БД консистентний.
-- **Property-based (hypothesis)** на всьому з `rules.py`: скоринг, фільтри, фільтр контенту, ліміти, корзини відстані, тихі години, вікна батчингу.
-- Справжній Postgres з PostGIS, транзакція на тест з rollback; годинник через `core/time.now()` з фікстурою підміни.
-- PR без тестів не проходить гейт. Якщо встановлено skill `engineering:testing-strategy` — фіксуй ним підхід у PR.
-
----
-
-## 6. Бекенд-слайси
-
-Формат задачі: ціль · домен · ендпоінти й моделі (розділ 7 `tech.md`) · правила · критерії приймання · тести. Константи — з `svoi_contracts.constants` (у тексті без префікса).
-
----
+Формат: домени · ендпоінти · правила · критерії приймання · тести. Константи — з `svoi_contracts.constants` (у тексті без префікса).
 
 ### S1-BE — старт, мова, згода, вік, ім'я, стать (еталон, MVP)
 
@@ -473,465 +1372,3 @@ Workaround until resolved: <локальна заглушка в межах тв
 ### v2 (S15–S19)
 
 Контракти заморожуються новою версією ядра на старті v2: питання дня (таблиці питань і відповідей, поле в картці), компанії за інтересами (підбір груп 3–5 людей за містом, пулом, інтересом і метою), події (зустрічі з радіусом 10 км і списком учасників, тільки свій пул), анонімний чат (ретрансляція через бота з фільтром контенту), монетизація (Telegram Stars, буст, безлімітне «Повернути»).
-
----
-
-## 7. HTTP-довідник API: що шле бот і що віддає бекенд
-
-Зведення розділів 6–7 `tech.md` у форматі «запит → відповідь» для кожного ендпоінта. Джерело істини лишається `tech.md` і `svoi_contracts`; при розбіжності перемагають вони, а цей розділ виправляє тимлід.
-
-### 7.1. Загальне для всіх запитів
-
-- Базова адреса: `http://api:8000/v1`. Усі шляхи нижче — відносно неї.
-- Заголовки кожного запиту від бота:
-
-```
-Authorization: Bearer <INTERNAL_API_TOKEN>
-X-Tg-User-Id: <tg_id>
-Content-Type: application/json        # тільки коли є тіло
-```
-
-- **Хто робить запит, визначає заголовок `X-Tg-User-Id`, а не шлях і не тіло.** Тому `GET /users/me`, а не `/users/me/{tg_id}`. `me` у шляху означає «користувач із заголовка». Бекенд бере його в `deps.current_user`.
-- `tg_id` у шляху є тільки там, де він означає іншу людину: `GET /admin/users/{tg_id}` (адмін дивиться чужу анкету) і `POST /internal/users/{tg_id}/bot-blocked`.
-- `/internal/*` викликає `bot-worker` без `X-Tg-User-Id`, тільки з `Authorization`.
-- Без токена або з хибним токеном → `401`. Невідомий `X-Tg-User-Id` → `404 not_found` на всіх ендпоінтах, крім `POST /users/start`.
-- Тіло запиту і відповіді — JSON моделей `svoi_contracts` (`model_dump(mode="json")`). Дати — ISO 8601 з tz (UTC), `time` — `"HH:MM:SS"`, енуми — рядки.
-- Зайве поле в тілі або хибний тип → `422 validation_error`. Скаляри в `*In` суворі: `"18"` замість `18` теж `422`.
-- `204` — порожнє тіло.
-- Будь-яка помилка — тіло `ApiError` зі статусом з розділу 6.2 `tech.md`:
-
-```json
-{"code": "age_too_young", "message": "age below 16", "details": null}
-```
-
-```json
-{"code": "content_blocked", "message": "link in name", "details": {"field": "name", "reason": "link"}}
-```
-
-```json
-{"code": "limit_reached", "message": "daily reactions", "details": {"reactions_left": 0, "messages_left": 3, "resets_at": "2026-11-09T22:00:00Z"}}
-```
-
-### 7.2. Спільні відповіді
-
-Більшість ендпоінтів онбордингу і профілю повертають `UserState`, щоб бот одразу знав наступний крок:
-
-```json
-{
-  "user_id": 2,
-  "tg_id": 914462173,
-  "status": "onboarding",
-  "lang": "uk",
-  "onboarding_step": "lang",
-  "pool": null,
-  "needs_username": false,
-  "captcha_required": false,
-  "is_admin": false,
-  "counters": {"incoming_likes": 0}
-}
-```
-
-`ProfileCard`, `MatchResult`, `Limits`, `MediaRef`, `Page[T]` — розділ 6.3 `tech.md`. `Page[T]`: `{"items": [...], "next_cursor": "..." | null}`.
-
-### 7.3. Приклад повного запиту
-
-Бот на `/start` від користувача `914462173`:
-
-```http
-POST /v1/users/start
-Authorization: Bearer change-me
-X-Tg-User-Id: 914462173
-Content-Type: application/json
-
-{"tg_username": "ira", "tg_first_name": "Ira", "tg_language_code": "uk", "has_tg_profile_photo": true, "referral_code": null}
-```
-
-Бекенд створює користувача (або повертає існуючого) і віддає `200` з `UserState` з 7.2. Забанений → `403 banned`, `details: {"until": "...ISO..." | null}`.
-
-Бот питає свій стан:
-
-```http
-GET /v1/users/me
-Authorization: Bearer change-me
-X-Tg-User-Id: 914462173
-```
-
-Тіла немає, відповідь `200` з `UserState`.
-
-### 7.4. Усі ендпоінти: навіщо, що приходить, що віддати
-
-Формат кожного ендпоінта:
-
-- **Коли** — у який момент бот робить запит;
-- **Запит** — тіло JSON або query-параметри (`—` — тіла немає, достатньо заголовків з 7.1);
-- **Бекенд** — що зробити; детальні бізнес-правила — у розділі слайса `S<n>-BE` вище;
-- **Відповідь** — статус і тіло;
-- **Помилки** — коди `ApiError`, які бот уміє показати.
-
-Якщо ендпоінт повертає `UserState`, віддавай стан **після** зміни: бот за `onboarding_step` вирішує, який екран показати далі.
-
----
-
-#### S1 — старт, мова, згода, вік, ім'я, стать
-
-**`POST /users/start`** — реєстрація або повернення користувача.
-- Коли: перше повідомлення від людини в сесії бота (`/start`, `/start r_<code>`).
-- Запит:
-  ```json
-  {"tg_username": "ira", "tg_first_name": "Ira", "tg_language_code": "uk", "has_tg_profile_photo": true, "referral_code": "AB12CD34"}
-  ```
-  `referral_code` — `null`, якщо людина прийшла не за посиланням.
-- Бекенд: новий `tg_id` → створити `users` + порожній `profiles`, мова з `tg_language_code`, записати `referred_by_id`. Існуючий → оновити username та ім'я, скинути `bot_blocked`. Єдиний ендпоінт, де невідомий `X-Tg-User-Id` — не помилка.
-- Відповідь: `200 UserState`.
-- Помилки: `403 banned` (`details.until`).
-
-**`GET /users/me`** — поточний стан користувача.
-- Коли: бот оновлює кеш стану (раз на 60 с) або після дії, що могла змінити стан.
-- Запит: —
-- Бекенд: прочитати користувача із заголовка. Забаненому теж відповідає `200`, щоб бот показав екран бану.
-- Відповідь: `200 UserState`.
-
-**`PUT /users/me/lang`** — вибір мови.
-- Коли: перший крок онбордингу або «Налаштування → Мова».
-- Запит: `{"lang": "ru"}`
-- Бекенд: зберегти `users.lang`; на кроці `lang` перевести на `consent`. Усі `title`/`name` у наступних відповідях — цією мовою.
-- Відповідь: `200 UserState`.
-
-**`POST /users/me/consent`** — згода з правилами.
-- Коли: кнопка «Погоджуюсь» на кроці `consent`.
-- Запит: —
-- Бекенд: `consent_at = now`, крок → `age`.
-- Відповідь: `200 UserState`. Помилки: `409 conflict` — крок не `consent`.
-
-**`PUT /profile/age`** — вік.
-- Коли: користувач ввів число на кроці `age` або редагує вік.
-- Запит: `{"age": 18}`
-- Бекенд: правила віку з S1-BE і S5-BE (мінімум, кулдаун, вікно редагування 24 год), виставити `pool`.
-- Відповідь: `200 UserState` (з `pool`).
-- Помилки: `400 age_too_young`, `400 age_locked`, `422 validation_error` (> `AGE_MAX`).
-
-**`PUT /profile/name`** — ім'я.
-- Запит: `{"name": "Ira"}`
-- Бекенд: довжина `NAME_LEN`, тільки літери, фільтр контенту.
-- Відповідь: `200 UserState`. Помилки: `400 content_blocked` (`details: {"field": "name", "reason": "link"}`), `422 validation_error`.
-
-**`PUT /profile/gender`** — стать.
-- Запит: `{"gender": "female"}` (`male` | `female` | `hidden`)
-- Відповідь: `200 UserState`.
-
-**`POST /onboarding/skip`** — пропустити опційний крок.
-- Коли: кнопка «Пропустити» на `clarify`, `institution`, `height`, `prompts`, `media`.
-- Запит: `{"step": "height"}`
-- Бекенд: крок має бути поточним і опційним → перейти на наступний.
-- Відповідь: `200 UserState`. Помилки: `409 conflict`.
-
----
-
-#### S2 — місто
-
-**`GET /catalog/cities/search?q=вінн&limit=5`** — пошук міста текстом.
-- Коли: користувач пише назву міста (з опечатками).
-- Бекенд: trigram-пошук по `name_uk/ru/en`, сортування за схожістю й населенням. `q` коротше 2 символів → `422`.
-- Відповідь: `200`
-  ```json
-  [{"id": 12, "name": "Вінниця", "region": "Вінницька область", "country_code": "UA"}]
-  ```
-  Нічого не знайдено → `[]`, не помилка.
-
-**`GET /catalog/cities/by-location?lat=48.44&lon=27.79`** — місто за геолокацією.
-- Коли: користувач натиснув «Надіслати геолокацію».
-- Бекенд: найближче місто з `cities`.
-- Відповідь: `200 CityOut`. Помилки: `404 not_found` — поруч немає міста.
-
-**`PUT /profile/city`** — зберегти місто.
-- Запит: `{"city_id": 12, "lat": 48.44, "lon": 27.79}` (`lat/lon` — тільки якщо була геолокація)
-- Бекенд: `city_id`, `geo` з округленням до `GEO_ROUND_DECIMALS`.
-- Відповідь: `200 UserState`. Помилки: `404 not_found` — немає такого міста.
-
----
-
-#### S3 — цілі та інтереси
-
-**`GET /catalog/goals`** — список цілей для кнопок.
-- Відповідь: `200 [{"code": "friends", "title": "Друзі", "emoji": "🤝"}, ...]`
-
-**`PUT /profile/goals`** — вибрані цілі.
-- Запит: `{"codes": ["friends", "sport"]}` (від 1 до 7, без дублів)
-- Відповідь: `200 UserState`. Помилки: `422 validation_error`.
-
-**`GET /catalog/interest-categories`** — категорії інтересів.
-- Відповідь: `200 [{"id": 1, "code": "games", "emoji": "🎮", "title": "Ігри"}, ...]`. Прихована категорія `other` не повертається.
-
-**`GET /catalog/interests?category_id=1`** — теги однієї категорії.
-- Відповідь: `200 [{"id": 101, "category_id": 1, "title": "CS2"}, ...]`. Тільки `approved`. Помилки: `404 not_found` — немає категорії.
-
-**`PUT /profile/interests`** — вибрані інтереси.
-- Запит: `{"interest_ids": [101, 102, 205]}` (від 3 до 15, без дублів)
-- Бекенд: замінити набір повністю, перерахувати `snapshot_hash`.
-- Відповідь: `200 UserState`. Помилки: `422 validation_error`.
-
-**`POST /catalog/interests/custom`** — свій тег.
-- Запит: `{"title": "бордгейми"}`
-- Бекенд: схожий існуючий тег (similarity ≥ 0.6) → повернути його; інакше створити кастомний тег на модерації.
-- Відповідь: `200`
-  ```json
-  {"matched": {"id": 140, "category_id": 3, "title": "настолки"}, "pending": false}
-  ```
-  або `{"matched": null, "pending": true}`.
-- Помилки: `400 content_blocked`, `422 validation_error`.
-
----
-
-#### S4 — уточнення, заклад, зріст, промпти, медіа, завершення
-
-**`GET /profile/clarifications`** — питання-уточнення до вибраних інтересів.
-- Відповідь: `200`, не більше 2:
-  ```json
-  [{"interest_id": 101, "interest_title": "CS2", "question_key": "games_role", "options": [{"key": "plays", "title": "граю"}]}]
-  ```
-  `question_key` — ключ перекладу в боті, береться тільки з `fixtures/clarifications.json`.
-
-**`PUT /profile/interests/{interest_id}/note`** — відповідь на уточнення.
-- Запит: `{"option_key": "plays"}`
-- Помилки: `404 not_found` — інтересу немає в анкеті; `422` — такого варіанта немає.
-
-**`GET /catalog/institutions/search?city_id=12&q=мпрек&limit=8`** — заклади міста.
-- Відповідь: `200 [{"id": 7, "name": "...", "short_name": "МПРЕК", "type": "college"}]`. Порожній `q` → заклади міста без фільтра назви, до `limit`.
-
-**`PUT /profile/institution`** — заклад.
-- Запит: `{"institution_id": 7}` або `{"institution_id": null}` — прибрати.
-- Помилки: `404 not_found`.
-
-**`PUT /profile/height`** — зріст.
-- Запит: `{"height_cm": 182}` або `{"height_cm": null}` — прибрати. Межі `HEIGHT_CM`.
-- Помилки: `422 validation_error`.
-
-**`GET /catalog/prompts`** — список навідних запитань.
-- Відповідь: `200 [{"id": 3, "title": "Ідеальні вихідні — це..."}]` (тільки `active`).
-
-**`PUT /profile/prompts`** — відповіді на промпти.
-- Запит: `{"answers": [{"prompt_id": 3, "text": "катка з друзями"}]}` (до 2, текст до 300; `[]` — прибрати всі)
-- Бекенд: фільтр контенту; ознаки віку < 18 у пулі adult не блокують, а ховають анкету на модерацію (S11-BE).
-- Помилки: `400 content_blocked`, `422 validation_error`.
-
-**`POST /profile/media`** — додати фото або відео.
-- Коли: користувач надіслав фото/відео в бот; бот передає Telegram `file_id`.
-- Запит: `{"kind": "photo", "file_id": "AgAC...", "file_unique_id": "AQAD..."}`
-- Бекенд: зберегти зі статусом `pending`, поставити джоб `api.moderate_photo`.
-- Відповідь: `200 {"id": 55, "kind": "photo", "file_id": "AgAC...", "moderation_status": "pending"}`
-- Помилки: `400 media_limit` — уже 3 медіа.
-
-**`DELETE /profile/media/{media_id}`** — видалити медіа. Відповідь: `200 UserState`. Помилки: `404 not_found`.
-
-**`PUT /profile/media/order`** — новий порядок.
-- Запит: `{"ids": [57, 55, 56]}` — рівно всі медіа користувача.
-- Відповідь: `200 list[MediaRef]` у новому порядку. Помилки: `422 validation_error`.
-
-**`POST /onboarding/complete`** — завершити анкету.
-- Коли: кнопка «Все вірно» на попередньому перегляді.
-- Бекенд: перевірити обов'язкові поля (вік, ім'я, стать, місто, ≥1 мета, ≥3 інтереси); `status = active`, `onboarding_step = done`, створити `filters` і `settings`, нарахувати реферальний бонус.
-- Відповідь: `200 UserState`.
-- Помилки: `400 profile_incomplete`, `details: {"missing": ["city_id", "interests"]}`.
-
----
-
-#### S5 — картка, приховати, видалити
-
-**`GET /profile/me/card`** — своя анкета.
-- Відповідь: `200 ProfileCard` з `completeness` (0..100) і всіма медіа, включно з `pending`. `common = null`.
-- Помилки: `400 profile_incomplete`.
-
-**`POST /profile/reset`** — «Заповнити заново»: `onboarding_step = age`, статус `onboarding`; лайки, контакти й покази лишаються. Відповідь: `200 UserState`.
-
-**`POST /profile/hide`** — приховати анкету зі стрічки (`status = hidden`). Відповідь: `200 UserState`.
-
-**`POST /profile/unhide`** — повернути в стрічку. Відповідь: `200 UserState`. Помилки: `409 conflict` — анкета не прихована.
-
-**`DELETE /users/me`** — видалити все. Забанений: лишається рядок `users` з `tg_id` і статусом `banned`. Відповідь: `204`.
-
----
-
-#### S6 — фільтри і налаштування
-
-**`GET /filters`** — поточні фільтри стрічки.
-- Відповідь:
-  ```json
-  {"age_min": 17, "age_max": 21, "age_bounds": [18, 99], "gender": "all", "radius": "city", "verified_only": false}
-  ```
-  `age_bounds` — межі пулу, щоб бот не дав вийти за них.
-
-**`PUT /filters`** — зберегти фільтри.
-- Запит: ті самі поля без `age_bounds`.
-- Бекенд: вік у межах пулу, `age_min ≤ age_max`; поставити `api.rebuild_feed` з `filters_changed`.
-- Відповідь: `200 FiltersOut`. Помилки: `422 validation_error`.
-
-**`GET /settings`** / **`PUT /settings`** — сповіщення і приватність.
-- Тіло й відповідь:
-  ```json
-  {"notify_frequency": "instant", "quiet_from": "23:00:00", "quiet_to": "08:00:00", "show_distance": true, "show_institution": true}
-  ```
-  `quiet_from == quiet_to` — тихих годин немає.
-
----
-
-#### S7 — стрічка
-
-**`GET /feed/next`** — наступна анкета.
-- Коли: «🔍 Дивитися анкети» і після кожної реакції.
-- Бекенд: взяти кандидата з пачки (S7-BE), записати показ у `views` **до** відповіді.
-- Відповідь — одне з двох (поле `kind`):
-  ```json
-  {"kind": "item", "card": {...ProfileCard з common...}, "can_undo": false}
-  ```
-  ```json
-  {"kind": "empty", "reason": "no_candidates", "expand_options": ["region", "country"], "resets_at": null}
-  ```
-  `reason`: `no_candidates`, `limit_reached` (з `resets_at`), `profile_hidden`, `profile_incomplete`, `banned`. Порожня стрічка — це `200`, не помилка.
-
-**`POST /feed/expand`** — розширити пошук.
-- Коли: кнопка «Шукати в області/країні» на порожній стрічці.
-- Запит: `{"radius": "region"}` — одне з `expand_options`.
-- Бекенд: зберегти радіус у фільтрах, перебудувати пачку, віддати першу анкету.
-- Відповідь: `200 FeedResponse`. Помилки: `422 validation_error`.
-
----
-
-#### S8 — реакції
-
-**`POST /reactions`** — лайк, лайк з повідомленням або пропуск.
-- Коли: ❤️, 💌 (+ текст / голосове / кружок) або 👎 під карткою.
-- Запит:
-  ```json
-  {"target_id": 37, "type": "like", "message": null, "media": null}
-  ```
-  ```json
-  {"target_id": 37, "type": "like_msg", "message": "Привіт! Теж граєш у CS2?", "media": null}
-  ```
-  ```json
-  {"target_id": 37, "type": "like_msg", "message": null, "media": {"kind": "voice", "file_id": "AwAC...", "duration_s": 12}}
-  ```
-  `target_id` — `user_id` з картки, не `tg_id`.
-- Бекенд: ліміти, фільтр тексту, детектор ритму; лайк у відповідь на чужий лайк → одразу взаємність.
-- Відповідь: `200`
-  ```json
-  {"match": null, "limits": {"reactions_left": 99, "messages_left": 20, "resets_at": "2026-11-09T22:00:00Z"}}
-  ```
-  При взаємності `match` — `MatchResult` з `partner_username` і `partner_tg_id`.
-- Помилки: `429 limit_reached`, `429 rate_limited`, `400 content_blocked`, `400 media_forbidden` (медіа в пулі minor), `403 captcha_required`, `409 conflict` (анкету не показували або вже була реакція).
-
-**`POST /reactions/undo`** — «↩️ Повернути» останній пропуск протягом 60 с.
-- Відповідь: `200 FeedItem` — та сама анкета знову. Помилки: `409 undo_unavailable`.
-
-**`GET /limits`** — скільки реакцій і повідомлень лишилось.
-- Відповідь: `200 Limits`.
-
----
-
-#### S9 — вхідні лайки, взаємність, контакти
-
-**`GET /likes/incoming/count`** — лічильник для кнопки меню. Відповідь: `200 {"count": 3}`.
-
-**`GET /likes/incoming/next`** — наступний вхідний лайк.
-- Коли: «Хто мене лайкнув» або перед стрічкою (вхідні — першими).
-- Відповідь:
-  ```json
-  {"kind": "like", "like_id": 812, "card": {...}, "message": "Привіт!", "media": null}
-  ```
-  або `{"kind": "none"}`, коли лайків немає.
-
-**`POST /likes/{like_id}/respond`** — відповідь на лайк.
-- Запит: `{"decision": "accept"}` або `{"decision": "decline"}`
-- Бекенд: `accept` → створити `matches`, сповістити обох; `decline` → статус `declined`.
-- Відповідь: `200 {"match": MatchResult | null}`.
-- Помилки: `404 not_found` — лайк не тобі; `409 conflict` — уже відповів.
-
-**`GET /matches/{match_id}`** — деталі взаємності (з кнопки в сповіщенні).
-- Відповідь: `200 MatchResult`: картка партнера, `partner_username`, `partner_tg_id`, `icebreaker`. Помилки: `404 not_found`.
-
-**`GET /contacts?cursor=...&limit=20`** — список взаємностей.
-- Відповідь:
-  ```json
-  {"items": [{"match_id": 9, "partner": {"user_id": 37, "name": "Max", "age": 18, "city_name": "Вінниця"}, "partner_username": "max", "partner_tg_id": 5551, "matched_at": "2026-11-08T17:00:00Z"}], "next_cursor": null}
-  ```
-
-**`DELETE /contacts/{match_id}`** — прибрати контакт (`removed_by_id`). Відповідь: `204`. Помилки: `404 not_found`.
-
----
-
-#### S10, S10b — скарги, блоки, адмін-розділ
-
-**`POST /reports`** — скарга.
-- Запит: `{"target_id": 37, "reason": "spam", "text": null, "context": "feed"}`. Для `reason = other` `text` обов'язковий. `context = system` від бота заборонений.
-- Бекенд: запис `reports`, автоприховування після 3 скарг від різних людей.
-- Відповідь: `204`. Помилки: `409 conflict` — уже скаржився; `400 content_blocked`.
-
-**`POST /blocks`** — заблокувати: `{"target_id": 37}` → `204`. Більше не бачать одне одного.
-
-**`DELETE /blocks/{target_id}`** — розблокувати → `204`. Помилки: `404 not_found`.
-
-Усі `/admin/*` — тільки коли `X-Tg-User-Id` є в `ADMIN_TG_IDS`, інакше `403 forbidden`.
-
-**`GET /admin/queue?kind=photos`** — наступний елемент черги модерації.
-- Відповідь: `200 AdminQueueItem` (повна картка, скарги, фото/кружок/тег/текст залежно від `kind`) або `200 null` — черга порожня.
-
-**`GET /admin/queue/stats`** — розмір черг: `200 {"reports": 2, "photos": 5, "verifications": 0, "custom_tags": 1, "texts": 0}`.
-
-**`POST /admin/actions`** — рішення модератора.
-- Запит: `{"kind": "photos", "item_id": 55, "action": "delete_media", "reason": null}`
-- Бекенд: застосувати дію, записати `mod_actions`, створити outbox-сповіщення користувачу.
-- Відповідь: `204`. Помилки: `404 not_found`, `409 conflict` — елемент уже оброблено.
-
-**`GET /admin/users/{tg_id}`** — команда `/user <tg_id>`.
-- Відповідь: `200 AdminUserOut`: статус, бан, ризик, картка, кількість скарг, історія дій.
-- Помилки: `404 not_found`.
-
-**`GET /admin/metrics?days=7`** — команда `/metrics`.
-- Відповідь: `200 MetricsOut` (старти, онбординг, лайки, взаємності, retention, скарги). `days` поза 1..90 → `422`.
-
----
-
-#### S11 — капча
-
-**`POST /users/me/captcha`** — видати капчу.
-- Коли: `UserState.captcha_required = true` або реакція повернула `captcha_required`.
-- Відповідь: `200 {"challenge_id": "c1f...", "target_emoji": "🐱", "options": ["🐶", "🐱", "🦊", "🐻", "🐼", "🐸"]}`
-- Помилки: `409 conflict` — капча не потрібна.
-
-**`POST /users/me/captcha/verify`** — відповідь.
-- Запит: `{"challenge_id": "c1f...", "answer": "🐱"}`
-- Відповідь: `200 UserState` (`captcha_required = false`, якщо правильно; інакше нова спроба з тим самим станом).
-- Помилки: `404 not_found` — капча протухла (300 с).
-
----
-
-#### S12 — верифікація
-
-**`POST /verification/start`** — почати: видати жест.
-- Відповідь: `200 {"verification_id": 4, "gesture": "peace"}`
-- Помилки: `409 conflict`, `details.reason`: `already_verified` | `pending` | `no_photo`.
-
-**`POST /verification/submit`** — надіслати кружок.
-- Запит: `{"verification_id": 4, "video_note_file_id": "DQAC..."}`
-- Бекенд: зберегти, поставити в чергу модерації `verifications`.
-- Відповідь: `200 {"status": "pending"}`. Помилки: `404 not_found`, `409 conflict`.
-
-**`GET /verification/status`** — стан: `200 {"status": "approved" | "pending" | "rejected" | null}` (`null` — не подавав).
-
----
-
-#### S13 — внутрішні (викликає `bot-worker`, без `X-Tg-User-Id`)
-
-**`POST /internal/users/{tg_id}/bot-blocked`** — Telegram повернув 403: користувач заблокував бота. Бекенд ставить `bot_blocked = true` і більше не шле йому сповіщень. Відповідь: `204`. Помилки: `404 not_found`.
-
-**`POST /internal/notifications/{dedupe_key}/sent`** — сповіщення доставлено. Бекенд ставить outbox-запису `status = sent`. `dedupe_key` URL-кодується (містить `:`). Відповідь: `204`. Помилки: `404 not_found`.
-
----
-
-#### S14 — рефералка
-
-**`GET /referral`** — дані для екрана «Запросити друга».
-- Відповідь: `200 {"code": "AB12CD34", "invited_count": 2, "bonus_per_invite": 20}`. Посилання `https://t.me/<bot>?start=r_<code>` будує бот.
-
-### 7.5. Як перевірити свій ендпоінт проти бота
-
-Бот ходить в API через `HttpApiClient` (`apps/bot/svoi_bot/api_client`), де кожен рядок таблиці вище — один `Op(name, method, path, response, body)`. Твоя відповідь має проходити `Model.model_validate(response.json())` тієї самої моделі, інакше бот впаде на валідації. Саме це перевіряє `assert_contract` з розділу 5.
