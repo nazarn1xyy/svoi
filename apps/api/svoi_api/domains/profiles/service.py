@@ -226,7 +226,7 @@ async def clarifications(ctx: Ctx, user: User) -> list[ClarificationOut]:
                 OptionOut(key=o["key"], title=local(o, "title", user.lang)) for o in c.options
             ],
         )
-        for c, interest in rows.tuples()
+        for c, interest in rows
     ]
 
 

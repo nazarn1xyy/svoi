@@ -11,15 +11,10 @@ from svoi_api.deps import Ctx
 async def recalc_idf(ctx: Ctx) -> int:
     """idf = ln((N + 1) / (n + 1)) + 1; same result on every run."""
     total = int(await ctx.session.scalar(select(func.count()).select_from(User)) or 0)
-    counts = dict(
-        (
-            await ctx.session.execute(
-                select(ProfileInterest.interest_id, func.count()).group_by(
-                    ProfileInterest.interest_id
-                )
-            )
-        ).tuples()
+    rows = await ctx.session.execute(
+        select(ProfileInterest.interest_id, func.count()).group_by(ProfileInterest.interest_id)
     )
+    counts = {iid: n for iid, n in rows}
     ids = list(await ctx.session.scalars(select(Interest.id)))
     for iid in ids:
         idf = math.log((total + 1) / (counts.get(iid, 0) + 1)) + 1

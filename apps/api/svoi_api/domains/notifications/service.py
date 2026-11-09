@@ -285,7 +285,7 @@ async def new_people_scan(ctx: Ctx) -> int:
         .order_by(counts.c.user_id, counts.c.n.desc(), counts.c.interest_id)
     )
     made = 0
-    for user_id, interest_id, n in (await ctx.session.execute(best)).tuples():
+    for user_id, interest_id, n in await ctx.session.execute(best):
         user = await ctx.session.get(User, user_id)
         interest = await ctx.session.get(Interest, interest_id)
         if user is None or interest is None or user.status is not UserStatus.active:

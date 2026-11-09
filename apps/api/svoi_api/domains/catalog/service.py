@@ -50,9 +50,13 @@ async def search_cities(ctx: Ctx, user: User, q: str, limit: int) -> list[CityOu
     query = rules.normalize_query(q)
     if len(query) < MIN_QUERY:
         raise DomainError(ErrorCode.validation_error, message="q: at least 2 characters")
-    names = (City.name_uk, City.name_ru, City.name_en)
-    sim = func.greatest(*(func.similarity(func.lower(n), query) for n in names))
-    starts = or_(*(func.lower(n).startswith(query) for n in names))
+    # the same folding as normalize_query: lowercase, yo -> ye, one apostrophe
+    names = tuple(
+        func.replace(func.replace(func.lower(n), "ё", "е"), "'", "’")
+        for n in (City.name_uk, City.name_ru, City.name_en)
+    )
+    sim = func.greatest(*(func.similarity(n, query) for n in names))
+    starts = or_(*(n.startswith(query) for n in names))
     rows = await ctx.session.scalars(
         select(City)
         .where(or_(sim >= rules.CITY_SIMILARITY, starts))

@@ -46,7 +46,7 @@ async def _interests(ctx: Ctx, user_id: int, lang: Lang) -> list[tuple[int, str,
         .order_by(Interest.id)
     )
     out = []
-    for interest, note_key, options in rows.tuples():
+    for interest, note_key, options in rows:
         note = None
         if note_key and options:
             option = next((o for o in options if o["key"] == note_key), None)
@@ -117,7 +117,7 @@ async def build(ctx: Ctx, viewer: User, target_id: int, mode: CardMode) -> Profi
     media = [media_ref(m) for m in await ctx.session.scalars(media_q)]
     prompts = [
         PromptAnswer(prompt_id=pr.id, title=local(pr, "title", lang), text=pp.text)
-        for pp, pr in (await ctx.session.execute(prompt_q)).tuples()
+        for pp, pr in (await ctx.session.execute(prompt_q))
     ]
 
     hide_inst = not own and settings is not None and not settings.show_institution

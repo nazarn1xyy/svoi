@@ -220,7 +220,7 @@ async def _people(ctx: Ctx, ids: Sequence[int]) -> dict[int, rules.Person]:
     ):
         goals[uid].add(goal)
     out = {}
-    for p, region, itype in rows.tuples():
+    for p, region, itype in rows:
         if p.age is None or p.city_id is None:
             continue
         out[p.user_id] = rules.Person(
@@ -276,15 +276,13 @@ async def _candidates(ctx: Ctx, viewer: User, ids: Sequence[int]) -> list[rules.
             )
         )
     )
-    reports: dict[int, int] = dict(
-        (
-            await ctx.session.execute(
-                select(Report.target_id, func.count())
-                .where(Report.target_id.in_(ids), Report.status == ReportStatus.open)
-                .group_by(Report.target_id)
-            )
-        ).tuples()
+    report_rows = await ctx.session.execute(
+        select(Report.target_id, func.count())
+        .where(Report.target_id.in_(ids), Report.status == ReportStatus.open)
+        .group_by(Report.target_id)
     )
+    # a Result has .keys(), so dict(result) would treat it as a mapping
+    reports: dict[int, int] = {target: n for target, n in report_rows}
     day = f"{time.kyiv_today():%Y%m%d}"
     exposure = await ctx.redis.mget([f"exposure:{i}:{day}" for i in ids]) if ids else []
     out = []

@@ -73,7 +73,7 @@ async def _autohide(ctx: Ctx, target_id: int) -> None:
     )
     total = 0.0
     underage = False
-    for report, weight in rows.tuples():
+    for report, weight in rows:
         underage |= report.reason is ReportReason.underage
         if report.reporter_id is not None:
             factor = CONTACT_WEIGHT if report.context is ReportContext.contact else 1.0
