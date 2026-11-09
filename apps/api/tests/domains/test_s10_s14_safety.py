@@ -399,3 +399,23 @@ async def test_referral_bonus_once(user: UserFactory, ctx: Ctx) -> None:
     assert len(bonuses) == 2
     limits = await host.ok("GET", "/limits", dict)
     assert limits["reactions_left"] == 120
+
+
+async def test_metrics_totals(user: UserFactory) -> None:
+    admin = user(ADMIN_TG)
+    await onboard(admin, name="Admin")
+    a, _b = await _people(user, 2)
+    item = await a.ok("GET", "/feed/next", FeedResponse)
+    assert isinstance(item, FeedItem)
+    await a.ok(
+        "POST",
+        "/reactions",
+        dict,
+        body={"target_id": item.card.user_id, "type": "like_msg", "message": "Привіт"},
+    )
+    m = await admin.ok("GET", "/admin/metrics", MetricsOut)
+    assert m.users_total == 3 and m.users_by_status["active"] == 3
+    assert m.users_by_pool["adult"] == 3 and m.users_by_pool["minor"] == 0
+    assert m.active_today == 3 and m.active_30d == 3
+    assert m.views_total >= 1 and m.likes_with_message == 1 and m.likes_pending == 1
+    assert m.likes_all_time == 1 and m.matches_all_time == 0

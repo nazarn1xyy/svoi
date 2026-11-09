@@ -112,7 +112,9 @@ async def test_user_lookup_and_metrics() -> None:
     await harness.send_command("user", str(TG))
     assert f"tg {TG}" in harness.last_text()
     await harness.send_command("metrics")
-    assert harness.last_text().startswith("Метрики за")
+    text = harness.last_text()
+    assert text.startswith("📊 <b>Статистика</b>")
+    assert "Усього: <b>" in text and "Реєстрацій (/start):" in text
 
 
 async def test_metrics_render_survives_zero_division() -> None:
@@ -121,20 +123,20 @@ async def test_metrics_render_survives_zero_division() -> None:
     from svoi_contracts.enums import Lang  # noqa: PLC0415
 
     set_locale(Lang.uk)
+    zero = {name: 0 for name, f in MetricsOut.model_fields.items() if f.annotation is int}
     text = metrics(
         MetricsOut(
+            **zero,
             period_from=NOW.date(),
             period_to=NOW.date(),
-            starts=0,
-            onboarding_completed=0,
             onboarding_rate=0.0,
-            likes_total=0,
-            matches_total=0,
             mutual_rate=0.0,
             d1_retention=0.0,
             d7_retention=0.0,
             reports_per_1000_views=0.0,
             confirmed_reports_rate=0.0,
+            users_by_status={},
+            users_by_pool={},
         )
     )
-    assert "старти 0, завершили анкету 0%" in text
+    assert "Завершили анкету: 0 (0%)" in text and "Усього: <b>0</b>" in text

@@ -2,7 +2,7 @@
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from svoi_contracts.api.admin import AdminQueueItem, AdminUserOut, MetricsOut
-from svoi_contracts.enums import AdminAction, AdminQueueKind
+from svoi_contracts.enums import AdminAction, AdminQueueKind, Pool, UserStatus
 
 from svoi_bot.ui import keyboards
 from svoi_bot.ui.callbacks import AdminCb
@@ -104,15 +104,39 @@ def user(out: AdminUserOut) -> str:
 
 def metrics(m: MetricsOut) -> str:
     """S10b: /metrics [days]; rates are already 0 when the API divides by zero."""
+    status, pool = m.users_by_status, m.users_by_pool
     return _(
         "admin.metrics",
         start=f"{m.period_from:%d.%m}",
         end=f"{m.period_to:%d.%m}",
+        users_total=m.users_total,
+        active=status.get(UserStatus.active, 0),
+        onboarding=status.get(UserStatus.onboarding, 0),
+        hidden=status.get(UserStatus.hidden, 0),
+        banned=status.get(UserStatus.banned, 0),
+        adult=pool.get(Pool.adult, 0),
+        minor=pool.get(Pool.minor, 0),
+        verified=m.verified_total,
+        shadow=m.shadow_banned_total,
+        bot_blocked=m.bot_blocked_total,
+        today=m.active_today,
+        week=m.active_7d,
+        month=m.active_30d,
         starts=m.starts,
-        onboarding=round(m.onboarding_rate * 100),
-        mutual=round(m.mutual_rate * 100),
+        completed=m.onboarding_completed,
+        rate=round(m.onboarding_rate * 100),
         d1=round(m.d1_retention * 100),
         d7=round(m.d7_retention * 100),
-        reports=f"{m.reports_per_1000_views:.1f}",
+        views=m.views_total,
+        likes=m.likes_total,
+        likes_msg=m.likes_with_message,
+        skips=m.skips_total,
+        matches=m.matches_total,
+        mutual=round(m.mutual_rate * 100),
+        reports=m.reports_total,
+        per1000=f"{m.reports_per_1000_views:.1f}",
         confirmed=round(m.confirmed_reports_rate * 100),
+        likes_all=m.likes_all_time,
+        matches_all=m.matches_all_time,
+        pending=m.likes_pending,
     )

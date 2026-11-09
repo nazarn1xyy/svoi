@@ -9,7 +9,7 @@ from svoi_contracts.errors import ErrorCode
 
 from svoi_api.core import time
 from svoi_api.core.errors import DomainError
-from svoi_api.db.models import Profile, User
+from svoi_api.db.models import Profile, User, UserActivityDay
 from svoi_api.deps import Ctx
 from svoi_api.domains.users import rules
 
@@ -100,6 +100,8 @@ async def start(ctx: Ctx, tg_id: int, body: StartIn) -> UserState:
             await ctx.session.rollback()
             return await start(ctx, tg_id, body)
         ctx.session.add(Profile(user_id=user.id))
+        # deps only touches after a minute of inactivity; count the sign-up day itself
+        ctx.session.add(UserActivityDay(user_id=user.id, day=time.kyiv_today()))
         from svoi_api.domains.safety import service as safety  # noqa: PLC0415 - cycle
 
         await safety.score_new_user(ctx, user, has_photo=body.has_tg_profile_photo)
